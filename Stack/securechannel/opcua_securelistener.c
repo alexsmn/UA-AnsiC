@@ -2352,9 +2352,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "ProcessOpenSecureChannelReq
     } /* if(a_bRequestComplete == OpcUa_False) */
 
     /*** clean up ***/
-    OpcUa_SecureListener_ChannelManager_ReleaseChannel(
-            pSecureListener->ChannelManager,
-            &pSecureChannel);
+    if(pSecureChannel != OpcUa_Null)
+    {
+        OpcUa_SecureListener_ChannelManager_ReleaseChannel(
+                pSecureListener->ChannelManager,
+                &pSecureChannel);
+    }
 
     if(pRequest != OpcUa_Null)
     {
