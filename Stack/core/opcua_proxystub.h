@@ -31,6 +31,7 @@
 #include "opcua_types.h"
 #include "opcua_browsenames.h"
 #include "opcua_attributes.h"
+#include "opcua_stringtable.h"
 
 OPCUA_BEGIN_EXTERN_C
 
@@ -152,6 +153,16 @@ OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString();
   * @return Pointer to a static string containing the options set by compiler switches. Must not be freed!
   */
 OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetStaticConfigString();
+
+/*============================================================================
+ ** @brief Global table of known types.
+ *===========================================================================*/
+OPCUA_IMEXPORT extern OpcUa_EncodeableTypeTable OpcUa_ProxyStub_g_EncodeableTypes;
+
+/*============================================================================
+ ** @brief Global table of supported namespaces.
+ *===========================================================================*/
+OPCUA_IMEXPORT extern OpcUa_StringTable OpcUa_ProxyStub_g_NamespaceUris;
 
 OPCUA_END_EXTERN_C
 #endif /* _OpcUa_ProxyStub_H_ */
