@@ -40,6 +40,11 @@ void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup();
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_OpenSSL_SeedPRNG( OpcUa_Byte* seed,
                                                          OpcUa_Int   bytes);
 
+/**
+  @brief destroys secret data values in a cyptographically safe way.
+*/
+void OPCUA_DLLCALL OpcUa_P_OpenSSL_DestroySecretData(    OpcUa_Void*  data,
+                                                         OpcUa_UInt32 bytes);
 
 /**
   @brief Encrypts data using Advanced Encryption Standard (AES) with the Cipher Block Chaining (CBC) mode.
@@ -613,7 +618,7 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_SymmetricSign(
     OpcUa_Byte*           pData,
     OpcUa_UInt32          dataLen,
     OpcUa_Key*            key,
-    OpcUa_ByteString*    ppSignature);
+    OpcUa_ByteString*     ppSignature);
 
 /**
   @brief

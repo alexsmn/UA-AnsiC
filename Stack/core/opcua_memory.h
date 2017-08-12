@@ -60,6 +60,17 @@ OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_Memory_MemCpy(   OpcUa_Void*  
     OpcUa_Void*  pSource,
     OpcUa_UInt32 nCount);
 
+/**
+ * @brief destroys secret data values in a cyptographically safe way.
+ * Does not necessarily set the memory to zero.
+ * Does nothing unless security is enabled.
+ *
+ * @param pData        [in] The memory block to be erased.
+ * @param nBytes       [in] The number of bytes to erase.
+ */
+OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_Memory_DestroySecretData(OpcUa_Void*  pData,
+                                                                     OpcUa_UInt32 nBytes);
+
 OPCUA_END_EXTERN_C
 
 #endif /* _OpcUa_Memory_H_ */

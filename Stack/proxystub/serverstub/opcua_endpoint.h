@@ -25,6 +25,7 @@ OPCUA_BEGIN_EXTERN_C
 /**
  * @brief Associates a supported security policy with message security modes.
  */
+#ifndef OPCUA_ENDPOINT_SECURITYPOLICYCONFIGURATION_DEFINED
 struct _OpcUa_Endpoint_SecurityPolicyConfiguration
 {
     /** @brief The URI of a supported security policy. */
@@ -34,6 +35,8 @@ struct _OpcUa_Endpoint_SecurityPolicyConfiguration
     /** @brief The client certificate, if provided. */
     OpcUa_ByteString*   pbsClientCertificate;
 };
+#define OPCUA_ENDPOINT_SECURITYPOLICYCONFIGURATION_DEFINED
+#endif
 
 typedef struct _OpcUa_Endpoint_SecurityPolicyConfiguration OpcUa_Endpoint_SecurityPolicyConfiguration;
 

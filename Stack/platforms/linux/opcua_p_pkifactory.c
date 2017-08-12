@@ -108,7 +108,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_PKIFactory_CreatePKIProvider(OpcUa_Void* 
 
             if(pOverride->LoadPrivateKeyFromFile == OpcUa_Null)
             {
-                a_pPkiProvider->LoadPrivateKeyFromFile = OpcUa_P_OpenSSL_RSA_LoadPrivateKeyFromFile;
+                a_pPkiProvider->LoadPrivateKeyFromFile = OpcUa_P_OpenSSL_PKI_LoadPrivateKeyFromFile;
             }
             else
             {
@@ -134,7 +134,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_PKIFactory_CreatePKIProvider(OpcUa_Void* 
             a_pPkiProvider->ValidateCertificate     = OpcUa_P_OpenSSL_PKI_ValidateCertificate;
             a_pPkiProvider->LoadCertificate         = OpcUa_P_OpenSSL_PKI_LoadCertificate;
             a_pPkiProvider->SaveCertificate         = OpcUa_P_OpenSSL_PKI_SaveCertificate;
-            a_pPkiProvider->LoadPrivateKeyFromFile  = OpcUa_P_OpenSSL_RSA_LoadPrivateKeyFromFile;
+            a_pPkiProvider->LoadPrivateKeyFromFile  = OpcUa_P_OpenSSL_PKI_LoadPrivateKeyFromFile;
             a_pPkiProvider->ExtractCertificateData  = OpcUa_P_OpenSSL_PKI_ExtractCertificateData;
             break;
         }

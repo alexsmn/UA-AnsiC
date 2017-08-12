@@ -27,7 +27,7 @@ OPCUA_BEGIN_EXTERN_C
 typedef struct _OpcUa_ActualCredential
 {
     OpcUa_ByteString*               pClientCertificate;
-    OpcUa_ByteString*               pClientPrivateKey;
+    OpcUa_Key*                      pClientPrivateKey;
     OpcUa_ByteString*               pServerCertificate;
     OpcUa_Void*                     pkiConfig;
     OpcUa_String*                   pRequestedSecurityPolicyUri;

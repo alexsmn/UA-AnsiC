@@ -42,6 +42,8 @@
 
 /* optimization; set to OPCUA_CONFIG_YES for old behavior, which includes additional allocation, memcpy and free */
 #define OPCUA_SECURESTREAM_ENCRYPT_COPY_CIPHERTEXT OPCUA_CONFIG_NO
+/* optimization; set to OPCUA_CONFIG_YES for old behavior, which includes additional allocation, memcpy and free */
+#define OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT  OPCUA_CONFIG_NO
 
 /*============================================================================
  * OpcUa_SecureStream_SanityCheck
@@ -239,16 +241,16 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "GetAsymmetricSignatureSize");
 
     *a_pSignatureSize = 0;
 
-    switch (a_pProvider->AsymmetricEncryptionAlgorithmId)
+    switch (a_pProvider->AsymmetricSignatureAlgorithmId)
     {
         case OpcUa_P_NoSignature_Id:
         {
             *a_pSignatureSize = 0;
             break;
         }
-        case OpcUa_P_RSA_PKCS1_V15_Id:
-        case OpcUa_P_RSA_OAEP_Id:
-        case OpcUa_P_RSA_OAEP_SHA256_Id:
+        case OpcUa_P_RSA_PKCS1_V15_SHA1_Id:
+        case OpcUa_P_RSA_PKCS1_V15_SHA256_Id:
+        case OpcUa_P_RSA_PSS_SHA256_Id:
         {
             uStatus = OpcUa_Crypto_GetAsymmetricKeyLength(a_pProvider, *a_pPublicKey, &uSizeInBits);
             OpcUa_GotoErrorIfBad(uStatus);
@@ -2785,7 +2787,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "DecryptInputBuffer");
 
 #else /* OPCUA_SECURESTREAM_DECRYPT_COPY_PLAINTEXT */
 
-        uStatus = OpcUa_Buffer_GetData((OpcUa_Handle)a_pEncryptedBuffer, &pPlainText, &uiPlainTextSpace);
+        uStatus = OpcUa_Buffer_GetData(a_pEncryptedBuffer, &pPlainText, &uiPlainTextSpace);
         OpcUa_GotoErrorIfBad(uStatus);
 
         pPlainText = pPlainText + uBeginOfEncryptedData;
@@ -2819,7 +2821,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "DecryptInputBuffer");
 
 #else /* OPCUA_SECURESTREAM_DECRYPT_COPY_PLAINTEXT */
 
-        uStatus = OpcUa_Buffer_GetData((OpcUa_Handle)a_pEncryptedBuffer, &pPlainText, &uiPlainTextSpace);
+        uStatus = OpcUa_Buffer_GetData(a_pEncryptedBuffer, &pPlainText, &uiPlainTextSpace);
         OpcUa_GotoErrorIfBad(uStatus);
 
         pPlainText = pPlainText + uBeginOfEncryptedData;
@@ -2946,14 +2948,28 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "EncryptOutput");
     uStatus = OpcUa_Buffer_GetPosition(&pSecureStream->Buffers[0], &uBeginOfEncryption);
     OpcUa_GotoErrorIfBad(uStatus);
 
+#if OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT
+
     /* get message body length */
     uPlainTextLen = pSecureStream->Buffers[0].EndOfData - uBeginOfEncryption;
     pPlainText = (OpcUa_Byte*)OpcUa_Alloc(uPlainTextLen * sizeof(OpcUa_Byte));
     OpcUa_GotoErrorIfAllocFailed(pPlainText);
 
     /* read the data from the stream */
-    uStatus = OpcUa_Buffer_Read((OpcUa_Handle)&pSecureStream->Buffers[0], pPlainText, &uPlainTextLen);
+    uStatus = OpcUa_Buffer_Read(&pSecureStream->Buffers[0], pPlainText, &uPlainTextLen);
     OpcUa_GotoErrorIfBad(uStatus);
+
+#else /* OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT */
+
+    uStatus = OpcUa_Buffer_GetData(&pSecureStream->Buffers[0], &pPlainText, &uPlainTextLen);
+    OpcUa_GotoErrorIfBad(uStatus);
+
+    /* get encrypted data length */
+    uPlainTextLen = pSecureStream->Buffers[0].EndOfData - uBeginOfEncryption;
+
+    pPlainText = pPlainText + uBeginOfEncryption;
+
+#endif /* OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT */
 
     /*** encrypt data ***/
     if(a_bUseSymmetricAlgorithm == OpcUa_False)
@@ -2973,7 +2989,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "EncryptOutput");
 
 #else /* OPCUA_SECURESTREAM_ENCRYPT_COPY_CIPHERTEXT */
 
-        uStatus = OpcUa_Buffer_GetData((OpcUa_Handle)&pSecureStream->Buffers[0], &pCipherText, &uiCipherTextSpace);
+        uStatus = OpcUa_Buffer_GetData(&pSecureStream->Buffers[0], &pCipherText, &uiCipherTextSpace);
         OpcUa_GotoErrorIfBad(uStatus);
 
         pCipherText = pCipherText + uBeginOfEncryption;
@@ -3005,7 +3021,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "EncryptOutput");
 
 #else /* OPCUA_SECURESTREAM_ENCRYPT_COPY_CIPHERTEXT */
 
-        uStatus = OpcUa_Buffer_GetData((OpcUa_Handle)&pSecureStream->Buffers[0], &pCipherText, &uiCipherTextSpace);
+        uStatus = OpcUa_Buffer_GetData(&pSecureStream->Buffers[0], &pCipherText, &uiCipherTextSpace);
         OpcUa_GotoErrorIfBad(uStatus);
 
         pCipherText = pCipherText + uBeginOfEncryption;
@@ -3051,10 +3067,14 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "EncryptOutput");
 
 #endif /* OPCUA_SECURESTREAM_ENCRYPT_COPY_CIPHERTEXT */
 
+#if OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT
+
     if(pPlainText != OpcUa_Null)
     {
         OpcUa_Free(pPlainText);
     }
+
+#endif /* OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT */
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
@@ -3068,10 +3088,14 @@ OpcUa_BeginErrorHandling;
 
 #endif /* OPCUA_SECURESTREAM_ENCRYPT_COPY_CIPHERTEXT */
 
+#if OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT
+
     if(pPlainText != OpcUa_Null)
     {
         OpcUa_Free(pPlainText);
     }
+
+#endif /* OPCUA_SECURESTREAM_ENCRYPT_COPY_PLAINTEXT */
 
 OpcUa_FinishErrorHandling;
 }

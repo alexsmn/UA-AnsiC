@@ -70,3 +70,16 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_Memory_MemCpy(   OpcUa_Void*     a_pBuffer,
                                     a_nCount);
 }
 
+/*============================================================================
+ * OpcUa_Memory_DestroySecretData
+ *===========================================================================*/
+OpcUa_Void OPCUA_DLLCALL OpcUa_Memory_DestroySecretData(OpcUa_Void*  a_pData,
+                                                        OpcUa_UInt32 a_nBytes)
+{
+    if(OpcUa_ProxyStub_g_PlatformLayerCalltable->DestroySecretData != OpcUa_Null)
+    {
+        OpcUa_ProxyStub_g_PlatformLayerCalltable->DestroySecretData(a_pData,
+                                                                    a_nBytes);
+    }
+}
+

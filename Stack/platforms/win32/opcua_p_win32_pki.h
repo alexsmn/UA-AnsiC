@@ -202,7 +202,8 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
     OpcUa_StringA           privateKeyFile,
     OpcUa_P_FileFormat      fileFormat,
     OpcUa_StringA           password,
-    OpcUa_ByteString*       pPrivateKey);
+    OpcUa_UInt              keyType,
+    OpcUa_Key*              pPrivateKey);
 
 OPCUA_END_EXTERN_C
 

@@ -970,7 +970,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Socket, "CreateSslServer");
         bio = BIO_new_file(pFileName, "r");
         if(bio != OpcUa_Null)
         {
-            pInternalSocket->pDHparams = PEM_read_bio_DHparams(bio, NULL, NULL, NULL);
+            pInternalSocket->pDHparams = PEM_read_bio_DHparams(bio, NULL, NULL, "");
             BIO_free(bio);
         }
     }

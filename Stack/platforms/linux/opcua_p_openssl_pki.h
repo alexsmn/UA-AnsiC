@@ -67,7 +67,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_ValidateCertificate(
   @param pProvider                [in]  The crypto provider handle.
   @param pCertificateStore        [in]  The certificate store that should store the passed in certificate.
   @param pCertificate             [in]  The certificate that should be stored in the certificate store.
-  @param pSaveHandle              [out]  The handle that indicates the save location of the certificate within then certificate store.
+  @param pSaveHandle              [in]  The index that indicates the store location of the certificate within the certificate store.
 */
 OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_SaveCertificate(
     OpcUa_PKIProvider*          pProvider,
@@ -79,10 +79,10 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_SaveCertificate(
   @brief exports a certain certificate from a given certificate store.
 
   @param pProvider                [in]  The crypto provider handle.
-  @param pLoadHandle              [in]  The handle that indicates the load location of the certificate within then certificate store.
+  @param pLoadHandle              [in]  The index that indicates the store location of the certificate within the certificate store.
   @param ppCertificateStore       [in]  The certificate store that contains the desired certificate.
 
-  @param pCertificate             [out] The desired certificate.
+  @param pCertificate             [out] The exported certificate.
 */
 OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_LoadCertificate(
     OpcUa_PKIProvider*          pProvider,
@@ -91,7 +91,28 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_LoadCertificate(
     OpcUa_ByteString*           pCertificate);
 
 /**
-  @brief Extracts data from a certificate store object.
+  @brief loads a private key object, usually from an encrypted file.
+
+  Note: fileFormat == OpcUa_Crypto_Encoding_DER needs a keyType != OpcUa_Crypto_KeyType_Any
+        e.g. OpcUa_Crypto_KeyType_Rsa_Public.
+        Other formats can use keyType == OpcUa_Crypto_KeyType_Any as a wildcard.
+
+  @param privateKeyFile           [in]  The file name.
+  @param fileFormat               [in]  The file format.
+  @param password                 [in]  The encryption password.
+  @param keyType                  [in]  The expected key type.
+
+  @param pPrivateKey              [out] The private key (in DER format).
+  */
+OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_LoadPrivateKeyFromFile(
+    OpcUa_StringA           privateKeyFile,
+    OpcUa_P_FileFormat      fileFormat,
+    OpcUa_StringA           password,
+    OpcUa_UInt              keyType,
+    OpcUa_Key*              pPrivateKey);
+
+/**
+  @brief Extracts data from a certificate.
 
   @param pCertificate          [in] The certificate to examine.
   @param pIssuer               [out, optional] The issuer name of the certificate.
@@ -165,7 +186,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_ValidateCertificate(
   @param pProvider                [in]  The crypto provider handle.
   @param pCertificateStore        [in]  The certificate store that should store the passed in certificate.
   @param pCertificate             [in]  The certificate that should be stored in the certificate store.
-  @param pSaveHandle              [out]  The handle that indicates the save location of the certificate within then certificate store.
+  @param pSaveHandle              [in]  The index that indicates the store location of the certificate within the certificate store.
 */
 OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_SaveCertificate(
     OpcUa_PKIProvider*          pProvider,
@@ -177,10 +198,10 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_SaveCertificate(
   @brief exports a certain certificate from a given certificate store.
 
   @param pProvider                [in]  The crypto provider handle.
-  @param pLoadHandle              [in]  The handle that indicates the load location of the certificate within then certificate store.
+  @param pLoadHandle              [in]  The index that indicates the store location of the certificate within the certificate store.
   @param ppCertificateStore       [in]  The certificate store that contains the desired certificate.
 
-  @param pCertificate             [out] The desired certificate.
+  @param pCertificate             [out] The exported certificate.
 */
 OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_LoadCertificate(
     OpcUa_PKIProvider*          pProvider,
@@ -189,19 +210,25 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_LoadCertificate(
     OpcUa_ByteString*           pCertificate);
 
 /**
-  @brief exports a certain certificate from a given certificate store.
+  @brief loads a private key object, usually from an encrypted file.
 
-  @param pProvider                [in]  Load handle of the key file (ie. path in directory based PKI's).
-  @param pLoadHandle              [in]  The format in which the key is stored.
-  @param ppCertificateStore       [in]  The password if the key file is password secured.
+  Note: fileFormat == OpcUa_Crypto_Encoding_DER needs a keyType != OpcUa_Crypto_KeyType_Any
+        e.g. OpcUa_Crypto_KeyType_Rsa_Public.
+        Other formats can use keyType == OpcUa_Crypto_KeyType_Any as a wildcard.
 
-  @param pCertificate             [out] The desired private key.
+  @param privateKeyFile           [in]  The file name.
+  @param fileFormat               [in]  The file format.
+  @param password                 [in]  The encryption password.
+  @param keyType                  [in]  The expected key type.
+
+  @param pPrivateKey              [out] The private key (in DER format).
 */
 OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_LoadPrivateKeyFromFile(
     OpcUa_StringA               privateKeyFile,
     OpcUa_P_FileFormat          fileFormat,
     OpcUa_StringA               password,
-    OpcUa_ByteString*           pPrivateKey);
+    OpcUa_UInt                  keyType,
+    OpcUa_Key*                  pPrivateKey);
 
 /**
   @brief Extracts data from a certificate store object.

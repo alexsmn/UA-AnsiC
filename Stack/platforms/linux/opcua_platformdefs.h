@@ -137,6 +137,8 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_ReAlloc(xSrc, xSize)                  OpcUa_Memory_ReAlloc(xSrc, xSize)
 #define OpcUa_Free(xSrc)                            OpcUa_Memory_Free(xSrc)
 
+#define OpcUa_DestroySecretData(xDst, xSize)        OpcUa_Memory_DestroySecretData(xDst, xSize)
+
 /* shortcuts to utility functions */
 #define OpcUa_qSort(xBase, xNum, xWidth, xCmp, xCtx)            OpcUa_QSort(xBase, xNum, xWidth, xCmp, xCtx)
 #define OpcUa_bSearch(xKey, xBase, xNum, xWidth, xCmp, xCtx)    OpcUa_BSearch(xKey, xBase, xNum, xWidth, xCmp, xCtx)

@@ -41,7 +41,8 @@ typedef enum eOpcUa_SecureListener_SecureChannelEvent
 /**
  * @brief Associates a supported security policy with message security modes.
  */
-struct _OpcUa_SecureListener_SecurityPolicyConfiguration
+#ifndef OPCUA_ENDPOINT_SECURITYPOLICYCONFIGURATION_DEFINED
+struct _OpcUa_Endpoint_SecurityPolicyConfiguration
 {
     /** @brief The URI of a supported security policy. */
     OpcUa_String        sSecurityPolicy;
@@ -50,8 +51,10 @@ struct _OpcUa_SecureListener_SecurityPolicyConfiguration
     /** @brief The client certificate, if provided. */
     OpcUa_ByteString*   pbsClientCertificate;
 };
+#define OPCUA_ENDPOINT_SECURITYPOLICYCONFIGURATION_DEFINED
+#endif
 
-typedef struct _OpcUa_SecureListener_SecurityPolicyConfiguration OpcUa_SecureListener_SecurityPolicyConfiguration;
+typedef struct _OpcUa_Endpoint_SecurityPolicyConfiguration OpcUa_SecureListener_SecurityPolicyConfiguration;
 
 /**
  * @brief Function, that needs to be implemented to receive notifications about secure channel events.

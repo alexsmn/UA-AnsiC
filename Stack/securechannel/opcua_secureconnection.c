@@ -1144,7 +1144,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Connect");
     /* private key */
     if(pSecureConnection->ClientPrivateKey != OpcUa_Null)
     {
-        OpcUa_Free((OpcUa_Key*)pSecureConnection->ClientPrivateKey);
+        OpcUa_Free(pSecureConnection->ClientPrivateKey);
         pSecureConnection->ClientPrivateKey = OpcUa_Null;
     }
 
@@ -1152,9 +1152,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Connect");
 
     pSecureConnection->ClientPrivateKey = (OpcUa_Key*)OpcUa_Alloc(sizeof(OpcUa_Key));
     OpcUa_GotoErrorIfAllocFailed(pSecureConnection->ClientPrivateKey);
-    ((OpcUa_Key*)pSecureConnection->ClientPrivateKey)->Type = OpcUa_Crypto_KeyType_Rsa_Private;
-    ((OpcUa_Key*)pSecureConnection->ClientPrivateKey)->Key = *(pClientCredentials->pClientPrivateKey);
-    ((OpcUa_Key*)pSecureConnection->ClientPrivateKey)->fpClearHandle = 0;
+    *(pSecureConnection->ClientPrivateKey)          = *(pClientCredentials->pClientPrivateKey);
 
     pSecureConnection->ClientCertificate            = pClientCredentials->pClientCertificate;
     pSecureConnection->ServerCertificate            = pClientCredentials->pServerCertificate;
@@ -1180,7 +1178,7 @@ OpcUa_BeginErrorHandling;
     /* clean up members set in this function */
     if(pSecureConnection->ClientPrivateKey != OpcUa_Null)
     {
-        OpcUa_Free((OpcUa_Key*)pSecureConnection->ClientPrivateKey);
+        OpcUa_Free(pSecureConnection->ClientPrivateKey);
         pSecureConnection->ClientPrivateKey = OpcUa_Null;
         OpcUa_String_Clear(&pSecureConnection->sUrl);
     }
@@ -2593,7 +2591,7 @@ OpcUa_Void OpcUa_SecureConnection_Delete(OpcUa_Connection** a_ppConnection)
         pSecureConnection->SanityCheck = 0;
 
         /* set during connect phase - also reset during disconnect */
-        OpcUa_Free((OpcUa_Key*)pSecureConnection->ClientPrivateKey);
+        OpcUa_Free(pSecureConnection->ClientPrivateKey);
         pSecureConnection->ClientPrivateKey = OpcUa_Null;
         OpcUa_String_Clear(&pSecureConnection->sUrl);
 

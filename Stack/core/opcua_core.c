@@ -217,7 +217,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_CryptoProvider_Delete(OpcUa_CryptoProvider*
 
 OpcUa_Void OPCUA_DLLCALL OpcUa_ThreadCleanupOpenSSL()
 {
-    if (OpcUa_ProxyStub_g_PlatformLayerCalltable->ThreadCleanupOpenSSL != OpcUa_Null)
+    if(OpcUa_ProxyStub_g_PlatformLayerCalltable->ThreadCleanupOpenSSL != OpcUa_Null)
     {
         OpcUa_ProxyStub_g_PlatformLayerCalltable->ThreadCleanupOpenSSL();
     }
@@ -229,7 +229,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_OpenSSLSeedPRNG(   OpcUa_Byte*  a_pEntropy,
                                                         OpcUa_UInt32 a_nBytes)
 {
     OpcUa_StatusCode uStatus = OpcUa_BadNotImplemented;
-    if (OpcUa_ProxyStub_g_PlatformLayerCalltable->OpenSSLSeedPRNG != OpcUa_Null)
+    if(OpcUa_ProxyStub_g_PlatformLayerCalltable->OpenSSLSeedPRNG != OpcUa_Null)
     {
         uStatus = OpcUa_ProxyStub_g_PlatformLayerCalltable->OpenSSLSeedPRNG(a_pEntropy,
                                                                             a_nBytes);

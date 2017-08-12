@@ -1594,12 +1594,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "Connect");
 
     /* security credentials */
 #if OPCUA_HTTPSCONNECTION_USE_TLS_CREDENTIALS
-    if(a_pCredential->Credential.TheActuallyUsedCredential.pClientPrivateKey != OpcUa_Null)
-    {
-        pHttpConnection->PrivateKey.Type            = OpcUa_Crypto_KeyType_Rsa_Private;
-        pHttpConnection->PrivateKey.Key             = *(a_pCredential->Credential.TheActuallyUsedCredential.pClientPrivateKey);
-        pHttpConnection->PrivateKey.fpClearHandle   = 0;
-    }
+    pHttpConnection->PrivateKey                 = *(a_pCredential->Credential.TheActuallyUsedCredential.pClientPrivateKey);
 #endif
 
     pHttpConnection->pCertificate               = a_pCredential->Credential.TheActuallyUsedCredential.pClientCertificate;

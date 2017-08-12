@@ -26,10 +26,10 @@
 
 /* System Headers */
 #include <openssl/pem.h>
+#include <openssl/bio.h>
 #include <openssl/x509_vfy.h>
 #include <openssl/x509v3.h>
-#include <openssl/bio.h>
-#include <openssl/err.h>
+#include <openssl/pkcs12.h>
 
 
 
@@ -872,8 +872,213 @@ OpcUa_BeginErrorHandling;
 OpcUa_FinishErrorHandling;
 }
 
+/*============================================================================
+ * OpcUa_P_OpenSSL_PKI_LoadPrivateKeyFromFile
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_LoadPrivateKeyFromFile(
+    OpcUa_StringA           a_privateKeyFile,
+    OpcUa_P_FileFormat      a_fileFormat,
+    OpcUa_StringA           a_password,         /* optional: just needed encrypted PEM */
+    OpcUa_UInt              a_keyType,
+    OpcUa_Key*              a_pPrivateKey)
+{
+    BIO*            pPrivateKeyFile     = OpcUa_Null;
+    RSA*            pRsaPrivateKey      = OpcUa_Null;
+    EVP_PKEY*       pEvpKey             = OpcUa_Null;
+    unsigned char*  pData;
+
+OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "PKI_LoadPrivateKeyFromFile");
+
+    /* check parameters */
+    OpcUa_ReturnErrorIfArgumentNull(a_privateKeyFile);
+    OpcUa_ReturnErrorIfArgumentNull(a_pPrivateKey);
+
+    if(a_fileFormat == OpcUa_Crypto_Encoding_Invalid)
+    {
+        return OpcUa_BadInvalidArgument;
+    }
+
+    /* open file */
+    pPrivateKeyFile = BIO_new_file((const char*)a_privateKeyFile, "rb");
+    OpcUa_ReturnErrorIfArgumentNull(pPrivateKeyFile);
+
+    /* read and convert file */
+    switch(a_fileFormat)
+    {
+    case OpcUa_Crypto_Encoding_PEM:
+        {
+            /* read from file */
+            pEvpKey = PEM_read_bio_PrivateKey(  pPrivateKeyFile,    /* file                 */
+                                                NULL,               /* key struct           */
+                                                0,                  /* password callback    */
+                                                a_password);        /* default passphrase or arbitrary handle */
+            break;
+        }
+    case OpcUa_Crypto_Encoding_PKCS12:
+        {
+            int i;
+
+            /* read from file. */
+            PKCS12* pPkcs12 = d2i_PKCS12_bio(pPrivateKeyFile, NULL);
+
+            if(pPkcs12 == NULL)
+            {
+                OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+            }
+
+            /* parse the certificate. */
+            if(a_keyType == OpcUa_Crypto_KeyType_Asymmetric)
+            {
+                X509 *pCert;
+                STACK_OF(X509) *pCA = sk_X509_new_null();
+                OpcUa_GotoErrorIfNull(pCA, OpcUa_Bad);
+                i = PKCS12_parse(pPkcs12, a_password, &pEvpKey, &pCert, &pCA);
+                PKCS12_free(pPkcs12);
+
+                if(i <= 0 || pCert == NULL)
+                {
+                    sk_X509_pop_free(pCA, X509_free);
+                    OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+                }
+
+                a_pPrivateKey->Key.Length = i2d_X509(pCert, NULL);
+                for(i = 0; i < sk_X509_num(pCA); i++)
+                {
+                    a_pPrivateKey->Key.Length += i2d_X509(sk_X509_value(pCA, i), NULL);
+                }
+
+                a_pPrivateKey->Key.Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pPrivateKey->Key.Length);
+                if(a_pPrivateKey->Key.Data == OpcUa_Null)
+                {
+                    sk_X509_pop_free(pCA, X509_free);
+                    X509_free(pCert);
+                    OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+                }
+
+                pData = a_pPrivateKey->Key.Data;
+                i2d_X509(pCert, &pData);
+                for(i = 0; i < sk_X509_num(pCA); i++)
+                {
+                    i2d_X509(sk_X509_value(pCA, i), &pData);
+                }
+
+                a_pPrivateKey->Type = OpcUa_Crypto_KeyType_Asymmetric;
+
+                sk_X509_pop_free(pCA, X509_free);
+                X509_free(pCert);
+                EVP_PKEY_free(pEvpKey);
+                BIO_free(pPrivateKeyFile);
+                OpcUa_ReturnStatusCode;
+            }
+
+            i = PKCS12_parse(pPkcs12, a_password, &pEvpKey, NULL, NULL);
+            PKCS12_free(pPkcs12);
+
+            if(i <= 0)
+            {
+                OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+            }
+            break;
+        }
+    case OpcUa_Crypto_Encoding_DER:
+        {
+            switch(a_keyType)
+            {
+            case OpcUa_Crypto_KeyType_Rsa_Private:
+                pRsaPrivateKey = d2i_RSAPrivateKey_bio(pPrivateKeyFile, OpcUa_Null);
+                break;
+
+            default:
+                uStatus = OpcUa_BadNotSupported;
+                OpcUa_GotoError;
+            }
+            break;
+        }
+    default:
+        {
+            uStatus = OpcUa_BadNotSupported;
+            OpcUa_GotoError;
+        }
+    }
+
+    if(pEvpKey != NULL)
+    {
+        /* convert to intermediary openssl struct */
+        switch(a_keyType)
+        {
+        case OpcUa_Crypto_KeyType_Any:
+        case OpcUa_Crypto_KeyType_Rsa_Private:
+            pRsaPrivateKey = EVP_PKEY_get1_RSA(pEvpKey);
+            break;
+
+        default:
+            uStatus = OpcUa_BadNotSupported;
+            OpcUa_GotoError;
+        }
+
+        EVP_PKEY_free(pEvpKey);
+        pEvpKey = NULL;
+    }
+
+    if(pRsaPrivateKey != NULL)
+    {
+        /* get required length */
+        a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsaPrivateKey, OpcUa_Null);
+        OpcUa_GotoErrorIfTrue((a_pPrivateKey->Key.Length <= 0), OpcUa_Bad);
+
+        /* allocate target buffer */
+        a_pPrivateKey->Key.Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pPrivateKey->Key.Length);
+        OpcUa_GotoErrorIfAllocFailed(a_pPrivateKey->Key.Data);
+
+        /* do real conversion */
+        pData = a_pPrivateKey->Key.Data;
+        a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsaPrivateKey, &pData);
+        OpcUa_GotoErrorIfTrue((a_pPrivateKey->Key.Length <= 0), OpcUa_Bad);
+
+        a_pPrivateKey->Type = OpcUa_Crypto_KeyType_Rsa_Private;
+
+        RSA_free(pRsaPrivateKey);
+    }
+    else
+    {
+        OpcUa_GotoErrorWithStatus(OpcUa_Bad);
+    }
+
+    BIO_free(pPrivateKeyFile);
+
+OpcUa_ReturnStatusCode;
+OpcUa_BeginErrorHandling;
+
+    if(pEvpKey)
+    {
+        EVP_PKEY_free(pEvpKey);
+    }
+
+    if(a_pPrivateKey != OpcUa_Null)
+    {
+        if(a_pPrivateKey->Key.Data != OpcUa_Null)
+        {
+            OpcUa_P_Memory_Free(a_pPrivateKey->Key.Data);
+            a_pPrivateKey->Key.Data = OpcUa_Null;
+            a_pPrivateKey->Key.Length = -1;
+        }
+    }
+
+    if(pPrivateKeyFile != NULL)
+    {
+        BIO_free(pPrivateKeyFile);
+    }
+
+    if(pRsaPrivateKey != NULL)
+    {
+        RSA_free(pRsaPrivateKey);
+    }
+
+OpcUa_FinishErrorHandling;
+}
+
 /**
-  @brief Extracts data from a certificate store object.
+  @brief Extracts data from a certificate.
 
   @param pCertificate          [in] The certificate to examine.
   @param pIssuer               [out, optional] The issuer name of the certificate.
@@ -909,37 +1114,37 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "PKI_ExtractCertificateData");
     if(a_pIssuer != OpcUa_Null)
     {
         a_pIssuer->Data = OpcUa_Null;
-        a_pIssuer->Length = 0;
+        a_pIssuer->Length = -1;
     }
 
     if(a_pSubject != OpcUa_Null)
     {
         a_pSubject->Data = OpcUa_Null;
-        a_pSubject->Length = 0;
+        a_pSubject->Length = -1;
     }
 
     if(a_pSubjectUri != OpcUa_Null)
     {
         a_pSubjectUri->Data = OpcUa_Null;
-        a_pSubjectUri->Length = 0;
+        a_pSubjectUri->Length = -1;
     }
 
     if(a_pSubjectIP != OpcUa_Null)
     {
         a_pSubjectIP->Data = OpcUa_Null;
-        a_pSubjectIP->Length = 0;
+        a_pSubjectIP->Length = -1;
     }
 
     if(a_pSubjectDNS != OpcUa_Null)
     {
         a_pSubjectDNS->Data = OpcUa_Null;
-        a_pSubjectDNS->Length = 0;
+        a_pSubjectDNS->Length = -1;
     }
 
     if(a_pCertThumbprint != OpcUa_Null)
     {
         a_pCertThumbprint->Data = OpcUa_Null;
-        a_pCertThumbprint->Length = 0;
+        a_pCertThumbprint->Length = -1;
     }
 
     if(a_pSubjectHash != OpcUa_Null)
@@ -1067,42 +1272,42 @@ OpcUa_BeginErrorHandling;
     {
         OpcUa_P_Memory_Free(a_pIssuer->Data);
         a_pIssuer->Data = OpcUa_Null;
-        a_pIssuer->Length = 0;
+        a_pIssuer->Length = -1;
     }
 
     if(a_pSubject != OpcUa_Null && a_pSubject->Data != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(a_pSubject->Data);
         a_pSubject->Data = OpcUa_Null;
-        a_pSubject->Length = 0;
+        a_pSubject->Length = -1;
     }
 
     if(a_pSubjectUri != OpcUa_Null && a_pSubjectUri->Data != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(a_pSubjectUri->Data);
         a_pSubjectUri->Data = OpcUa_Null;
-        a_pSubjectUri->Length = 0;
+        a_pSubjectUri->Length = -1;
     }
 
     if(a_pSubjectIP != OpcUa_Null && a_pSubjectIP->Data != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(a_pSubjectIP->Data);
         a_pSubjectIP->Data = OpcUa_Null;
-        a_pSubjectIP->Length = 0;
+        a_pSubjectIP->Length = -1;
     }
 
     if(a_pSubjectDNS != OpcUa_Null && a_pSubjectDNS->Data != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(a_pSubjectDNS->Data);
         a_pSubjectDNS->Data = OpcUa_Null;
-        a_pSubjectDNS->Length = 0;
+        a_pSubjectDNS->Length = -1;
     }
 
     if(a_pCertThumbprint != OpcUa_Null && a_pCertThumbprint->Data != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(a_pCertThumbprint->Data);
         a_pCertThumbprint->Data = OpcUa_Null;
-        a_pCertThumbprint->Length = 0;
+        a_pCertThumbprint->Length = -1;
     }
 
     if (pName != OpcUa_Null)

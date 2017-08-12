@@ -553,7 +553,8 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
     OpcUa_StringA           a_privateKeyFile,
     OpcUa_P_FileFormat      a_fileFormat,       /* Not used */
     OpcUa_StringA           a_password,         /* Not used */
-    OpcUa_ByteString*       a_pPrivateKey)
+    OpcUa_UInt              a_keyType,          /* Not used */
+    OpcUa_Key*              a_pPrivateKey)
 {
     HCERTSTORE        hSystemStore     = OpcUa_Null;
     HCERTSTORE        hMemoryStore     = OpcUa_Null;
@@ -578,6 +579,7 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
 
     OpcUa_ReferenceParameter(a_fileFormat);
     OpcUa_ReferenceParameter(a_password);
+    OpcUa_ReferenceParameter(a_keyType);
 
     /*** OPEN SYSTEM STORE ***/
     /* This has to move to OpenCertificateStore, */
@@ -669,17 +671,17 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
         OpcUa_GotoErrorIfNull(pRsaPrivateKey, OpcUa_Bad);
 
         /* get required length */
-        a_pPrivateKey->Length = i2d_RSAPrivateKey(pRsaPrivateKey, OpcUa_Null);
-        OpcUa_GotoErrorIfTrue((a_pPrivateKey->Length <= 0), OpcUa_Bad);
+        a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsaPrivateKey, OpcUa_Null);
+        OpcUa_GotoErrorIfTrue((a_pPrivateKey->Key.Length <= 0), OpcUa_Bad);
 
         /* allocate target buffer */
-        a_pPrivateKey->Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pPrivateKey->Length);
-        OpcUa_GotoErrorIfAllocFailed(a_pPrivateKey->Data);
+        a_pPrivateKey->Key.Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pPrivateKey->Key.Length);
+        OpcUa_GotoErrorIfAllocFailed(a_pPrivateKey->Key.Data);
 
         /* do real conversion */
-        pData = a_pPrivateKey->Data;
-        a_pPrivateKey->Length = i2d_RSAPrivateKey(pRsaPrivateKey, &pData);
-        OpcUa_GotoErrorIfTrue((a_pPrivateKey->Length <= 0), OpcUa_Bad);
+        pData = a_pPrivateKey->Key.Data;
+        a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsaPrivateKey, &pData);
+        OpcUa_GotoErrorIfTrue((a_pPrivateKey->Key.Length <= 0), OpcUa_Bad);
         RSA_free(pRsaPrivateKey);
         pRsaPrivateKey = OpcUa_Null;
     }
@@ -702,20 +704,20 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
         pPKCS12 = OpcUa_Null;
     }
 
-    if (pTempCertContext)
+    if(pTempCertContext)
     {
         CertFreeCertificateContext(pTempCertContext);
         pTempCertContext = OpcUa_Null;
     }
 
     /*** Free CerificateContextHandles ***/
-    if (pTargetCert)
+    if(pTargetCert)
     {
         CertFreeCertificateContext(pTargetCert);
         pTargetCert = OpcUa_Null;
     }
 
-    if (pfx.pbData)
+    if(pfx.pbData)
     {
         CryptMemFree(pfx.pbData);
         pfx.pbData = OpcUa_Null;
@@ -724,11 +726,12 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
     /*** CLOSE MEMORY STORE ***/
     if(hMemoryStore)
     {
-        if (!CertCloseStore(hMemoryStore, CERT_CLOSE_STORE_CHECK_FLAG))
+        if(!CertCloseStore(hMemoryStore, CERT_CLOSE_STORE_CHECK_FLAG))
         {
             /* memory store could not be freed */
             OpcUa_GotoErrorWithStatus(OpcUa_Bad);
         }
+        hMemoryStore = OpcUa_Null;
     }
 
     /*** CLOSE SYSTEM STORE ***/
@@ -737,7 +740,7 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
     /* provided in the function declaration first! */
     if(hSystemStore)
     {
-        if (!CertCloseStore(hSystemStore, CERT_CLOSE_STORE_FORCE_FLAG))
+        if(!CertCloseStore(hSystemStore, CERT_CLOSE_STORE_FORCE_FLAG))
         {
             /* system store could not be freed */
             OpcUa_GotoErrorWithStatus(OpcUa_Bad);
@@ -756,56 +759,48 @@ OpcUa_BeginErrorHandling;
     if(pEvpKey)
     {
         EVP_PKEY_free(pEvpKey);
-        pEvpKey = OpcUa_Null;
     }
 
     if(pRsaPrivateKey)
     {
         RSA_free(pRsaPrivateKey);
-        pRsaPrivateKey = OpcUa_Null;
     }
 
     if(a_pPrivateKey)
     {
-        OpcUa_P_ByteString_Clear(a_pPrivateKey);
-        a_pPrivateKey = OpcUa_Null;
+        OpcUa_P_ByteString_Clear(&a_pPrivateKey->Key);
     }
 
     if(pBio)
     {
         BIO_free(pBio);
-        pBio = OpcUa_Null;
     }
 
     if(pPKCS12)
     {
         PKCS12_free(pPKCS12);
-        pPKCS12 = OpcUa_Null;
     }
 
-    if (pTempCertContext)
+    if(pTempCertContext)
     {
         CertFreeCertificateContext(pTempCertContext);
-        pTempCertContext = OpcUa_Null;
     }
 
     /*** Free CerificateContextHandles ***/
-    if (pTargetCert)
+    if(pTargetCert)
     {
         CertFreeCertificateContext(pTargetCert);
-        pTargetCert = OpcUa_Null;
     }
 
-    if (pfx.pbData)
+    if(pfx.pbData)
     {
         CryptMemFree(pfx.pbData);
-        pfx.pbData = OpcUa_Null;
     }
 
     /*** CLOSE MEMORY STORE ***/
     if(hMemoryStore)
     {
-        if (!CertCloseStore(hMemoryStore, CERT_CLOSE_STORE_FORCE_FLAG))
+        if(!CertCloseStore(hMemoryStore, CERT_CLOSE_STORE_FORCE_FLAG))
         {
             /* memory store could not be freed */
             /* trace?? */
@@ -818,14 +813,14 @@ OpcUa_BeginErrorHandling;
     /* provided in the function declaration first! */
     if(hSystemStore)
     {
-        if (!CertCloseStore(hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG))
+        if(!CertCloseStore(hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG))
         {
             /* system store could not be freed */
             /* trace?? */
         }
     }
 
-    if (pSubjectName != OpcUa_Null)
+    if(pSubjectName != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(pSubjectName);
     }

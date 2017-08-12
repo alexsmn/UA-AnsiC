@@ -17,6 +17,10 @@ Current Version
 		- fixed OpcUa_EncodeableTypeTable_AddTypes and OpcUa_ProxyStub_AddTypes were potentially moving
 			type entries around.  This rarely used API was changed to not copying the type entries.
 			Therefore the a_pType parameter should always be from the static storage class.
+		- added new API function OpcUa_DestroySecretData.
+		- changed the signature of LoadPrivateKeyFromFile to return the private key in a OpcUa_Key structure.
+		- changed the signature of OpcUa_Channel_BeginConnect and OpcUa_Channel_Connect to expect
+			a pPrivateKey of type OpcUa_Key.
 
 	Other changes:
 		- added cmake build support for both linux and windows in addition to existing tooling.

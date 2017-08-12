@@ -25,13 +25,9 @@
 
 /* System Headers */
 #include <openssl/rsa.h>
-#include <openssl/pem.h>
-#include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
-#include <openssl/pkcs12.h>
-#include <openssl/err.h>
 
 
 /* own headers */
@@ -171,6 +167,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
     X509*               pCert               = OpcUa_Null;
     EVP_PKEY*           pSubjectPublicKey   = OpcUa_Null;
     EVP_PKEY*           pIssuerPrivateKey   = OpcUa_Null;
+    OpcUa_Byte*         pBuffer             = OpcUa_Null;
 
     OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_SelfSigned_Custom_Create");
 
@@ -366,6 +363,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
     {
         /* conversion to DER not possible */
         uStatus = OpcUa_Bad;
+        OpcUa_GotoErrorIfBad(uStatus);
     }
 
     /* allocate conversion target buffer */
@@ -373,22 +371,12 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_SelfSigned_Custom_Create(
     OpcUa_GotoErrorIfAllocFailed(a_pCertificate->Data);
 
     /* convert into DER */
-    a_pCertificate->Length = i2d_X509(pCert, &(a_pCertificate->Data));
-    if(a_pCertificate->Length <= 0)
-    {
-        /* conversion to DER not possible */
-        uStatus = OpcUa_Bad;
-    }
-    else
-    {
-        /* correct pointer incrementation by i2d_X509() */
-        a_pCertificate->Data -= a_pCertificate->Length;
-    }
+    pBuffer = a_pCertificate->Data;
+    a_pCertificate->Length = i2d_X509(pCert, &pBuffer);
 
     X509_free(pCert);
 
 OpcUa_ReturnStatusCode;
-
 OpcUa_BeginErrorHandling;
 
     X509_free(pCert);
@@ -412,140 +400,6 @@ OpcUa_FinishErrorHandling;
 }
 
 /*============================================================================
- * OpcUa_P_OpenSSL_X509_LoadFromFile
- *===========================================================================*/
-OpcUa_StatusCode OpcUa_P_OpenSSL_X509_LoadFromFile(
-    OpcUa_StringA               a_fileName,
-    OpcUa_P_FileFormat          a_fileFormat,
-    OpcUa_StringA               a_sPassword,        /* optional: just for OpcUa_PKCS12 */
-    OpcUa_ByteString*           a_pCertificate)
-{
-    BIO*            pCertFile       = OpcUa_Null;
-    X509*           pCertX509       = OpcUa_Null;
-    PKCS12*         pPKCS12Cert     = OpcUa_Null;
-
-OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_LoadFromFile");
-
-    /* check filename */
-    if(OpcUa_P_String_strlen(a_fileName) < 1)
-    {
-        uStatus = OpcUa_BadInvalidArgument;
-        OpcUa_GotoErrorIfBad(uStatus);
-    }
-
-    /* import certificate from file by the given encoding type */
-    pCertFile = BIO_new_file((const char*)a_fileName, "r");
-    OpcUa_ReturnErrorIfArgumentNull(pCertFile);
-
-    switch(a_fileFormat)
-    {
-    case OpcUa_Crypto_Encoding_DER:
-        {
-
-            pCertX509 = d2i_X509_bio(pCertFile,      /* sourcefile */
-                                     (X509**)NULL);  /* target (if preallocated) */
-            break;
-        }
-    case OpcUa_Crypto_Encoding_PEM:
-        {
-
-            pCertX509 = PEM_read_bio_X509(  pCertFile,          /* sourcefile */
-                                            (X509**)OpcUa_Null, /* target (if preallocated) */
-                                            OpcUa_Null,         /* password callback function */
-                                            OpcUa_Null);        /* passphrase or callback data */
-            break;
-        }
-    case OpcUa_Crypto_Encoding_PKCS12:
-        {
-            d2i_PKCS12_bio(pCertFile, &pPKCS12Cert);
-
-            PKCS12_parse(pPKCS12Cert, a_sPassword, OpcUa_Null, &pCertX509, OpcUa_Null);
-
-            if(pPKCS12Cert != OpcUa_Null)
-            {
-                PKCS12_free(pPKCS12Cert);
-                /*OPENSSL_free(pPKCS12Cert);*/
-            }
-
-            break;
-        }
-    default:
-        {
-            BIO_free(pCertFile);
-            return OpcUa_BadNotSupported;
-        }
-    }
-
-    BIO_free(pCertFile);
-    pCertFile = OpcUa_Null;
-
-    if(pCertX509 == OpcUa_Null)
-    {
-        /* error in OpenSSL - maybe certificate file was corrupt */
-        return OpcUa_Bad;
-    }
-
-    /* prepare container */
-    memset(a_pCertificate, 0, sizeof(OpcUa_ByteString));
-
-    /* get required length for conversion target buffer */
-    a_pCertificate->Length = i2d_X509(  pCertX509,
-                                            NULL);
-
-    if(a_pCertificate->Length <= 0)
-    {
-        /* conversion to DER not possible */
-        uStatus = OpcUa_Bad;
-    }
-
-    /* allocate conversion target buffer */
-    a_pCertificate->Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pCertificate->Length);
-    OpcUa_GotoErrorIfAllocFailed(a_pCertificate->Data);
-
-    /* convert into DER */
-    a_pCertificate->Length = i2d_X509(  pCertX509,
-                                            &(a_pCertificate->Data));
-    if(a_pCertificate->Length <= 0)
-    {
-        /* conversion to DER not possible */
-        uStatus = OpcUa_Bad;
-    }
-    else
-    {
-        /* correct pointer incrementation by i2d_X509() */
-        a_pCertificate->Data -= a_pCertificate->Length;
-    }
-
-    X509_free(pCertX509);
-
-OpcUa_ReturnStatusCode;
-OpcUa_BeginErrorHandling;
-
-    if(pCertX509 != OpcUa_Null)
-    {
-        X509_free(pCertX509);
-    }
-
-    if(pPKCS12Cert != OpcUa_Null)
-    {
-        OPENSSL_free(pPKCS12Cert);
-    }
-
-    if(a_pCertificate->Data != OpcUa_Null)
-    {
-        OpcUa_P_Memory_Free(a_pCertificate->Data);
-        a_pCertificate->Data = OpcUa_Null;
-    }
-
-    if(pCertFile != OpcUa_Null)
-    {
-        BIO_free(pCertFile);
-    }
-
-OpcUa_FinishErrorHandling;
-}
-
-/*============================================================================
  * OpcUa_P_OpenSSL_X509_GetPublicKey
  *===========================================================================*/
 OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPublicKey(
@@ -554,11 +408,11 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPublicKey(
     OpcUa_StringA               a_password,             /* this could be optional */
     OpcUa_Key*                  a_pPublicKey)
 {
-    EVP_PKEY*           pPublicKey      = OpcUa_Null;
-    RSA*                pRsaPublicKey   = OpcUa_Null;
-    X509*               pCertificate    = OpcUa_Null;
-    OpcUa_Byte*         pBuffer         = OpcUa_Null;
-    BIO*                bi;
+    EVP_PKEY*               pPublicKey      = OpcUa_Null;
+    RSA*                    pRsaPublicKey   = OpcUa_Null;
+    X509*                   pCertificate    = OpcUa_Null;
+    OpcUa_Byte*             pBuffer         = OpcUa_Null;
+    const unsigned char*    pTemp           = OpcUa_Null;
 
     OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_GetPublicKey");
 
@@ -569,12 +423,9 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPublicKey(
     OpcUa_ReturnErrorIfArgumentNull(a_pCertificate->Data);
     OpcUa_ReturnErrorIfArgumentNull(a_pPublicKey);
 
-    bi = BIO_new(BIO_s_mem());
-    BIO_write(bi, a_pCertificate->Data, a_pCertificate->Length);
+    pTemp = a_pCertificate->Data;
 
-    pCertificate = d2i_X509_bio(bi, NULL);
-
-    BIO_free(bi);
+    d2i_X509(&pCertificate, &pTemp, a_pCertificate->Length);
 
     if(pCertificate == OpcUa_Null)
     {
@@ -611,10 +462,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPublicKey(
         if(a_pPublicKey->Key.Data == OpcUa_Null)
         {
             RSA_free(pRsaPublicKey);
-            pRsaPublicKey = OpcUa_Null;
-
             EVP_PKEY_free(pPublicKey);
-            pPublicKey = OpcUa_Null;
 
             OpcUa_ReturnStatusCode;
         }
@@ -626,7 +474,6 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPublicKey(
 
         /* free memory for RSA key */
         RSA_free(pRsaPublicKey);
-        pRsaPublicKey = OpcUa_Null;
 
         break;
 
@@ -639,128 +486,11 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPublicKey(
 
     /*** clean up ***/
     EVP_PKEY_free(pPublicKey);
-    pPublicKey = OpcUa_Null;
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
     EVP_PKEY_free(pPublicKey);
-    pPublicKey = OpcUa_Null;
-
-OpcUa_FinishErrorHandling;
-}
-
-/*============================================================================
- * OpcUa_P_OpenSSL_X509_GetPrivateKey
- *===========================================================================*/
-OpcUa_StatusCode OpcUa_P_OpenSSL_X509_GetPrivateKey(
-    OpcUa_CryptoProvider*       a_pProvider,
-    OpcUa_StringA               a_certificateFileName,
-    OpcUa_StringA               a_password,             /* this is optional */
-    OpcUa_Key*                  a_pPrivateKey)
-{
-    BIO*            pCertFile       = OpcUa_Null;
-    PKCS12*         pPKCS12Cert     = OpcUa_Null;
-    EVP_PKEY*       pPrivateKey     = OpcUa_Null;
-    RSA*            pRsaPrivateKey  = OpcUa_Null;
-
-OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_GetPrivateKey");
-
-    OpcUa_ReferenceParameter(a_pProvider);
-
-    OpcUa_ReturnErrorIfArgumentNull(a_pProvider);
-    OpcUa_ReturnErrorIfArgumentNull(a_certificateFileName);
-    OpcUa_ReturnErrorIfArgumentNull(a_pPrivateKey);
-
-    /* import certificate from file by the given encoding type */
-    pCertFile = BIO_new_file((const char*)a_certificateFileName, "r");
-    OpcUa_ReturnErrorIfArgumentNull(pCertFile);
-
-    /* convert certificate file handle to PKCS12 structure */
-    d2i_PKCS12_bio(pCertFile, &pPKCS12Cert);
-
-    /* close certificat file handle */
-    BIO_free(pCertFile);
-
-    if(pPKCS12Cert != OpcUa_Null)
-    {
-        /* get the private key from the PKCS12 structure*/
-        PKCS12_parse(pPKCS12Cert, a_password, &pPrivateKey, OpcUa_Null, OpcUa_Null);
-    }
-    else
-    {
-        uStatus = OpcUa_Bad;
-        OpcUa_ReturnStatusCode;
-    }
-
-    if(pPKCS12Cert != OpcUa_Null)
-    {
-        PKCS12_free(pPKCS12Cert);
-        pPKCS12Cert = OpcUa_Null;
-    }
-
-#if OPENSSL_VERSION_NUMBER >= 0x1000000fL
-    switch(EVP_PKEY_base_id(pPrivateKey))
-#else
-    switch(EVP_PKEY_type(pPrivateKey->type))
-#endif
-    {
-    case EVP_PKEY_RSA:
-        {
-            /* convert to intermediary openssl struct */
-            pRsaPrivateKey = EVP_PKEY_get1_RSA(pPrivateKey);
-            EVP_PKEY_free(pPrivateKey);
-            OpcUa_GotoErrorIfNull(pRsaPrivateKey, OpcUa_Bad);
-
-            /* get required length */
-            a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(pRsaPrivateKey, OpcUa_Null);
-            OpcUa_GotoErrorIfTrue(a_pPrivateKey->Key.Length <= 0, OpcUa_Bad);
-
-            if(a_pPrivateKey->Key.Data == OpcUa_Null)
-            {
-                OpcUa_ReturnStatusCode;
-            }
-
-            /* do real conversion */
-            a_pPrivateKey->Key.Length = i2d_RSAPrivateKey(  pRsaPrivateKey,
-                                                            &a_pPrivateKey->Key.Data);
-            OpcUa_GotoErrorIfTrue(a_pPrivateKey->Key.Length <= 0, OpcUa_Bad);
-
-            if(pRsaPrivateKey != OpcUa_Null)
-            {
-                RSA_free(pRsaPrivateKey);
-                pRsaPrivateKey = OpcUa_Null;
-            }
-
-            /* correct buffer pointer */
-            a_pPrivateKey->Key.Data -= a_pPrivateKey->Key.Length;
-
-            a_pPrivateKey->Type = OpcUa_Crypto_KeyType_Rsa_Private;
-
-            break;
-        }
-    case EVP_PKEY_EC:
-    case EVP_PKEY_DSA:
-    case EVP_PKEY_DH:
-    default:
-        {
-            uStatus =  OpcUa_BadNotSupported;
-            OpcUa_GotoErrorIfBad(uStatus);
-        }
-    }
-
-OpcUa_ReturnStatusCode;
-OpcUa_BeginErrorHandling;
-
-    if(pRsaPrivateKey != OpcUa_Null)
-    {
-        RSA_free(pRsaPrivateKey);
-    }
-
-    if(pPrivateKey != OpcUa_Null)
-    {
-        EVP_PKEY_free(pPrivateKey);
-    }
 
 OpcUa_FinishErrorHandling;
 }
@@ -876,7 +606,6 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "X509_GetCertificateThumbprint");
     if(X509_digest(pX509Certificate, EVP_sha1(), a_pCertificateThumbprint->Data, NULL) <= 0)
     {
         uStatus = OpcUa_Bad;
-        OpcUa_GotoErrorIfBad(uStatus);
     }
 
     X509_free(pX509Certificate);

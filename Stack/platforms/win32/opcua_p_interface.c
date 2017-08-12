@@ -145,8 +145,10 @@ OpcUa_Port_CallTable g_OpcUa_Port_CallTable =
     /* OpenSSL */
 #if OPCUA_REQUIRE_OPENSSL
     OpcUa_P_OpenSSL_Thread_Cleanup,
-    OpcUa_P_OpenSSL_SeedPRNG
+    OpcUa_P_OpenSSL_SeedPRNG,
+    OpcUa_P_OpenSSL_DestroySecretData
 #else
+    OpcUa_Null,
     OpcUa_Null,
     OpcUa_Null
 #endif

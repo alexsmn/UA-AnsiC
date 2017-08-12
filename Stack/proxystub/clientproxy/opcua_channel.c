@@ -922,7 +922,7 @@ static OpcUa_StatusCode OpcUa_Channel_InternalConnectComplete(  OpcUa_Channel   
 OpcUa_StatusCode OpcUa_Channel_BeginConnect(OpcUa_Channel                               a_pChannel,
                                             OpcUa_StringA                               a_sUrl,
                                             OpcUa_ByteString*                           a_pClientCertificate,
-                                            OpcUa_ByteString*                           a_pClientPrivateKey,
+                                            OpcUa_Key*                                  a_pClientPrivateKey,
                                             OpcUa_ByteString*                           a_pServerCertificate,
                                             OpcUa_Void*                                 a_pPKIConfig,
                                             OpcUa_String*                               a_pRequestedSecurityPolicyUri,
@@ -942,16 +942,18 @@ OpcUa_StatusCode OpcUa_Channel_BeginConnect(OpcUa_Channel                       
 OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
 
     OpcUa_ReturnErrorIfArgumentNull(a_pChannel);
+    OpcUa_ReturnErrorIfArgumentNull(a_pClientCertificate);
+    OpcUa_ReturnErrorIfArgumentNull(a_pClientPrivateKey);
+    OpcUa_ReturnErrorIfArgumentNull(a_pServerCertificate);
     OpcUa_ReturnErrorIfArgumentNull(a_pfCallback);
 
     if(a_nNetworkTimeout == 0)
     {
-        uStatus = OpcUa_BadInvalidArgument;
-        OpcUa_ReturnStatusCode;
+        OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
     }
 
     if(     (a_messageSecurityMode != OpcUa_MessageSecurityMode_None)
-        &&  ((a_pServerCertificate->Length <= 0) || (a_pClientCertificate->Length <= 0) || (a_pClientPrivateKey->Length <= 0)))
+        &&  ((a_pServerCertificate->Length <= 0) || (a_pClientCertificate->Length <= 0) || (a_pClientPrivateKey->Key.Data == OpcUa_Null)))
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_Channel_BeginConnect: Cannot create secure channel without certificates!\n");
         OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
@@ -969,6 +971,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Channel, "BeginConnect");
     uStatus = OpcUa_String_StrnCpy( &pChannel->Url,
                                     OpcUa_String_FromCString(a_sUrl),
                                     OPCUA_STRING_LENDONTCARE);
+    OpcUa_GotoErrorIfBad(uStatus);
 
     /* save session timeout */
     pChannel->NetworkTimeout = a_nNetworkTimeout;
@@ -1071,7 +1074,7 @@ OpcUa_StatusCode OpcUa_Channel_Connect( OpcUa_Channel                           
                                         OpcUa_Channel_PfnConnectionStateChanged*    a_pfCallback,
                                         OpcUa_Void*                                 a_pvCallbackData,
                                         OpcUa_ByteString*                           a_pClientCertificate,
-                                        OpcUa_ByteString*                           a_pClientPrivateKey,
+                                        OpcUa_Key*                                  a_pClientPrivateKey,
                                         OpcUa_ByteString*                           a_pServerCertificate,
                                         OpcUa_Void*                                 a_pPKIConfig,
                                         OpcUa_String*                               a_pRequestedSecurityPolicyUri,

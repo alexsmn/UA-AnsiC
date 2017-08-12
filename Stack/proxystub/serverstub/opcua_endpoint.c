@@ -220,6 +220,8 @@ OpcUa_StatusCode OpcUa_Endpoint_GetMessageSecureChannelSecurityPolicy(
     OpcUa_ReturnErrorIfArgumentNull(a_hContext);
     OpcUa_ReturnErrorIfArgumentNull(a_pSecurityPolicy);
 
+    OpcUa_MemSet(a_pSecurityPolicy, 0, sizeof(OpcUa_Endpoint_SecurityPolicyConfiguration));
+
 #ifdef OPCUA_HAVE_HTTPS
     /* In case of HTTPS, the transport listener is not set. */
     if(pEndpointInt->TransportListener == OpcUa_Null)
@@ -227,14 +229,16 @@ OpcUa_StatusCode OpcUa_Endpoint_GetMessageSecureChannelSecurityPolicy(
         return OpcUa_HttpsListener_GetSecurityPolicyConfiguration(
                         pEndpointInt->SecureListener,
                         pContext->pOstrm,
-                        (OpcUa_SecureListener_SecurityPolicyConfiguration*)a_pSecurityPolicy);
+                        a_pSecurityPolicy);
     }
+    else
 #endif /* OPCUA_HAVE_HTTPS */
-
-    return OpcUa_SecureListener_GetSecureChannelSecurityPolicyConfiguration(
-        pEndpointInt->SecureListener,
-        pContext->uSecureChannelId,
-        (OpcUa_SecureListener_SecurityPolicyConfiguration*)a_pSecurityPolicy);
+    {
+        return OpcUa_SecureListener_GetSecureChannelSecurityPolicyConfiguration(
+                        pEndpointInt->SecureListener,
+                        pContext->uSecureChannelId,
+                        a_pSecurityPolicy);
+    }
 }
 
 /*============================================================================
@@ -498,7 +502,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Endpoint, "Open");
                                                 a_pServerPrivateKey,
                                                 a_pPKIConfig,
                                                 a_nNoOfSecurityPolicies,
-                                                (OpcUa_SecureListener_SecurityPolicyConfiguration*)a_pSecurityPolicies,
+                                                a_pSecurityPolicies,
                                                 OpcUa_Endpoint_OnSecureChannelEvent,
                                                 (OpcUa_Void*)pEndpointInt,
                                                 &pEndpointInt->SecureListener);

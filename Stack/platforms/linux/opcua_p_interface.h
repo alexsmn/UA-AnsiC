@@ -662,6 +662,12 @@ struct S_OpcUa_Port_CallTable
     OpcUa_StatusCode    (OPCUA_DLLCALL* OpenSSLSeedPRNG)          ( OpcUa_Byte*                 seed,
                                                                     OpcUa_Int                   bytes);
 
+    /** @brief destroys secret data values in a cyptographically safe way.
+     *  @ingroup opcua_platformlayer_interface
+     */
+    OpcUa_Void          (OPCUA_DLLCALL* DestroySecretData)        ( OpcUa_Void*                 data,
+                                                                    OpcUa_UInt32                bytes);
+
 }; /* struct S_OpcUa_Port_CallTable */
 
 

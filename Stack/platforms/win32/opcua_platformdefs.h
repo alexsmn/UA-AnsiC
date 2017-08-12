@@ -144,6 +144,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_Free(xSrc)                                OpcUa_Memory_Free(xSrc)
 #define OpcUa_MemCpy(xDst, xDstSize, xSrc, xCount)      OpcUa_Memory_MemCpy(xDst, xDstSize, xSrc, xCount)
 
+#define OpcUa_DestroySecretData(xDst, xSize)            OpcUa_Memory_DestroySecretData(xDst, xSize)
 
 /* import prototype for direct mapping on memset */
 #define OpcUa_MemSet(xDst, xValue, xDstSize)            memset(xDst, xValue, xDstSize)

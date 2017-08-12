@@ -17,13 +17,7 @@
 #ifndef _OpcUa_CryptoFactory_H_
 #define _OpcUa_CryptoFactory_H_ 1
 
-OPCUA_BEGIN_EXTERN_C
-
 #define OPCUA_P_CRYPTOFACTORY_CREATECRYPTOPROVIDER OpcUa_ProxyStub_g_PlatformLayerCalltable->CreateCryptoProvider
 #define OPCUA_P_CRYPTOFACTORY_DELETECRYPTOPROVIDER OpcUa_ProxyStub_g_PlatformLayerCalltable->DeleteCryptoProvider
-#define OPCUA_P_CRYPTOFACTORY_GETENCRYPTIONMETHODS OpcUa_ProxyStub_g_PlatformLayerCalltable->GetEncryptionMethods
-#define OPCUA_P_CRYPTOFACTORY_GETSIGNATUREMETHODS  OpcUa_ProxyStub_g_PlatformLayerCalltable->GetSignatureMethods
-
-OPCUA_END_EXTERN_C
 
 #endif

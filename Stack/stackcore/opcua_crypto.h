@@ -38,7 +38,6 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_Crypto_KeyType_Random_Handle          OpcUa_Crypto_KeyType_Random      + OpcUa_Crypto_KeyType_Handle_Offset
 #define OpcUa_Crypto_KeyType_Symmetric_Handle       OpcUa_Crypto_KeyType_Symmetric   + OpcUa_Crypto_KeyType_Handle_Offset
 #define OpcUa_Crypto_KeyType_Asymmetric_Handle      OpcUa_Crypto_KeyType_Asymmetric  + OpcUa_Crypto_KeyType_Handle_Offset
-#define OpcUa_Crypto_KeyType_Any_Handle             OpcUa_Crypto_KeyType_Asymmetric  + OpcUa_Crypto_KeyType_Handle_Offset
 #define OpcUa_Crypto_KeyType_Rsa_Private_Handle     OpcUa_Crypto_KeyType_Rsa_Private + OpcUa_Crypto_KeyType_Handle_Offset
 #define OpcUa_Crypto_KeyType_Rsa_Public_Handle      OpcUa_Crypto_KeyType_Rsa_Public  + OpcUa_Crypto_KeyType_Handle_Offset
 

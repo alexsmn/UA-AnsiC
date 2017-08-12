@@ -137,6 +137,15 @@ void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup()
 }
 
 /*============================================================================
+ * OpcUa_P_OpenSSL_DestroySecretData()
+ *===========================================================================*/
+void OPCUA_DLLCALL OpcUa_P_OpenSSL_DestroySecretData(OpcUa_Void*  data,
+                                                     OpcUa_UInt32 bytes)
+{
+    OPENSSL_cleanse(data, bytes);
+}
+
+/*============================================================================
  * OpcUa_P_OpenSSL_AES_128_CBC_Encrypt
  *===========================================================================*/
 OpcUa_StatusCode OpcUa_P_OpenSSL_AES_128_CBC_Encrypt(
@@ -1018,6 +1027,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_OpenSSL, "DeriveChannelKeyset");
     OpcUa_GotoErrorIfBad(uStatus);
 
     /* cleanup */
+    OpcUa_P_OpenSSL_DestroySecretData(MasterKey.Key.Data, MasterKey.Key.Length);
     OpcUa_P_Key_Clear(&MasterKey);
 
 OpcUa_ReturnStatusCode;

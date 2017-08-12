@@ -382,6 +382,10 @@ OpcUa_Void OpcUa_Key_Clear(OpcUa_Key* a_pKey)
     {
         if(OPCUA_CRYPTO_KEY_ISNOHANDLE(a_pKey))
         {
+            if(a_pKey->Key.Data != OpcUa_Null && a_pKey->Key.Length > 0)
+            {
+                OpcUa_DestroySecretData(a_pKey->Key.Data, a_pKey->Key.Length);
+            }
             OpcUa_ByteString_Clear(&a_pKey->Key);
         }
         else

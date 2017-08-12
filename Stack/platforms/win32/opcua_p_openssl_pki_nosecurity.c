@@ -105,11 +105,13 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_PKI_NoSecurity_LoadPrivateKeyFromFile(
     OpcUa_StringA               a_privateKeyFile,
     OpcUa_P_FileFormat          a_fileFormat,
     OpcUa_StringA               a_password,
-    OpcUa_ByteString*           a_pPrivateKey)
+    OpcUa_UInt                  a_keyType,
+    OpcUa_Key*                  a_pPrivateKey)
 {
     OpcUa_ReferenceParameter(a_privateKeyFile);
     OpcUa_ReferenceParameter(a_fileFormat);
     OpcUa_ReferenceParameter(a_password);
+    OpcUa_ReferenceParameter(a_keyType);
     OpcUa_ReferenceParameter(a_pPrivateKey);
 
     return OpcUa_BadNotSupported;
