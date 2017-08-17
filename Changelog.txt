@@ -3,6 +3,19 @@ OPC Foundation OPC UA ANSI C-Stack
 
 Current Version
 
+Version 1.03.341
+
+	Highlights:
+		- added cmake build support for both linux and windows in addition to existing tooling.
+		- added support for OpenSSL 1.1.x in linux and windows.
+			Linux: build_linux.sh works if openssl-1.1.0f or newer is installed, or the
+			necessary include path and lib path is given with the build command:
+			./build_linux.sh MACHINE_OPT="-I $OSSL_INSTALL/include -L $OSSL_INSTALL/lib"
+			Windows: build_win32.bat and build_win64.bat look for the extracted openssl-1.1.0f
+			or newer and build that if found.  Strawberry perl has to be installed.
+		- added new security profiles Aes128_Sha256_RsaOaep and Aes256_Sha256_RsaPss.
+			Note: Aes256_Sha256_RsaPss requires OpenSSL 1.0.2 or newer.
+
 	API changes from the 1.03.340 version:
 
 		- removed OPCUA_SECURELISTENER_SUPPORT_THREADPOOL because of inherent race conditions (issue #32)
@@ -21,17 +34,6 @@ Current Version
 		- changed the signature of LoadPrivateKeyFromFile to return the private key in a OpcUa_Key structure.
 		- changed the signature of OpcUa_Channel_BeginConnect and OpcUa_Channel_Connect to expect
 			a pPrivateKey of type OpcUa_Key.
-
-	Other changes:
-		- added cmake build support for both linux and windows in addition to existing tooling.
-		- added support for OpenSSL 1.1.x in linux and windows.
-			Linux: build_linux.sh works if openssl-1.1.0f or newer is installed, or the
-			necessary include path and lib path is given with the build command:
-			./build_linux.sh MACHINE_OPT="-I $OSSL_INSTALL/include -L $OSSL_INSTALL/lib"
-			Windows: build_win32.bat and build_win64.bat look for the extracted openssl-1.1.0f
-			or newer and build that if found.  Strawberry perl has to be installed.
-		- added new security profiles Aes128_Sha256_RsaOaep and Aes256_Sha256_RsaPss.
-			Note: Aes256_Sha256_RsaPss requires OpenSSL 1.0.2 or newer.
 
 Version 1.03.340
 	
