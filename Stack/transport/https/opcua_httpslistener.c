@@ -1147,7 +1147,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpListener, "WriteEventHandler");
 
     /******************************************************************************************************/
 
-    OPCUA_P_MUTEX_UNLOCK(pListenerConnection->Mutex);
+    OPCUA_P_MUTEX_LOCK(pListenerConnection->Mutex);
 
     /* look for pending output stream */
     while(pListenerConnection->pSendQueue != OpcUa_Null)
