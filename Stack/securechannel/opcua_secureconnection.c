@@ -2694,26 +2694,34 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Create");
     uStatus = OPCUA_P_MUTEX_CREATE(&pSecureConnection->RequestMutex);
     OpcUa_GotoErrorIfBad(uStatus);
 
-    *a_ppConnection = pConnection;
-
     /* create list for pending requests */
     uStatus = OpcUa_List_Create(&(pSecureConnection->PendingRequests));
-    OpcUa_ReturnErrorIfBad(uStatus);
+    OpcUa_GotoErrorIfBad(uStatus);
 
     /* create watchdog timer for outstanding responses. */
     uStatus = OpcUa_Timer_Create(   &(pSecureConnection->hWatchdogTimer),
                                     OPCUA_SECURECONNECTION_TIMEOUTINTERVAL,
                                     OpcUa_SecureConnection_WatchdogTimerCallback,
                                     OpcUa_SecureConnection_WatchdogTimerKillCallback,
-                                    (OpcUa_Void*)(*a_ppConnection));
-    OpcUa_ReturnErrorIfBad(uStatus);
+                                    (OpcUa_Void*)(pConnection));
+    OpcUa_GotoErrorIfBad(uStatus);
+
+    *a_ppConnection = pConnection;
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
     if(pSecureConnection != OpcUa_Null)
     {
-        OPCUA_P_MUTEX_DELETE(&(pSecureConnection->RequestMutex));
+        if(pSecureConnection->PendingRequests != OpcUa_Null)
+        {
+            OpcUa_List_Delete(&(pSecureConnection->PendingRequests));
+        }
+
+        if(pSecureConnection->RequestMutex != OpcUa_Null)
+        {
+            OPCUA_P_MUTEX_DELETE(&(pSecureConnection->RequestMutex));
+        }
 
         OpcUa_Free(pSecureConnection);
         pSecureConnection = OpcUa_Null;
