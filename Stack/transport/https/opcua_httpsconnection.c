@@ -2273,21 +2273,20 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "Create");
     OpcUa_String_Initialize(&pHttpConnection->sURL);
     OpcUa_String_Initialize(&pHttpConnection->sHostName);
     OpcUa_String_Initialize(&pHttpConnection->sResourcePath);
+    OpcUa_String_Initialize(&pHttpConnection->sSecurityPolicy);
     OpcUa_ByteString_Initialize(&pHttpConnection->bsUsedServerCertificate);
 
     for(uIndex = 0; uIndex < OPCUA_HTTPS_CONNECTION_MAXPENDINGREQUESTS; uIndex++)
     {
         pRequest = &pHttpConnection->arrHttpsRequests[uIndex];
 
-        OpcUa_MemSet(pRequest, 0, sizeof(OpcUa_HttpsConnection_Request));
-
         pRequest->ConnectionState       = OpcUa_HttpsConnectionState_Disconnected;
         pRequest->pConnection           = *a_ppConnection;
         pRequest->bNotify               = OpcUa_False;
 #if OPCUA_HTTPSCONNECTION_SYNCHRONIZE_REQUESTS
         uStatus = OPCUA_P_MUTEX_CREATE(&pRequest->Mutex);
-#endif /* OPCUA_HTTPSCONNECTION_SYNCHRONIZE_REQUESTS */
         OpcUa_GotoErrorIfBad(uStatus);
+#endif /* OPCUA_HTTPSCONNECTION_SYNCHRONIZE_REQUESTS */
     }
 
 #if OPCUA_MULTITHREADED
@@ -2304,7 +2303,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "Create");
                                     OpcUa_HttpsConnection_WatchdogTimerCallback,
                                     OpcUa_HttpsConnection_WatchdogTimerKillCallback,
                                     (OpcUa_Void*)(*a_ppConnection));
-    OpcUa_ReturnErrorIfBad(uStatus);
+    OpcUa_GotoErrorIfBad(uStatus);
 
     (*a_ppConnection)->Connect              = OpcUa_HttpsConnection_Connect;
     (*a_ppConnection)->Disconnect           = OpcUa_HttpsConnection_Disconnect;
@@ -2319,7 +2318,37 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "Create");
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
-    OpcUa_HttpsConnection_Delete(a_ppConnection);
+    if(pHttpConnection != OpcUa_Null)
+    {
+#if OPCUA_MULTITHREADED
+        if(pHttpConnection->SocketManager != OpcUa_Null)
+        {
+            OPCUA_P_SOCKETMANAGER_DELETE(&(pHttpConnection->SocketManager));
+        }
+#endif /* OPCUA_MULTITHREADED */
+
+        for(uIndex = 0; uIndex < OPCUA_HTTPS_CONNECTION_MAXPENDINGREQUESTS; uIndex++)
+        {
+            pRequest = &pHttpConnection->arrHttpsRequests[uIndex];
+
+#if OPCUA_HTTPSCONNECTION_SYNCHRONIZE_REQUESTS
+            if(pRequest->Mutex != OpcUa_Null)
+            {
+                OPCUA_P_MUTEX_DELETE(&pRequest->Mutex);
+            }
+#endif /* OPCUA_HTTPSCONNECTION_SYNCHRONIZE_REQUESTS */
+        }
+
+        if(pHttpConnection->Mutex != OpcUa_Null)
+        {
+            OPCUA_P_MUTEX_DELETE(&(pHttpConnection->Mutex));
+        }
+
+        OpcUa_Free(pHttpConnection);
+    }
+
+    OpcUa_Free(*a_ppConnection);
+    *a_ppConnection = OpcUa_Null;
 
 OpcUa_FinishErrorHandling;
 }
