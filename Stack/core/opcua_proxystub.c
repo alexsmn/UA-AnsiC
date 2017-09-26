@@ -173,6 +173,11 @@ OpcUa_InitializeStatus(OpcUa_Module_ProxyStub, "UpdateConfigString");
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
+
+#if OPCUA_USE_SYNCHRONISATION
+    OPCUA_P_MUTEX_UNLOCK(OpcUa_ProxyStub_g_hGlobalsMutex);
+#endif /* OPCUA_USE_SYNCHRONISATION */
+
 OpcUa_FinishErrorHandling;
 }
 
@@ -184,7 +189,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_ProxyStub_ReInitialize(OpcUa_ProxyStubConfi
 OpcUa_InitializeStatus(OpcUa_Module_ProxyStub, "ReInitialize");
 
 #if OPCUA_USE_SYNCHRONISATION
-        OPCUA_P_MUTEX_LOCK(OpcUa_ProxyStub_g_hGlobalsMutex);
+    OPCUA_P_MUTEX_LOCK(OpcUa_ProxyStub_g_hGlobalsMutex);
 #endif /* OPCUA_USE_SYNCHRONISATION */
 
     OpcUa_GotoErrorIfArgumentNull(a_pProxyStubConfiguration);
@@ -240,7 +245,7 @@ OpcUa_InitializeStatus(OpcUa_Module_ProxyStub, "ReInitialize");
     }
 
 #if OPCUA_USE_SYNCHRONISATION
-        OPCUA_P_MUTEX_UNLOCK(OpcUa_ProxyStub_g_hGlobalsMutex);
+    OPCUA_P_MUTEX_UNLOCK(OpcUa_ProxyStub_g_hGlobalsMutex);
 #endif /* OPCUA_USE_SYNCHRONISATION */
 
 OpcUa_ReturnStatusCode;
