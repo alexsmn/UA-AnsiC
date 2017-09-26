@@ -36,9 +36,6 @@
 /* self */
 #include <opcua_tcpconnection.h>
 
-/* default value is 1, the alternative is a research implementation, which needs to be tested! */
-#define OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM 1
-
 /*============================================================================
  * OpcUa_SecureConnectionState
  *===========================================================================*/
@@ -78,11 +75,6 @@ typedef struct _OpcUa_TcpConnection
     OpcUa_Mutex                     ReadMutex;
     /** @brief An active datastream being received (message). */
     OpcUa_InputStream*              IncomingStream;
-#if !OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM
-    /** @brief An active datastream being sent (message). */
-    OpcUa_OutputStream*             OutgoingStream;
-    OpcUa_Boolean                   bOutgoingStreamIsUsed;
-#endif /* !OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM */
     /** @brief The time when the connection was established. */
     OpcUa_DateTime                  ConnectTime;
     /** @brief The time when the client disconnected. */
@@ -1260,8 +1252,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "BeginSendRequest");
 
     OPCUA_P_MUTEX_LOCK(pTcpConnection->ReadMutex);
 
-#if OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM
-
     if(pTcpConnection->ConnectionState != OpcUa_TcpConnectionState_Connected)
     {
         OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
@@ -1282,58 +1272,12 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "BeginSendRequest");
         OpcUa_GotoErrorWithStatus(uStatus);
     }
 
-#else
-
-    if(pTcpConnection->ConnectionState != OpcUa_TcpConnectionState_Connected)
-    {
-        OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
-        OpcUa_GotoErrorWithStatus(OpcUa_BadConnectionClosed);
-    }
-
-    /* reuse outgoing stream */
-    if(pTcpConnection->OutgoingStream == OpcUa_Null)
-    {
-        if(pTcpConnection->bOutgoingStreamIsUsed != OpcUa_False)
-        {
-            OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpConnection_BeginSendRequest: Used outstream detected!\n");
-            OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
-        }
-
-        /* create a tcp output stream based on the tcpConnection */
-        uStatus = OpcUa_TcpStream_CreateOutput( pTcpConnection->Socket,
-                                                OpcUa_TcpStream_MessageType_SecureChannel,
-                                                OpcUa_Null,
-                                                pTcpConnection->SendBufferSize,
-                                                OpcUa_TcpConnection_ConnectionDisconnectCB,
-                                                pTcpConnection->MaxChunkCount,
-                                                a_ppOutputStream);
-
-        if(OpcUa_IsBad(uStatus))
-        {
-            OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
-            OpcUa_GotoErrorWithStatus(uStatus);
-        }
-
-        pTcpConnection->OutgoingStream = *a_ppOutputStream;
-    }
-    else
-    {
-        *a_ppOutputStream = pTcpConnection->OutgoingStream;
-    }
-
-    pTcpConnection->bOutgoingStreamIsUsed = OpcUa_True;
-
-#endif
-
     OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
-#if OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM
     OpcUa_TcpStream_Delete((OpcUa_Stream**)a_ppOutputStream);
-#endif
 
 OpcUa_FinishErrorHandling;
 }
@@ -1370,8 +1314,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "EndSendRequest");
     pTcpOutputStream = (OpcUa_TcpOutputStream*)(*a_ppOutputStream)->Handle;
     OpcUa_GotoErrorIfArgumentNull(pTcpOutputStream);
 
-#if OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM
-
     OPCUA_P_MUTEX_LOCK(pTcpConnection->ReadMutex);
     if(pTcpConnection->ConnectionState != OpcUa_TcpConnectionState_Connected)
     {
@@ -1393,51 +1335,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "EndSendRequest");
 
     /* clean up stream resources */
     (*a_ppOutputStream)->Delete((OpcUa_Stream**)a_ppOutputStream);
-
-#else
-
-    OPCUA_P_MUTEX_LOCK(pTcpConnection->ReadMutex);
-    /* check for consistency */
-    if(     pTcpConnection->OutgoingStream == OpcUa_Null
-        ||  pTcpConnection->bOutgoingStreamIsUsed == OpcUa_False)
-    {
-        OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_TcpConnection_EndSendRequest: no outgoing stream\n");
-        OpcUa_GotoError;
-    }
-
-    if(pTcpConnection->ConnectionState != OpcUa_TcpConnectionState_Connected)
-    {
-        /* mark stream as available */
-        pTcpConnection->bOutgoingStreamIsUsed = OpcUa_False;
-
-        OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
-
-        /* unlink up stream resources */
-        *a_ppOutputStream = OpcUa_Null;
-
-        return OpcUa_BadConnectionClosed;
-    }
-
-    /* close and flush stream */
-    uStatus = (*a_ppOutputStream)->Flush(   (OpcUa_OutputStream*)(*a_ppOutputStream),
-                                            OpcUa_True);
-    if(OpcUa_IsBad(uStatus))
-    {
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_TcpConnection_EndSendRequest: close failed! 0x%08X \n", uStatus);
-    }
-
-    /* TODO: check if it is needed to reset stream buffer state! */
-
-    /* mark stream as available */
-    pTcpConnection->bOutgoingStreamIsUsed = OpcUa_False;
-
-    /* unlink up stream resources */
-    *a_ppOutputStream = OpcUa_Null;
-
-    OPCUA_P_MUTEX_UNLOCK(pTcpConnection->ReadMutex);
-
-#endif
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
@@ -1468,8 +1365,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "AbortSendRequest");
     tcpConnection = (OpcUa_TcpConnection*)a_pConnection->Handle;
     OpcUa_GotoErrorIfArgumentNull(tcpConnection);
 
-#if OPCUA_TCPCONNECTION_DELETE_REQUEST_STREAM
-
     if(a_ppOutputStream != OpcUa_Null && *a_ppOutputStream != OpcUa_Null)
     {
         tcpOutputStream = (OpcUa_TcpOutputStream*)(*a_ppOutputStream)->Handle;
@@ -1485,39 +1380,6 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "AbortSendRequest");
         OpcUa_ReferenceParameter(a_psReason);
     }
 
-#else
-
-    OPCUA_P_MUTEX_LOCK(tcpConnection->ReadMutex);
-
-    /* clean outgoing stream */
-    if(tcpConnection->bOutgoingStreamIsUsed != OpcUa_False)
-    {
-        tcpConnection->bOutgoingStreamIsUsed = OpcUa_False;
-    }
-    else
-    {
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_TcpConnection_AbortSendRequest: no active stream detected!\n");
-    }
-
-    if(a_ppOutputStream != OpcUa_Null)
-    {
-        tcpOutputStream = (OpcUa_TcpOutputStream*)(*a_ppOutputStream)->Handle;
-        OpcUa_GotoErrorIfArgumentNull(tcpOutputStream);
-
-        /* TODO: reset stream buffer state! */
-
-        a_ppOutputStream = OpcUa_Null;
-    }
-    else
-    {
-        /* no insecure abort messages implemented and allowed! */
-        OpcUa_ReferenceParameter(a_uStatus);
-        OpcUa_ReferenceParameter(a_psReason);
-    }
-
-    OPCUA_P_MUTEX_UNLOCK(tcpConnection->ReadMutex);
-
-#endif
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 OpcUa_FinishErrorHandling;
