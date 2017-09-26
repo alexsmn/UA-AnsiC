@@ -97,7 +97,16 @@ OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_strnicmp(OpcUa_StringA string1, OpcUa_S
  *===========================================================================*/
 OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_vsnprintf(OpcUa_StringA sDest, OpcUa_UInt32 nCount, const OpcUa_StringA sFormat, varg_list vaList)
 {
-    return (OpcUa_Int32) vsnprintf(sDest, nCount, sFormat, vaList);
+    OpcUa_Int   nRetval;
+
+    nRetval = vsnprintf(sDest, nCount, sFormat, vaList);
+    if (nRetval >= (OpcUa_Int)nCount)
+    {
+        /* In case of truncation, we do not follow C99, and return -1 instead. */
+        nRetval = -1;
+    }
+
+    return (OpcUa_Int32)nRetval;
 }
 
 
