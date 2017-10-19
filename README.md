@@ -115,3 +115,4 @@ Windows and linux build scripts, as well as Visual Studio 2013 solution can be f
 ## Known issues
 
 
+Warning: The sample server is not a complete server, and a number of security related features are missing. Please refer to Mantis Issue #3949 for details.
