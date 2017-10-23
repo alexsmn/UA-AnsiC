@@ -32,8 +32,6 @@
 /* UA platform definitions */
 #include <opcua_p_internal.h>
 
-#define UINT64 long long
-
 /*============================================================================
  * Calculate DateTime Difference
  *===========================================================================*/
@@ -41,9 +39,9 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_GetDateTimeDiff( OpcUa_DateTime  a_Value1
                                                         OpcUa_DateTime  a_Value2,
                                                         OpcUa_DateTime* a_pResult)
 {
-    UINT64 ullValue1 = 0;
-    UINT64 ullValue2 = 0;
-    UINT64 ullResult = 0;
+    OpcUa_UInt64 ullValue1 = 0;
+    OpcUa_UInt64 ullValue2 = 0;
+    OpcUa_UInt64 ullResult = 0;
 
     OpcUa_ReturnErrorIfArgumentNull(a_pResult);
 
@@ -76,9 +74,9 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_GetDateTimeDiffInSeconds32(  OpcUa_DateTi
                                                                     OpcUa_DateTime  a_Value2,
                                                                     OpcUa_UInt32*   a_puResult)
 {
-    UINT64 ullValue1 = 0;
-    UINT64 ullValue2 = 0;
-    UINT64 ullResult = 0;
+    OpcUa_UInt64 ullValue1 = 0;
+    OpcUa_UInt64 ullValue2 = 0;
+    OpcUa_UInt64 ullResult = 0;
 
     OpcUa_ReturnErrorIfArgumentNull(a_puResult);
 
@@ -95,9 +93,9 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_GetDateTimeDiffInSeconds32(  OpcUa_DateTi
         return OpcUa_BadInvalidArgument;
     }
 
-    ullResult = (UINT64)((ullValue2 - ullValue1 + 5000000) / 10000000);
+    ullResult = (OpcUa_UInt64)((ullValue2 - ullValue1 + 5000000) / 10000000);
 
-    if(ullResult > (UINT64)OpcUa_UInt32_Max)
+    if(ullResult > (OpcUa_UInt64)OpcUa_UInt32_Max)
     {
         return OpcUa_BadOutOfRange;
     }
