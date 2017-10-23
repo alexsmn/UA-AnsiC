@@ -669,7 +669,7 @@ OpcUa_FinishErrorHandling;
  * Accept a SSL server socket
  *===========================================================================*/
 static OpcUa_StatusCode OpcUa_SslSocket_InternalAccept( OpcUa_InternalSslSocket* a_pInternalSocket,
-                                                        OpcUa_Socket*            a_pRawSocket)
+                                                        OpcUa_Socket             a_pRawSocket)
 {
     OpcUa_InternalSslSocket* pInternalSocket = OpcUa_Null;
     BIO*                     pSslBio         = OpcUa_Null;
