@@ -1702,7 +1702,6 @@ OpcUa_StatusCode OpcUa_SecureStream_AppendInput(OpcUa_InputStream*      a_pTrans
                                                 OpcUa_SecureChannel*    a_pSecureChannel)
 {
     OpcUa_Buffer        readBuffer;
-    OpcUa_UInt32        uChunkLength    = 0;
     OpcUa_UInt32        uSequenceNumber = 0;
     OpcUa_UInt32        uRequestId      = 0;
     OpcUa_SecureStream* pSecureStream   = OpcUa_Null;
@@ -1716,83 +1715,12 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "AppendInput");
     pSecureStream = (OpcUa_SecureStream*)a_pSecureIStream->Handle;
     pSecureStream->InnerStrm = (OpcUa_Stream*)a_pTransportIstrm;
 
-    /* try to detach the buffer */
     uStatus = a_pTransportIstrm->DetachBuffer(  (OpcUa_Stream*)a_pTransportIstrm,
                                                 &readBuffer);
 
     if(OpcUa_IsBad(uStatus))
     {
-        /* if that is not supported by the underlying stream, copy the content */
-        if(OpcUa_IsEqual(OpcUa_BadNotSupported))
-        {
-            OpcUa_UInt32 uBufferPosition = 0;
-
-            /* get the length of the streambuffer */
-            uStatus = a_pTransportIstrm->GetChunkLength((OpcUa_Stream*)a_pTransportIstrm,
-                                                        &uChunkLength);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            /* get the position in the streambuffer */
-            uStatus = a_pTransportIstrm->GetPosition((OpcUa_Stream*)a_pTransportIstrm,
-                                                     &uBufferPosition);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            /* create own buffer */
-            uStatus = OpcUa_Buffer_Initialize(  &readBuffer,
-                                                OpcUa_Null,
-                                                0,
-                                                uChunkLength,
-                                                0,
-                                                OpcUa_True);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            /* rewind the original buffer */
-            uStatus = OpcUa_Stream_SetPosition((OpcUa_Stream*)a_pTransportIstrm,
-                                               OpcUa_StreamPosition_Start);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            while (OpcUa_IsGood(uStatus))
-            {
-                OpcUa_Byte pBuffer[4096];
-                /* see comment above */
-
-                OpcUa_UInt32 uCount = sizeof(pBuffer);
-
-                /* read block from stream */
-                uStatus = OpcUa_Stream_Read(    a_pTransportIstrm,
-                                                pBuffer,
-                                                &uCount);
-
-                if (OpcUa_IsBad(uStatus))
-                {
-                    if (uStatus == OpcUa_BadEndOfStream)
-                    {
-                        uStatus = OpcUa_Good;
-                        break;
-                    }
-                    OpcUa_GotoErrorIfBad(uStatus);
-                }
-
-                uStatus = OpcUa_Buffer_Write(   &readBuffer,
-                                                pBuffer,
-                                                uCount);
-                OpcUa_GotoErrorIfBad(uStatus);
-            }
-
-            /* update the buffer position in an own buffer */
-            uStatus = OpcUa_Buffer_SetPosition(&readBuffer, uBufferPosition);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            /* restore the buffer position in the original buffer */
-            uStatus = OpcUa_Stream_SetPosition((OpcUa_Stream*)a_pTransportIstrm,
-                                               uBufferPosition);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-        }
-        else /* or leave with error */
-        {
-            OpcUa_GotoError;
-        }
+        OpcUa_ReturnStatusCode;
     }
 
     if(pSecureStream->nBuffers >= pSecureStream->nMaxBuffers)
