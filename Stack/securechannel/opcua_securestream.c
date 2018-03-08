@@ -1389,89 +1389,6 @@ static OpcUa_Void OpcUa_SecureStream_Delete(OpcUa_Stream** a_ppStrm)
 }
 
 /*============================================================================
- * OpcUa_SecureStream_Skip
- *===========================================================================*/
-static OpcUa_StatusCode OpcUa_SecureStream_Skip(    OpcUa_InputStream*  a_pIstrm,
-                                                    OpcUa_UInt32        a_nCount)
-{
-    OpcUa_SecureStream* pSecureStream       = OpcUa_Null;
-    OpcUa_UInt32        uBytesToSkip        = 0;
-    OpcUa_UInt32        uBytesLeftToSkip    = 0;
-    OpcUa_Boolean       bReadAgain          = OpcUa_True;
-
-OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "Skip");
-
-    OpcUa_ReturnErrorIfArgumentNull(a_pIstrm);
-
-    OpcUa_ReturnErrorIfTrue((a_nCount == 0), OpcUa_Good); /* nothing to do */
-
-    uBytesLeftToSkip = a_nCount;
-
-    pSecureStream = (OpcUa_SecureStream*)a_pIstrm->Handle;
-
-    /* verify stream state */
-    if(pSecureStream->IsClosed)
-    {
-        uStatus = OpcUa_BadInvalidState;
-        OpcUa_GotoErrorIfBad(uStatus);
-    }
-
-    do
-    {
-        /* set available amount of data as maximum */
-        uBytesToSkip = pSecureStream->Buffers[pSecureStream->nCurrentReadBuffer].EndOfData - pSecureStream->Buffers[pSecureStream->nCurrentReadBuffer].Position;
-
-        if(uBytesToSkip >= uBytesLeftToSkip)
-        {
-            /* ok - all of the bytes required are in one buffer */
-            uBytesToSkip = uBytesLeftToSkip;
-        }
-        else
-        {
-            /* not all can be delivered */
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_SecureStream_Skip: end of buffer reached: %u requested, %u available in buffer; need to skip)!\n", uBytesLeftToSkip, uBytesToSkip);
-        }
-
-        /* no data left in buffer, trigger skipping */
-        if(uBytesToSkip > 0)
-        {
-            /* read requested data */
-
-            /* TODO: intra buffer skip */
-            uStatus = OpcUa_Buffer_Skip( &pSecureStream->Buffers[pSecureStream->nCurrentReadBuffer],
-                                         uBytesToSkip);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            /* prepare for next read */
-            uBytesLeftToSkip -= uBytesToSkip;
-        }
-
-        if((uBytesLeftToSkip == 0) || (pSecureStream->nCurrentReadBuffer >= (pSecureStream->nBuffers - 1)))
-        {
-            bReadAgain = OpcUa_False;
-        }
-        else
-        {
-            /* skip to next buffer */
-            pSecureStream->nCurrentReadBuffer++;
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_SecureStream_Read: Buffer skip to index %u of %u!\n", pSecureStream->nCurrentReadBuffer, pSecureStream->nBuffers);
-        }
-
-    } while(bReadAgain != OpcUa_False);
-
-    if(uBytesLeftToSkip > 0)
-    {
-        uStatus = OpcUa_BadEndOfStream;
-    }
-
-    /* todo: check if enough bytes were in the involved buffers to finish the skip operation */
-
-OpcUa_ReturnStatusCode;
-OpcUa_BeginErrorHandling;
-OpcUa_FinishErrorHandling;
-}
-
-/*============================================================================
  * OpcUa_SecureStream_GetPosition
  *===========================================================================*/
 static OpcUa_StatusCode OpcUa_SecureStream_GetPosition( OpcUa_Stream* a_pStrm,
@@ -1535,8 +1452,8 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "SetPosition");
         }
         else
         {
-            uStatus = OpcUa_SecureStream_Skip(  (OpcUa_InputStream*)a_pStrm,
-                                                a_uPosition - pSecureStream->nAbsolutePosition);
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_SecureStream_SetPosition: Owner tried to seek forward! Not supported!\n");
+            OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
         }
     }
     else
