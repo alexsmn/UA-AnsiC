@@ -211,7 +211,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_P_Win32_PKI_ValidateCertificate
  * note: for this check to succeed, the root certificate must be installed
- *       in the store "ROOT" / "Vertrauensw�rdige Stammzertifizierungsstellen"
+ *       in the store "ROOT" / "Vertrauenswuerdige Stammzertifizierungsstellen"
  *===========================================================================*/
 OpcUa_StatusCode OpcUa_P_Win32_PKI_ValidateCertificate(
     OpcUa_PKIProvider*          a_pProvider,
@@ -558,7 +558,7 @@ OpcUa_FinishErrorHandling;
  * OpcUa_P_Win32_LoadPrivateKeyFromKeyStore
  * note: for this to work the Certificate + Private Key must be in PKCS#12 format
  *       and imported into the Store "MY" / "Eigene Zertifikate"
- * important: please check "Schl�ssel als exportierbar markieren"
+ * important: please check "Schluessel als exportierbar markieren"
  * openssl pkcs12 -export -in cert.pem -inkey private_key.pem -out cert.p12
  * Internet -> Inhalte -> Zertifikate... -> Eigene Zertifikate -> Importieren...
  *===========================================================================*/
