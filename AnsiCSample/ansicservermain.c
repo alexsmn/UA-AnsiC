@@ -1560,7 +1560,9 @@ int main(void)
 	my_FindServers_ServiceType.ResponseType		= &OpcUa_FindServersResponse_EncodeableType;
 	dummy_CreatSubscription.ResponseType            = &OpcUa_CreateSubscriptionResponse_EncodeableType;
 
-    printf("Warning: The sample server is not a complete server, and a number of security related features are missing. Please refer to Mantis Issue #3949 for details.\n");
+    printf("Warning: The sample server is intended to show how to use the ANSI C stack and is has not gone through any sort of quality assurance process. Therefore, it cannot be used in any production system.\n");
+    printf("Press enter to proceed or CTRL-C to exit now!\n");
+    getchar();
 	
 	
     /* Initialize Stack */

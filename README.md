@@ -114,4 +114,4 @@ Windows and linux build scripts, as well as Visual Studio 2013 solution can be f
 
 ## Known issues
 
-Warning: The sample server is intended to show how to use the ANSI C stack and is has not gone through any sort of quality assurance process. Therefore, it cannot be used in any production system. 
+Warning: The sample server is intended to show how to use the ANSI C stack and is has not gone through any sort of quality assurance process. Therefore, it cannot be used in any production system.
