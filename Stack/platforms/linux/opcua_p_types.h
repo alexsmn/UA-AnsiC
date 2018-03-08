@@ -53,21 +53,8 @@ typedef int                 OpcUa_Int32;
 typedef unsigned int        OpcUa_UInt32;
 
 
-#if OPCUA_P_NATIVE64
 typedef long long           OpcUa_Int64;
 typedef unsigned long long  OpcUa_UInt64;
-#else
-struct _OpcUa_Int64 {
-    OpcUa_UInt32 dwLowQuad;
-    OpcUa_UInt32 dwHighQuad;
-};
-typedef struct _OpcUa_Int64 OpcUa_Int64;
-struct _OpcUa_UInt64 {
-    OpcUa_UInt32 dwLowQuad;
-    OpcUa_UInt32 dwHighQuad;
-};
-typedef struct _OpcUa_UInt64 OpcUa_UInt64;
-#endif
 
 typedef float               OpcUa_Float;
 typedef double              OpcUa_Double;

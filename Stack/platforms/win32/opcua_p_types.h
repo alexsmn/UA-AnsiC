@@ -57,26 +57,8 @@ typedef unsigned char       OpcUa_UCharA;
 typedef OpcUa_CharA*        OpcUa_StringA;
 typedef unsigned short      OpcUa_Char;
 
-#if OPCUA_P_NATIVE64
-  #ifdef _MSC_VER
-    typedef __int64             OpcUa_Int64;
-    typedef unsigned __int64    OpcUa_UInt64;
-  #else /* _MSC_VER */
-    typedef long long           OpcUa_Int64;
-    typedef unsigned long long  OpcUa_UInt64;
-  #endif /* _MSC_VER */
-#else
-struct _OpcUa_Int64 {
-    OpcUa_UInt32 dwLowQuad;
-    OpcUa_UInt32 dwHighQuad;
-};
-typedef struct _OpcUa_Int64 OpcUa_Int64;
-struct _OpcUa_UInt64 {
-    OpcUa_UInt32 dwLowQuad;
-    OpcUa_UInt32 dwHighQuad;
-};
-typedef struct _OpcUa_UInt64 OpcUa_UInt64;
-#endif
+typedef __int64             OpcUa_Int64;
+typedef unsigned __int64    OpcUa_UInt64;
 
 struct _OpcUa_DateTime
 {
