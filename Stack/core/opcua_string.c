@@ -528,14 +528,6 @@ OpcUa_StatusCode OpcUa_String_StrnCpy( OpcUa_String*       a_pDestString,
 
     OpcUa_ReturnErrorIfArgumentNull(a_pDestString);
 
-#if 0 /* deactivating check, because it is not right here */
-      /* user would have to enforce type casting and would provoke an error */
-    if(_OpcUa_IsUaString(a_pDestString) == OpcUa_False)
-    {
-        return OpcUa_BadInvalidArgument;
-    }
-#endif
-
     /* check src string */
 
     OpcUa_String_Clear(a_pDestString);
@@ -583,13 +575,6 @@ OpcUa_StatusCode OpcUa_String_StrnCat(  OpcUa_String*       a_pDestString,
 
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_String);
     OpcUa_ReturnErrorIfArgumentNull(a_pDestString);
-
-#if 0 /* deactivating check, because it is not right here */
-    if(_OpcUa_IsUaString(a_pDestString)==OpcUa_False)
-    {
-        return OpcUa_BadInvalidArgument;
-    }
-#endif
 
     if( a_pSrcString == OpcUa_Null || OpcUa_String_IsNull(a_pSrcString) || OpcUa_String_IsEmpty(a_pSrcString) || a_uLength == 0)
     {

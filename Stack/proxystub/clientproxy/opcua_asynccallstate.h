@@ -28,11 +28,6 @@ struct _OpcUa_AsyncCallState
     /*! @brief The channel used to send the asynchronous service call. */
     OpcUa_Void* Channel;
 
-#if 0 /* not required */
-    /*! @brief The name of the service. */
-    OpcUa_StringA Name;
-#endif
-
     /*! @brief The request sent to the server. */
     OpcUa_Void* RequestData;
 

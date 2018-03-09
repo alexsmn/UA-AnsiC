@@ -233,10 +233,6 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Clean(OpcUa_Handle* a_pPlatformLayerHandl
         return OpcUa_BadInvalidState;
     }
 
-#if 0 /* Removed because it needs to be called by the stack before the platform layer is cleaned up. */
-    OpcUa_P_Timer_CleanupTimers();
-#endif
-
 #if OPCUA_REQUIRE_OPENSSL
     OpcUa_P_OpenSSL_Cleanup();
 #endif /* OPCUA_REQUIRE_OPENSSL */

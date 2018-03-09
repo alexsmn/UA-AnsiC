@@ -2536,12 +2536,6 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "CreateOutput");
     uStatus = OpcUa_SecureStream_CalculateFlushTrigger(pSecureStream, uChunkLength);
     OpcUa_GotoErrorIfBad(uStatus);
 
-#if 0
-    /* shrink data buffer */
-    pSecureStream->Buffers[0].Data = OpcUa_ReAlloc(pSecureStream->Buffers[0].Data,pSecureStream->uBeginOfRequestBody);
-    pSecureStream->Buffers[0].Size = pSecureStream->uBeginOfRequestBody;
-#endif
-
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 

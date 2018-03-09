@@ -1570,7 +1570,6 @@ OpcUa_StatusCode OpcUa_BinaryDecoder_ReadExtensionObject(
             a_pValue->TypeId.NodeId.IdentifierType = OpcUa_IdentifierType_Numeric;
             a_pValue->TypeId.NodeId.Identifier.Numeric = pType->BinaryEncodingTypeId;
 
-#if 1 /* CHZ: consider alternative below; pType->NamespaceUri must be sz anyway */
             OpcUa_String_AttachReadOnly(&a_pValue->TypeId.NamespaceUri, pType->NamespaceUri);
 
             uStatus = OpcUa_StringTable_FindIndex(
@@ -1582,15 +1581,6 @@ OpcUa_StatusCode OpcUa_BinaryDecoder_ReadExtensionObject(
 
             a_pValue->TypeId.NodeId.NamespaceIndex = (OpcUa_UInt16)nIndex;
             OpcUa_String_Clear(&a_pValue->TypeId.NamespaceUri);
-#else
-            uStatus = OpcUa_StringTable_FindIndex(
-                pHandle->Context->NamespaceUris,
-                OpcUa_String_FromCString(pType->NamespaceUri),
-                &nIndex);
-            OpcUa_GotoErrorIfBad(uStatus);
-
-            a_pValue->TypeId.NodeId.NamespaceIndex = (OpcUa_UInt16)nIndex;
-#endif
         }
 
         /* all done */
