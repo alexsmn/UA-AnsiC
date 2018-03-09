@@ -218,9 +218,6 @@
 #define OPCUA_TCPLISTENER_DEFAULTCHUNKSIZE          ((OpcUa_UInt32)65536)
 #define OPCUA_TCPCONNECTION_DEFAULTCHUNKSIZE        ((OpcUa_UInt32)65536)
 
-/** @brief if defined, the tcpstream expects the write call to block until all data is sent */
-#define OPCUA_TCPSTREAM_BLOCKINGWRITE               OPCUA_CONFIG_NO
-
 /** @brief The maximum number of client connections supported by a tcp listener. (maybe one reserved, see below) */
 #ifndef OPCUA_TCPLISTENER_MAXCONNECTIONS
 #define OPCUA_TCPLISTENER_MAXCONNECTIONS            100
@@ -303,9 +300,6 @@
 
 /** @brief The standard port for the https protocol. */
 #define OPCUA_HTTPS_DEFAULT_PORT                    443
-
-/** @brief if defined, the httpsstream expects the write call to block until all data is sent */
-#define OPCUA_HTTPSSTREAM_BLOCKINGWRITE             OPCUA_CONFIG_NO
 
 /*============================================================================
  * type support

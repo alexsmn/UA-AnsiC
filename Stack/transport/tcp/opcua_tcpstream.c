@@ -333,11 +333,7 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpStream, "Flush");
         iDataWritten = OPCUA_P_SOCKET_WRITE(pTcpOutputStream->Socket,
                                             &pTcpOutputStream->Buffer.Data[pTcpOutputStream->Buffer.Position],
                                             tempDataLength,
-#if OPCUA_TCPSTREAM_BLOCKINGWRITE
-                                            OpcUa_True);
-#else /* OPCUA_TCPSTREAM_BLOCKINGWRITE */
                                             OpcUa_False);
-#endif /* OPCUA_TCPSTREAM_BLOCKINGWRITE */
 
         pTcpOutputStream->NoOfFlushes++;
 

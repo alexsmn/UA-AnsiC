@@ -672,11 +672,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpStream, "SendChunk");
     iBytesWritten = OPCUA_P_SOCKET_WRITE(a_pHttpOutputStream->Socket,
                                          &pMessageData[uMessageStart],
                                          uMessageLength,
-#if OPCUA_HTTPSSTREAM_BLOCKINGWRITE
-                                         OpcUa_True);
-#else /* OPCUA_HTTPSSTREAM_BLOCKINGWRITE */
                                          OpcUa_False);
-#endif /* OPCUA_HTTPSSTREAM_BLOCKINGWRITE */
 
     if(iBytesWritten < (OpcUa_Int32)uMessageLength)
     {
@@ -1148,18 +1144,14 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpStream, "Flush");
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
-#if !OPCUA_HTTPSSTREAM_BLOCKINGWRITE
     if(OpcUa_IsNotEqual(OpcUa_BadWouldBlock))
     {
-#endif
         OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "OpcUa_HttpsStream_Flush: could not flush stream. (0x%08X)\n", uStatus);
-#if !OPCUA_HTTPSSTREAM_BLOCKINGWRITE
     }
     else
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_HttpsStream_Flush: send would block\n");
     }
-#endif
 
 OpcUa_FinishErrorHandling;
 }
@@ -2442,28 +2434,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpStream, "ProcessHeaders");
             bLengthValid = OpcUa_True;
         }
 
-#if OPCUA_HTTPSSTREAM_BLOCKINGWRITE
-        /* handle 100 continue */
-        if(pHttpInputStream->MessageType == OpcUa_HttpsStream_MessageType_Request)
-        {
-            if(OpcUa_String_StrnCmp(&pHttpHeader->Name, OpcUa_String_FromCString("Expect"), OPCUA_STRING_LENDONTCARE, OpcUa_True) == 0)
-            {
-                if(!OpcUa_String_IsEmpty(&pHttpHeader->Name))
-                {
-                    if(OpcUa_String_StrnCmp(&pHttpHeader->Name, OpcUa_String_FromCString("100-continue"), OPCUA_STRING_LENDONTCARE, OpcUa_False) == 0)
-                    {
-                        OpcUa_CharA* sHttpResponse   = "HTTP/1.1 100 Continue\r\n\r\n";
-                        OpcUa_UInt32 uResponseLength = OpcUa_StrLenA(sHttpResponse);
-
-                        OPCUA_P_SOCKET_WRITE(pHttpInputStream->Socket,
-                                             (OpcUa_Byte*)sHttpResponse,
-                                             uResponseLength,
-                                             OpcUa_True);
-                    }
-                }
-            }
-        }
-#endif
+        /* TODO: Consider handling of Expect: 100-continue */
 
         pHttpHeader = (OpcUa_HttpsHeader*)OpcUa_List_GetNextElement(pHttpInputStream->Headers);
     }
