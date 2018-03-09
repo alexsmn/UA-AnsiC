@@ -2976,6 +2976,11 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
         {
             eRevisedSecurityMode = OpcUa_MessageSecurityMode_None;
         }
+        else if((SenderCertificate.Data != OpcUa_Null) && (recvCertThumbprint.Data == OpcUa_Null))
+        {
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelResponse: Unexpected sender certificate will be ignored!\n");
+            eRevisedSecurityMode = OpcUa_MessageSecurityMode_None;
+        }
         else
         {
             OpcUa_Trace(OPCUA_TRACE_LEVEL_INFO, "ProcessOpenSecureChannelResponse: Invalid sender and/or receiver certificates specified!\n");
