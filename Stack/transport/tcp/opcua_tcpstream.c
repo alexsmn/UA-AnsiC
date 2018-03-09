@@ -304,115 +304,112 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpStream, "Flush");
         OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Flush no. %u with %u max flushes and final flag %u!\n", (pTcpOutputStream->NoOfFlushes + 1), pTcpOutputStream->MaxNoOfFlushes, a_bLastCall);
     }
 
-#if 1
     if(!OpcUa_Buffer_IsEmpty(&pTcpOutputStream->Buffer))
     {
-#endif
-    tempDataLength = pTcpOutputStream->Buffer.Position;
+        tempDataLength = pTcpOutputStream->Buffer.Position;
 
-    OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Messagelength is %d!%s\n", tempDataLength, a_bLastCall?" Last Call!":"");
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Messagelength is %d!%s\n", tempDataLength, a_bLastCall?" Last Call!":"");
 
-    /* update header only for own messages; securechannel headers don't get touched */
-    if(pTcpOutputStream->MessageType != OpcUa_TcpStream_MessageType_SecureChannel)
-    {
-        /* update chunk flag */
-        if(a_bLastCall != OpcUa_False)
+        /* update header only for own messages; securechannel headers don't get touched */
+        if(pTcpOutputStream->MessageType != OpcUa_TcpStream_MessageType_SecureChannel)
         {
-                /* change signature to message complete */
-                pTcpOutputStream->Buffer.Data[3] = 'F';
-        }
-
-        /* update size */
-        pTcpOutputStream->Buffer.Position = 4;
-
-        uStatus = OpcUa_UInt32_BinaryEncode(tempDataLength, a_pOstrm);
-        OpcUa_GotoErrorIfBad(uStatus);
-    }
-
-    pTcpOutputStream->Buffer.Position = 0;
-
-    /* send to network */
-    iDataWritten = OPCUA_P_SOCKET_WRITE(pTcpOutputStream->Socket,
-                                        &pTcpOutputStream->Buffer.Data[pTcpOutputStream->Buffer.Position],
-                                        tempDataLength,
-#if OPCUA_TCPSTREAM_BLOCKINGWRITE
-                                        OpcUa_True);
-#else /* OPCUA_TCPSTREAM_BLOCKINGWRITE */
-                                        OpcUa_False);
-#endif /* OPCUA_TCPSTREAM_BLOCKINGWRITE */
-
-    pTcpOutputStream->NoOfFlushes++;
-
-    if(iDataWritten < (OpcUa_Int32)tempDataLength)
-    {
-        if(iDataWritten < (OpcUa_Int32)0)
-        {
-            uStatus = OPCUA_P_SOCKET_GETLASTERROR(pTcpOutputStream->Socket);
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_TcpStream_Flush: Error writing to socket: 0x%08X!\n", uStatus);
-
-            /* Notify connection! */
-            if((pTcpOutputStream->NotifyDisconnect != OpcUa_Null) && (pTcpOutputStream->hConnection != OpcUa_Null))
+            /* update chunk flag */
+            if(a_bLastCall != OpcUa_False)
             {
-                pTcpOutputStream->NotifyDisconnect(pTcpOutputStream->hConnection);
+                    /* change signature to message complete */
+                    pTcpOutputStream->Buffer.Data[3] = 'F';
             }
 
-            OpcUa_GotoErrorWithStatus(OpcUa_BadDisconnect);
+            /* update size */
+            pTcpOutputStream->Buffer.Position = 4;
+
+            uStatus = OpcUa_UInt32_BinaryEncode(tempDataLength, a_pOstrm);
+            OpcUa_GotoErrorIfBad(uStatus);
+        }
+
+        pTcpOutputStream->Buffer.Position = 0;
+
+        /* send to network */
+        iDataWritten = OPCUA_P_SOCKET_WRITE(pTcpOutputStream->Socket,
+                                            &pTcpOutputStream->Buffer.Data[pTcpOutputStream->Buffer.Position],
+                                            tempDataLength,
+#if OPCUA_TCPSTREAM_BLOCKINGWRITE
+                                            OpcUa_True);
+#else /* OPCUA_TCPSTREAM_BLOCKINGWRITE */
+                                            OpcUa_False);
+#endif /* OPCUA_TCPSTREAM_BLOCKINGWRITE */
+
+        pTcpOutputStream->NoOfFlushes++;
+
+        if(iDataWritten < (OpcUa_Int32)tempDataLength)
+        {
+            if(iDataWritten < (OpcUa_Int32)0)
+            {
+                uStatus = OPCUA_P_SOCKET_GETLASTERROR(pTcpOutputStream->Socket);
+                OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_TcpStream_Flush: Error writing to socket: 0x%08X!\n", uStatus);
+
+                /* Notify connection! */
+                if((pTcpOutputStream->NotifyDisconnect != OpcUa_Null) && (pTcpOutputStream->hConnection != OpcUa_Null))
+                {
+                    pTcpOutputStream->NotifyDisconnect(pTcpOutputStream->hConnection);
+                }
+
+                OpcUa_GotoErrorWithStatus(OpcUa_BadDisconnect);
+            }
+            else
+            {
+                /* keep as outgoing stream */
+                OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Only %u bytes of %u written!\n", iDataWritten, tempDataLength);
+                /* store position */
+                pTcpOutputStream->Buffer.Position = (OpcUa_UInt32)iDataWritten;
+                pTcpOutputStream->Buffer.EndOfData = tempDataLength;
+                OpcUa_GotoErrorWithStatus(OpcUa_BadWouldBlock);
+            }
+        }
+
+        /* prepare new flags */
+        if(a_bLastCall == OpcUa_False)
+        {
+            /* Stream will be used again. Reset position. */
+            switch(pTcpOutputStream->MessageType)
+            {
+            case OpcUa_TcpStream_MessageType_SecureChannel:
+                {
+                    /* securechannel will need to encode its header by itself. */
+                    /* flush during write will cause problems! */
+                    uStatus = OpcUa_Buffer_SetPosition(&pTcpOutputStream->Buffer, 0);
+                    break;
+                }
+            /* we handle our own messages */
+            case OpcUa_TcpStream_MessageType_Hello:
+            case OpcUa_TcpStream_MessageType_Acknowledge:
+            case OpcUa_TcpStream_MessageType_Error:
+                {
+                    uStatus = OpcUa_Buffer_SetPosition(&pTcpOutputStream->Buffer, 3);
+                    /* encode as new fragment */
+                    uStatus = OpcUa_Buffer_Write(&pTcpOutputStream->Buffer, (OpcUa_Byte*)"F", 1);
+                    uStatus = OpcUa_Buffer_SetPosition(&pTcpOutputStream->Buffer, 8);
+                    break;
+                }
+            default:
+                {
+                    /* unknown message type */
+                    OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
+                }
+            }
         }
         else
         {
-            /* keep as outgoing stream */
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Only %u bytes of %u written!\n", iDataWritten, tempDataLength);
-            /* store position */
-            pTcpOutputStream->Buffer.Position = (OpcUa_UInt32)iDataWritten;
-            pTcpOutputStream->Buffer.EndOfData = tempDataLength;
-            OpcUa_GotoErrorWithStatus(OpcUa_BadWouldBlock);
+            /* this was the last call -> stream is doomed! */
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Buffer emptied!\n");
+            OpcUa_Buffer_SetEmpty(&pTcpOutputStream->Buffer);
         }
+    }
+    else
+    {
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Empty tcp stream flush ignored.\n");
     }
 
-    /* prepare new flags */
-    if(a_bLastCall == OpcUa_False)
-    {
-        /* Stream will be used again. Reset position. */
-        switch(pTcpOutputStream->MessageType)
-        {
-        case OpcUa_TcpStream_MessageType_SecureChannel:
-            {
-                /* securechannel will need to encode its header by itself. */
-                /* flush during write will cause problems! */
-                uStatus = OpcUa_Buffer_SetPosition(&pTcpOutputStream->Buffer, 0);
-                break;
-            }
-        /* we handle our own messages */
-        case OpcUa_TcpStream_MessageType_Hello:
-        case OpcUa_TcpStream_MessageType_Acknowledge:
-        case OpcUa_TcpStream_MessageType_Error:
-            {
-                uStatus = OpcUa_Buffer_SetPosition(&pTcpOutputStream->Buffer, 3);
-                /* encode as new fragment */
-                uStatus = OpcUa_Buffer_Write(&pTcpOutputStream->Buffer, (OpcUa_Byte*)"F", 1);
-                uStatus = OpcUa_Buffer_SetPosition(&pTcpOutputStream->Buffer, 8);
-                break;
-            }
-        default:
-            {
-                /* unknown message type */
-                OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidArgument);
-            }
-        }
-    }
-    else
-    {
-        /* this was the last call -> stream is doomed! */
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Buffer emptied!\n");
-        OpcUa_Buffer_SetEmpty(&pTcpOutputStream->Buffer);
-    }
-#if 1
-    }
-    else
-    {
-        /*OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_TcpStream_Flush: Empty tcp stream flush ignored.\n");*/
-    }
-#endif
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
