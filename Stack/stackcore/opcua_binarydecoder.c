@@ -1556,7 +1556,8 @@ OpcUa_StatusCode OpcUa_BinaryDecoder_ReadExtensionObject(
         /* the body length must match */
         if ((OpcUa_UInt32)nLength != (uBodyEnd - uBodyStart))
         {
-            OpcUa_GotoErrorWithStatus(OpcUa_BadDecodingError);
+            /* but if not, just complain and hope the best... */
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "ReadExtensionObject: Encoded length %d is different from true length %u!\n", nLength, uBodyEnd - uBodyStart);
         }
 
         /* update type id */
