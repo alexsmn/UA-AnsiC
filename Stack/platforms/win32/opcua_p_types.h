@@ -34,8 +34,6 @@
 #ifndef _OpcUa_P_Types_H_
 #define _OpcUa_P_Types_H_ 1
 
-#define OPCUA_P_NATIVE64 1
-
 /*============================================================================
 * Type definitions for basic data types.
 *===========================================================================*/
