@@ -113,9 +113,9 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_BuildFullPath( /*  in */ char*         a_pPath,
         return OpcUa_BadInvalidArgument;
     }
 
-    strncpy(a_pFullPath, a_pPath, uiPathLength + 1);
-    strncat(a_pFullPath, "/", 1);
-    strncat(a_pFullPath, a_pFileName, uiFileLength);
+    strcpy(a_pFullPath, a_pPath);
+    strcat(a_pFullPath, "/");
+    strcat(a_pFullPath, a_pFileName);
 
     return OpcUa_Good;
 }

@@ -104,9 +104,9 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_BuildFullPath( /*  in */ char*         a_pPath,
     strncat_s(a_pFullPath, a_uiFullPathBufferLength, "\\", 1);
     strncat_s(a_pFullPath, a_uiFullPathBufferLength, a_pFileName, uiFileLength);
 #else /* OPCUA_USE_SAFE_FUNCTIONS */
-    strncpy(a_pFullPath, a_pPath, uiPathLength + 1);
-    strncat(a_pFullPath, "\\", 1);
-    strncat(a_pFullPath, a_pFileName, uiFileLength);
+    strcpy(a_pFullPath, a_pPath);
+    strcat(a_pFullPath, "\\");
+    strcat(a_pFullPath, a_pFileName);
 #endif /* OPCUA_USE_SAFE_FUNCTIONS */
 
     return OpcUa_Good;
