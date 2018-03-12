@@ -2946,12 +2946,13 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessOpenSecureChannelR
         {
             if(pSecureConnection->ServerCertificate != OpcUa_Null && pSecureConnection->ServerCertificate->Length > 0)
             {
-                if(SenderCertificate.Length != pSecureConnection->ServerCertificate->Length)
+                if(SenderCertificate.Length < pSecureConnection->ServerCertificate->Length)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
 
-                if(OpcUa_MemCmp(SenderCertificate.Data, pSecureConnection->ServerCertificate->Data, SenderCertificate.Length) != 0)
+                /* ignore trailing data, might be certificate chain. */
+                if(OpcUa_MemCmp(SenderCertificate.Data, pSecureConnection->ServerCertificate->Data, pSecureConnection->ServerCertificate->Length) != 0)
                 {
                     OpcUa_GotoErrorWithStatus(OpcUa_BadCertificateInvalid);
                 }
