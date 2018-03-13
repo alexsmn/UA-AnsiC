@@ -224,6 +224,7 @@ OpcUa_StatusCode OpcUa_HttpsListener_ConnectionManager_ReleaseConnection(
     else
     {
         OPCUA_HLCM_TRACEREF(OPCUA_TRACE_LEVEL_DEBUG, "OpcUa_HttpsListener_ConnectionManager_ReleaseConnection: 0x%08X -- RefCount %u\n", (*a_ppConnection), (*a_ppConnection)->iReferenceCount);
+        *a_ppConnection = OpcUa_Null;
     }
 
     OpcUa_List_Leave(a_pConnectionManager->Connections);
@@ -408,7 +409,7 @@ OpcUa_Void OpcUa_HttpsListener_Connection_Delete(OpcUa_HttpsListener_Connection*
 
     /* free instance memory */
     OpcUa_Free(*a_ppConnection);
-    a_ppConnection = OpcUa_Null;
+    *a_ppConnection = OpcUa_Null;
 }
 
 /*==============================================================================*/

@@ -309,8 +309,6 @@ OpcUa_StatusCode OpcUa_String_AttachToString(  /* in */ OpcUa_StringA           
     }
 
 
-    a_pNewString = (OpcUa_String*)pStringInt;
-
     return OpcUa_Good;
 }
 
