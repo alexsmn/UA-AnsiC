@@ -28,16 +28,6 @@
  * ======================================================================*/
 
 /**
-* @brief Checks wether the given DateTime value is valid/set
-*/
-OpcUa_Boolean   OpcUa_P_DateTime_Set(     OpcUa_DateTime value);
-
-/**
-* @brief Sets the given DateTime value to unset/invalid
-*/
-OpcUa_Void      OpcUa_P_DateTime_UnSet(   OpcUa_DateTime* pValue);
-
-/**
  * @brief Returns the current time in UTC.
  */
 OpcUa_DateTime  OpcUa_P_DateTime_UtcNow(void);
