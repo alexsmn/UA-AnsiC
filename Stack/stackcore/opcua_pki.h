@@ -176,7 +176,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_PKIProvider_CloseCertificateStore(
   @brief loads a private key object, usually from an encrypted file.
 
   Note: fileFormat == OpcUa_Crypto_Encoding_DER needs a keyType != OpcUa_Crypto_KeyType_Any
-        e.g. OpcUa_Crypto_KeyType_Rsa_Public.
+        e.g. OpcUa_Crypto_KeyType_Rsa_Private.
         Other formats can use keyType == OpcUa_Crypto_KeyType_Any as a wildcard.
 
   @param privateKeyFile        [in]  The file name.
