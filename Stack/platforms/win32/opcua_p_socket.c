@@ -586,7 +586,7 @@ OpcUa_RawSocket OpcUa_P_RawSocket_Accept(   OpcUa_RawSocket a_RawSocket,
 
     if(a_RawSocket == (OpcUa_RawSocket)OPCUA_P_SOCKET_INVALID)
     {
-        return OpcUa_Null;
+        return (OpcUa_RawSocket)OPCUA_P_SOCKET_INVALID;
     }
     winSocketServer = (SOCKET)a_RawSocket;
 

@@ -640,9 +640,9 @@ OpcUa_RawSocket OpcUa_P_RawSocket_Accept(   OpcUa_RawSocket a_RawSocket,
     OpcUa_Int           iBufferSize = OPCUA_P_TCPRCVBUFFERSIZE;
 #endif /* OPCUA_P_SOCKET_SETTCPRCVBUFFERSIZE || OPCUA_P_SOCKET_SETTCPSNDBUFFERSIZE */
 
-    if(a_RawSocket == OPCUA_P_SOCKET_INVALID)
+    if(a_RawSocket == (OpcUa_RawSocket)OPCUA_P_SOCKET_INVALID)
     {
-        return OPCUA_P_SOCKET_INVALID;
+        return (OpcUa_RawSocket)OPCUA_P_SOCKET_INVALID;
     }
 
     gnuSocketServer = (int)a_RawSocket;
