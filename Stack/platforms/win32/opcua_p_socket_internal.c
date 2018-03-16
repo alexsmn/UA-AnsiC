@@ -710,6 +710,8 @@ OpcUa_Void OpcUa_SocketManager_AcceptHandlerThread(OpcUa_Void* a_pArgument)
     ClientSocket[0].pSocketServiceTable             = &OpcUa_RawSocketServiceTable;
     ClientSocket[1].pSocketServiceTable             = &OpcUa_RawSocketServiceTable;
 
+    pSocketManager->pSpawnedThread = OpcUa_Null;
+
     /* obtain slot in global socket list array */
     uStatus = OpcUa_P_Mutex_Create(&SpawnedSocketManager.pMutex);
 
@@ -731,11 +733,6 @@ OpcUa_Void OpcUa_SocketManager_AcceptHandlerThread(OpcUa_Void* a_pArgument)
     uStatus = OpcUa_Socket_HandleAcceptEvent(  pInternalSocket,    /* listen socket */
                                                pClientSocket);     /* accepted socket */
 
-    /* release spawn semaphore */
-    pSocketManager->pSpawnedThread = OpcUa_Null;
-    OpcUa_P_Semaphore_Post( pSocketManager->pStartupSemaphore,
-                            1);
-
     if(OpcUa_IsGood(uStatus))
     {
         /* fire accept event */
@@ -747,6 +744,10 @@ OpcUa_Void OpcUa_SocketManager_AcceptHandlerThread(OpcUa_Void* a_pArgument)
                                             pClientSocket->usPort,
                                             OpcUa_False);
         pClientSocket->Flags.bFromApplication = OpcUa_False;
+
+        /* release spawn semaphore */
+        OpcUa_P_Semaphore_Post( pSocketManager->pStartupSemaphore,
+                                1);
 
         do
         {
@@ -787,6 +788,10 @@ OpcUa_Void OpcUa_SocketManager_AcceptHandlerThread(OpcUa_Void* a_pArgument)
     }
     else
     {
+        /* release spawn semaphore */
+        OpcUa_P_Semaphore_Post( pSocketManager->pStartupSemaphore,
+                                1);
+
         /* error, configuration maximum reached */
         if(iSocketManagerSlot != -1)
         {
