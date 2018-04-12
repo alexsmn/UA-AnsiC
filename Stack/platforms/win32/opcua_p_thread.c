@@ -132,7 +132,7 @@ OpcUa_StatusCode OpcUa_P_Thread_Create(OpcUa_RawThread* pRawThread)
 {
     OpcUa_StatusCode uStatus = OpcUa_Good;
     *pRawThread = (OpcUa_RawThread)OpcUa_Alloc(sizeof(pthread_t));
-    OpcUa_ReturnErrorIfAllocFailed(pRawThread);
+    OpcUa_ReturnErrorIfAllocFailed(*pRawThread);
 
     OpcUa_P_Thread_Initialize(*pRawThread);
 
