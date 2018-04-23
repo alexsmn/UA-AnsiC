@@ -93,6 +93,643 @@ struct _OpcUa_EnumeratedType OpcUa_NodeClass_EnumeratedType =
 };
 #endif
 
+#ifndef OPCUA_EXCLUDE_PermissionType
+/*============================================================================
+ * OpcUa_PermissionType_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_PermissionType_EnumeratedValues[] =
+{
+    { "None", 0 },
+    { "Browse", 1 },
+    { "ReadRolePermissions", 2 },
+    { "WriteAttribute", 4 },
+    { "WriteRolePermissions", 8 },
+    { "WriteHistorizing", 16 },
+    { "Read", 32 },
+    { "Write", 64 },
+    { "ReadHistory", 128 },
+    { "InsertHistory", 256 },
+    { "ModifyHistory", 512 },
+    { "DeleteHistory", 1024 },
+    { "ReceiveEvents", 2048 },
+    { "Call", 4096 },
+    { "AddReference", 8192 },
+    { "RemoveReference", 16384 },
+    { "DeleteNode", 32768 },
+    { "AddNode", 65536 },
+    { "All", 131071 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_PermissionType_EnumeratedType =
+{
+    "PermissionType",
+    g_OpcUa_PermissionType_EnumeratedValues
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_AccessLevelType
+/*============================================================================
+ * OpcUa_AccessLevelType_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_AccessLevelType_EnumeratedValues[] =
+{
+    { "None", 0 },
+    { "CurrentRead", 1 },
+    { "CurrentWrite", 2 },
+    { "HistoryRead", 4 },
+    { "HistoryWrite", 16 },
+    { "StatusWrite", 32 },
+    { "TimestampWrite", 64 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_AccessLevelType_EnumeratedType =
+{
+    "AccessLevelType",
+    g_OpcUa_AccessLevelType_EnumeratedValues
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_AccessLevelExType
+/*============================================================================
+ * OpcUa_AccessLevelExType_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_AccessLevelExType_EnumeratedValues[] =
+{
+    { "None", 0 },
+    { "CurrentRead", 1 },
+    { "CurrentWrite", 2 },
+    { "HistoryRead", 4 },
+    { "HistoryWrite", 16 },
+    { "StatusWrite", 32 },
+    { "TimestampWrite", 64 },
+    { "NonatomicRead", 65536 },
+    { "NonatomicWrite", 131072 },
+    { "WriteFullArrayOnly", 262144 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_AccessLevelExType_EnumeratedType =
+{
+    "AccessLevelExType",
+    g_OpcUa_AccessLevelExType_EnumeratedValues
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_EventNotifierType
+/*============================================================================
+ * OpcUa_EventNotifierType_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_EventNotifierType_EnumeratedValues[] =
+{
+    { "None", 0 },
+    { "SubscribeToEvents", 1 },
+    { "HistoryRead", 4 },
+    { "HistoryWrite", 8 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_EventNotifierType_EnumeratedType =
+{
+    "EventNotifierType",
+    g_OpcUa_EventNotifierType_EnumeratedValues
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_AccessRestrictionType
+/*============================================================================
+ * OpcUa_AccessRestrictionType_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_AccessRestrictionType_EnumeratedValues[] =
+{
+    { "None", 0 },
+    { "SigningRequired", 1 },
+    { "EncryptionRequired", 2 },
+    { "SessionRequired ", 4 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_AccessRestrictionType_EnumeratedType =
+{
+    "AccessRestrictionType",
+    g_OpcUa_AccessRestrictionType_EnumeratedValues
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_RolePermissionType
+/*============================================================================
+ * OpcUa_RolePermissionType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_RolePermissionType_Initialize(OpcUa_RolePermissionType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(NodeId, RoleId);
+        OpcUa_Field_Initialize(UInt32, Permissions);
+    }
+}
+
+/*============================================================================
+ * OpcUa_RolePermissionType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_RolePermissionType_Clear(OpcUa_RolePermissionType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(NodeId, RoleId);
+        OpcUa_Field_Clear(UInt32, Permissions);
+    }
+}
+
+/*============================================================================
+ * OpcUa_RolePermissionType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_RolePermissionType_GetSize(OpcUa_RolePermissionType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "RolePermissionType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(NodeId, RoleId);
+    OpcUa_Field_GetSize(UInt32, Permissions);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_RolePermissionType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_RolePermissionType_Encode(OpcUa_RolePermissionType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "RolePermissionType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(NodeId, RoleId);
+    OpcUa_Field_Write(UInt32, Permissions);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_RolePermissionType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_RolePermissionType_Decode(OpcUa_RolePermissionType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "RolePermissionType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_RolePermissionType_Initialize(a_pValue);
+
+    OpcUa_Field_Read(NodeId, RoleId);
+    OpcUa_Field_Read(UInt32, Permissions);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_RolePermissionType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_RolePermissionType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_RolePermissionType_EncodeableType =
+{
+    "RolePermissionType",
+    OpcUaId_RolePermissionType,
+    OpcUaId_RolePermissionType_Encoding_DefaultBinary,
+    OpcUaId_RolePermissionType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_RolePermissionType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_RolePermissionType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_RolePermissionType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_RolePermissionType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_RolePermissionType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_RolePermissionType_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_StructureType
+/*============================================================================
+ * OpcUa_StructureType_EnumeratedType
+ *===========================================================================*/
+static struct _OpcUa_EnumeratedValue g_OpcUa_StructureType_EnumeratedValues[] =
+{
+    { "Structure", 0 },
+    { "StructureWithOptionalFields", 1 },
+    { "Union", 2 },
+    { OpcUa_Null, 0 }
+};
+
+struct _OpcUa_EnumeratedType OpcUa_StructureType_EnumeratedType =
+{
+    "StructureType",
+    g_OpcUa_StructureType_EnumeratedValues
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_StructureField
+/*============================================================================
+ * OpcUa_StructureField_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_StructureField_Initialize(OpcUa_StructureField* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(String, Name);
+        OpcUa_Field_Initialize(LocalizedText, Description);
+        OpcUa_Field_Initialize(NodeId, DataType);
+        OpcUa_Field_Initialize(Int32, ValueRank);
+        OpcUa_Field_InitializeArray(UInt32, ArrayDimensions);
+        OpcUa_Field_Initialize(UInt32, MaxStringLength);
+        OpcUa_Field_Initialize(Boolean, IsOptional);
+    }
+}
+
+/*============================================================================
+ * OpcUa_StructureField_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_StructureField_Clear(OpcUa_StructureField* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(String, Name);
+        OpcUa_Field_Clear(LocalizedText, Description);
+        OpcUa_Field_Clear(NodeId, DataType);
+        OpcUa_Field_Clear(Int32, ValueRank);
+        OpcUa_Field_ClearArray(UInt32, ArrayDimensions);
+        OpcUa_Field_Clear(UInt32, MaxStringLength);
+        OpcUa_Field_Clear(Boolean, IsOptional);
+    }
+}
+
+/*============================================================================
+ * OpcUa_StructureField_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_StructureField_GetSize(OpcUa_StructureField* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "StructureField_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(String, Name);
+    OpcUa_Field_GetSize(LocalizedText, Description);
+    OpcUa_Field_GetSize(NodeId, DataType);
+    OpcUa_Field_GetSize(Int32, ValueRank);
+    OpcUa_Field_GetSizeArray(UInt32, ArrayDimensions);
+    OpcUa_Field_GetSize(UInt32, MaxStringLength);
+    OpcUa_Field_GetSize(Boolean, IsOptional);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_StructureField_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_StructureField_Encode(OpcUa_StructureField* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "StructureField_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(String, Name);
+    OpcUa_Field_Write(LocalizedText, Description);
+    OpcUa_Field_Write(NodeId, DataType);
+    OpcUa_Field_Write(Int32, ValueRank);
+    OpcUa_Field_WriteArray(UInt32, ArrayDimensions);
+    OpcUa_Field_Write(UInt32, MaxStringLength);
+    OpcUa_Field_Write(Boolean, IsOptional);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_StructureField_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_StructureField_Decode(OpcUa_StructureField* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "StructureField_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_StructureField_Initialize(a_pValue);
+
+    OpcUa_Field_Read(String, Name);
+    OpcUa_Field_Read(LocalizedText, Description);
+    OpcUa_Field_Read(NodeId, DataType);
+    OpcUa_Field_Read(Int32, ValueRank);
+    OpcUa_Field_ReadArray(UInt32, ArrayDimensions);
+    OpcUa_Field_Read(UInt32, MaxStringLength);
+    OpcUa_Field_Read(Boolean, IsOptional);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_StructureField_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_StructureField_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_StructureField_EncodeableType =
+{
+    "StructureField",
+    OpcUaId_StructureField,
+    OpcUaId_StructureField_Encoding_DefaultBinary,
+    OpcUaId_StructureField_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_StructureField),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_StructureField_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_StructureField_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_StructureField_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_StructureField_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_StructureField_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_StructureDefinition
+/*============================================================================
+ * OpcUa_StructureDefinition_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_StructureDefinition_Initialize(OpcUa_StructureDefinition* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(NodeId, DefaultEncodingId);
+        OpcUa_Field_Initialize(NodeId, BaseDataType);
+        OpcUa_Field_InitializeEnumerated(OpcUa_StructureType, StructureType);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_StructureField, Fields);
+    }
+}
+
+/*============================================================================
+ * OpcUa_StructureDefinition_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_StructureDefinition_Clear(OpcUa_StructureDefinition* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(NodeId, DefaultEncodingId);
+        OpcUa_Field_Clear(NodeId, BaseDataType);
+        OpcUa_Field_ClearEnumerated(OpcUa_StructureType, StructureType);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_StructureField, Fields);
+    }
+}
+
+/*============================================================================
+ * OpcUa_StructureDefinition_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_StructureDefinition_GetSize(OpcUa_StructureDefinition* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "StructureDefinition_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(NodeId, DefaultEncodingId);
+    OpcUa_Field_GetSize(NodeId, BaseDataType);
+    OpcUa_Field_GetSizeEnumerated(OpcUa_StructureType, StructureType);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_StructureField, Fields);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_StructureDefinition_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_StructureDefinition_Encode(OpcUa_StructureDefinition* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "StructureDefinition_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(NodeId, DefaultEncodingId);
+    OpcUa_Field_Write(NodeId, BaseDataType);
+    OpcUa_Field_WriteEnumerated(OpcUa_StructureType, StructureType);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_StructureField, Fields);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_StructureDefinition_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_StructureDefinition_Decode(OpcUa_StructureDefinition* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "StructureDefinition_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_StructureDefinition_Initialize(a_pValue);
+
+    OpcUa_Field_Read(NodeId, DefaultEncodingId);
+    OpcUa_Field_Read(NodeId, BaseDataType);
+    OpcUa_Field_ReadEnumerated(OpcUa_StructureType, StructureType);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_StructureField, Fields);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_StructureDefinition_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_StructureDefinition_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_StructureDefinition_EncodeableType =
+{
+    "StructureDefinition",
+    OpcUaId_StructureDefinition,
+    OpcUaId_StructureDefinition_Encoding_DefaultBinary,
+    OpcUaId_StructureDefinition_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_StructureDefinition),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_StructureDefinition_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_StructureDefinition_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_StructureDefinition_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_StructureDefinition_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_StructureDefinition_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_EnumDefinition
+/*============================================================================
+ * OpcUa_EnumDefinition_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_EnumDefinition_Initialize(OpcUa_EnumDefinition* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_EnumField, Fields);
+    }
+}
+
+/*============================================================================
+ * OpcUa_EnumDefinition_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_EnumDefinition_Clear(OpcUa_EnumDefinition* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_ClearEncodeableArray(OpcUa_EnumField, Fields);
+    }
+}
+
+/*============================================================================
+ * OpcUa_EnumDefinition_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EnumDefinition_GetSize(OpcUa_EnumDefinition* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EnumDefinition_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_EnumField, Fields);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EnumDefinition_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EnumDefinition_Encode(OpcUa_EnumDefinition* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EnumDefinition_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_WriteEncodeableArray(OpcUa_EnumField, Fields);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EnumDefinition_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EnumDefinition_Decode(OpcUa_EnumDefinition* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EnumDefinition_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_EnumDefinition_Initialize(a_pValue);
+
+    OpcUa_Field_ReadEncodeableArray(OpcUa_EnumField, Fields);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_EnumDefinition_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EnumDefinition_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_EnumDefinition_EncodeableType =
+{
+    "EnumDefinition",
+    OpcUaId_EnumDefinition,
+    OpcUaId_EnumDefinition_Encoding_DefaultBinary,
+    OpcUaId_EnumDefinition_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_EnumDefinition),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_EnumDefinition_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_EnumDefinition_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_EnumDefinition_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_EnumDefinition_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_EnumDefinition_Decode
+};
+#endif
+
 #ifndef OPCUA_EXCLUDE_Node
 /*============================================================================
  * OpcUa_Node_Initialize
@@ -108,6 +745,9 @@ OpcUa_Void OpcUa_Node_Initialize(OpcUa_Node* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
     }
 }
@@ -126,6 +766,9 @@ OpcUa_Void OpcUa_Node_Clear(OpcUa_Node* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
     }
 }
@@ -152,6 +795,9 @@ OpcUa_StatusCode OpcUa_Node_GetSize(OpcUa_Node* a_pValue, OpcUa_Encoder* a_pEnco
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
 
     *a_pSize = iSize;
@@ -181,6 +827,9 @@ OpcUa_StatusCode OpcUa_Node_Encode(OpcUa_Node* a_pValue, OpcUa_Encoder* a_pEncod
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
 
     OpcUa_ReturnStatusCode;
@@ -210,6 +859,9 @@ OpcUa_StatusCode OpcUa_Node_Decode(OpcUa_Node* a_pValue, OpcUa_Decoder* a_pDecod
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
 
     OpcUa_ReturnStatusCode;
@@ -254,6 +906,9 @@ OpcUa_Void OpcUa_InstanceNode_Initialize(OpcUa_InstanceNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
     }
 }
@@ -272,6 +927,9 @@ OpcUa_Void OpcUa_InstanceNode_Clear(OpcUa_InstanceNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
     }
 }
@@ -298,6 +956,9 @@ OpcUa_StatusCode OpcUa_InstanceNode_GetSize(OpcUa_InstanceNode* a_pValue, OpcUa_
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
 
     *a_pSize = iSize;
@@ -327,6 +988,9 @@ OpcUa_StatusCode OpcUa_InstanceNode_Encode(OpcUa_InstanceNode* a_pValue, OpcUa_E
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
 
     OpcUa_ReturnStatusCode;
@@ -356,6 +1020,9 @@ OpcUa_StatusCode OpcUa_InstanceNode_Decode(OpcUa_InstanceNode* a_pValue, OpcUa_D
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
 
     OpcUa_ReturnStatusCode;
@@ -400,6 +1067,9 @@ OpcUa_Void OpcUa_TypeNode_Initialize(OpcUa_TypeNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
     }
 }
@@ -418,6 +1088,9 @@ OpcUa_Void OpcUa_TypeNode_Clear(OpcUa_TypeNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
     }
 }
@@ -444,6 +1117,9 @@ OpcUa_StatusCode OpcUa_TypeNode_GetSize(OpcUa_TypeNode* a_pValue, OpcUa_Encoder*
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
 
     *a_pSize = iSize;
@@ -473,6 +1149,9 @@ OpcUa_StatusCode OpcUa_TypeNode_Encode(OpcUa_TypeNode* a_pValue, OpcUa_Encoder* 
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
 
     OpcUa_ReturnStatusCode;
@@ -502,6 +1181,9 @@ OpcUa_StatusCode OpcUa_TypeNode_Decode(OpcUa_TypeNode* a_pValue, OpcUa_Decoder* 
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
 
     OpcUa_ReturnStatusCode;
@@ -546,6 +1228,9 @@ OpcUa_Void OpcUa_ObjectNode_Initialize(OpcUa_ObjectNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Byte, EventNotifier);
     }
@@ -565,6 +1250,9 @@ OpcUa_Void OpcUa_ObjectNode_Clear(OpcUa_ObjectNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Byte, EventNotifier);
     }
@@ -592,6 +1280,9 @@ OpcUa_StatusCode OpcUa_ObjectNode_GetSize(OpcUa_ObjectNode* a_pValue, OpcUa_Enco
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Byte, EventNotifier);
 
@@ -622,6 +1313,9 @@ OpcUa_StatusCode OpcUa_ObjectNode_Encode(OpcUa_ObjectNode* a_pValue, OpcUa_Encod
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Byte, EventNotifier);
 
@@ -652,6 +1346,9 @@ OpcUa_StatusCode OpcUa_ObjectNode_Decode(OpcUa_ObjectNode* a_pValue, OpcUa_Decod
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Byte, EventNotifier);
 
@@ -697,6 +1394,9 @@ OpcUa_Void OpcUa_ObjectTypeNode_Initialize(OpcUa_ObjectTypeNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Boolean, IsAbstract);
     }
@@ -716,6 +1416,9 @@ OpcUa_Void OpcUa_ObjectTypeNode_Clear(OpcUa_ObjectTypeNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Boolean, IsAbstract);
     }
@@ -743,6 +1446,9 @@ OpcUa_StatusCode OpcUa_ObjectTypeNode_GetSize(OpcUa_ObjectTypeNode* a_pValue, Op
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Boolean, IsAbstract);
 
@@ -773,6 +1479,9 @@ OpcUa_StatusCode OpcUa_ObjectTypeNode_Encode(OpcUa_ObjectTypeNode* a_pValue, Opc
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Boolean, IsAbstract);
 
@@ -803,6 +1512,9 @@ OpcUa_StatusCode OpcUa_ObjectTypeNode_Decode(OpcUa_ObjectTypeNode* a_pValue, Opc
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Boolean, IsAbstract);
 
@@ -848,6 +1560,9 @@ OpcUa_Void OpcUa_VariableNode_Initialize(OpcUa_VariableNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Variant, Value);
         OpcUa_Field_Initialize(NodeId, DataType);
@@ -857,6 +1572,7 @@ OpcUa_Void OpcUa_VariableNode_Initialize(OpcUa_VariableNode* a_pValue)
         OpcUa_Field_Initialize(Byte, UserAccessLevel);
         OpcUa_Field_Initialize(Double, MinimumSamplingInterval);
         OpcUa_Field_Initialize(Boolean, Historizing);
+        OpcUa_Field_Initialize(UInt32, AccessLevelEx);
     }
 }
 
@@ -874,6 +1590,9 @@ OpcUa_Void OpcUa_VariableNode_Clear(OpcUa_VariableNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Variant, Value);
         OpcUa_Field_Clear(NodeId, DataType);
@@ -883,6 +1602,7 @@ OpcUa_Void OpcUa_VariableNode_Clear(OpcUa_VariableNode* a_pValue)
         OpcUa_Field_Clear(Byte, UserAccessLevel);
         OpcUa_Field_Clear(Double, MinimumSamplingInterval);
         OpcUa_Field_Clear(Boolean, Historizing);
+        OpcUa_Field_Clear(UInt32, AccessLevelEx);
     }
 }
 
@@ -908,6 +1628,9 @@ OpcUa_StatusCode OpcUa_VariableNode_GetSize(OpcUa_VariableNode* a_pValue, OpcUa_
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Variant, Value);
     OpcUa_Field_GetSize(NodeId, DataType);
@@ -917,6 +1640,7 @@ OpcUa_StatusCode OpcUa_VariableNode_GetSize(OpcUa_VariableNode* a_pValue, OpcUa_
     OpcUa_Field_GetSize(Byte, UserAccessLevel);
     OpcUa_Field_GetSize(Double, MinimumSamplingInterval);
     OpcUa_Field_GetSize(Boolean, Historizing);
+    OpcUa_Field_GetSize(UInt32, AccessLevelEx);
 
     *a_pSize = iSize;
 
@@ -945,6 +1669,9 @@ OpcUa_StatusCode OpcUa_VariableNode_Encode(OpcUa_VariableNode* a_pValue, OpcUa_E
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Variant, Value);
     OpcUa_Field_Write(NodeId, DataType);
@@ -954,6 +1681,7 @@ OpcUa_StatusCode OpcUa_VariableNode_Encode(OpcUa_VariableNode* a_pValue, OpcUa_E
     OpcUa_Field_Write(Byte, UserAccessLevel);
     OpcUa_Field_Write(Double, MinimumSamplingInterval);
     OpcUa_Field_Write(Boolean, Historizing);
+    OpcUa_Field_Write(UInt32, AccessLevelEx);
 
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
@@ -982,6 +1710,9 @@ OpcUa_StatusCode OpcUa_VariableNode_Decode(OpcUa_VariableNode* a_pValue, OpcUa_D
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Variant, Value);
     OpcUa_Field_Read(NodeId, DataType);
@@ -991,6 +1722,7 @@ OpcUa_StatusCode OpcUa_VariableNode_Decode(OpcUa_VariableNode* a_pValue, OpcUa_D
     OpcUa_Field_Read(Byte, UserAccessLevel);
     OpcUa_Field_Read(Double, MinimumSamplingInterval);
     OpcUa_Field_Read(Boolean, Historizing);
+    OpcUa_Field_Read(UInt32, AccessLevelEx);
 
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
@@ -1034,6 +1766,9 @@ OpcUa_Void OpcUa_VariableTypeNode_Initialize(OpcUa_VariableTypeNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Variant, Value);
         OpcUa_Field_Initialize(NodeId, DataType);
@@ -1057,6 +1792,9 @@ OpcUa_Void OpcUa_VariableTypeNode_Clear(OpcUa_VariableTypeNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Variant, Value);
         OpcUa_Field_Clear(NodeId, DataType);
@@ -1088,6 +1826,9 @@ OpcUa_StatusCode OpcUa_VariableTypeNode_GetSize(OpcUa_VariableTypeNode* a_pValue
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Variant, Value);
     OpcUa_Field_GetSize(NodeId, DataType);
@@ -1122,6 +1863,9 @@ OpcUa_StatusCode OpcUa_VariableTypeNode_Encode(OpcUa_VariableTypeNode* a_pValue,
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Variant, Value);
     OpcUa_Field_Write(NodeId, DataType);
@@ -1156,6 +1900,9 @@ OpcUa_StatusCode OpcUa_VariableTypeNode_Decode(OpcUa_VariableTypeNode* a_pValue,
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Variant, Value);
     OpcUa_Field_Read(NodeId, DataType);
@@ -1205,6 +1952,9 @@ OpcUa_Void OpcUa_ReferenceTypeNode_Initialize(OpcUa_ReferenceTypeNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Boolean, IsAbstract);
         OpcUa_Field_Initialize(Boolean, Symmetric);
@@ -1226,6 +1976,9 @@ OpcUa_Void OpcUa_ReferenceTypeNode_Clear(OpcUa_ReferenceTypeNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Boolean, IsAbstract);
         OpcUa_Field_Clear(Boolean, Symmetric);
@@ -1255,6 +2008,9 @@ OpcUa_StatusCode OpcUa_ReferenceTypeNode_GetSize(OpcUa_ReferenceTypeNode* a_pVal
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Boolean, IsAbstract);
     OpcUa_Field_GetSize(Boolean, Symmetric);
@@ -1287,6 +2043,9 @@ OpcUa_StatusCode OpcUa_ReferenceTypeNode_Encode(OpcUa_ReferenceTypeNode* a_pValu
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Boolean, IsAbstract);
     OpcUa_Field_Write(Boolean, Symmetric);
@@ -1319,6 +2078,9 @@ OpcUa_StatusCode OpcUa_ReferenceTypeNode_Decode(OpcUa_ReferenceTypeNode* a_pValu
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Boolean, IsAbstract);
     OpcUa_Field_Read(Boolean, Symmetric);
@@ -1366,6 +2128,9 @@ OpcUa_Void OpcUa_MethodNode_Initialize(OpcUa_MethodNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Boolean, Executable);
         OpcUa_Field_Initialize(Boolean, UserExecutable);
@@ -1386,6 +2151,9 @@ OpcUa_Void OpcUa_MethodNode_Clear(OpcUa_MethodNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Boolean, Executable);
         OpcUa_Field_Clear(Boolean, UserExecutable);
@@ -1414,6 +2182,9 @@ OpcUa_StatusCode OpcUa_MethodNode_GetSize(OpcUa_MethodNode* a_pValue, OpcUa_Enco
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Boolean, Executable);
     OpcUa_Field_GetSize(Boolean, UserExecutable);
@@ -1445,6 +2216,9 @@ OpcUa_StatusCode OpcUa_MethodNode_Encode(OpcUa_MethodNode* a_pValue, OpcUa_Encod
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Boolean, Executable);
     OpcUa_Field_Write(Boolean, UserExecutable);
@@ -1476,6 +2250,9 @@ OpcUa_StatusCode OpcUa_MethodNode_Decode(OpcUa_MethodNode* a_pValue, OpcUa_Decod
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Boolean, Executable);
     OpcUa_Field_Read(Boolean, UserExecutable);
@@ -1522,6 +2299,9 @@ OpcUa_Void OpcUa_ViewNode_Initialize(OpcUa_ViewNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Boolean, ContainsNoLoops);
         OpcUa_Field_Initialize(Byte, EventNotifier);
@@ -1542,6 +2322,9 @@ OpcUa_Void OpcUa_ViewNode_Clear(OpcUa_ViewNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Boolean, ContainsNoLoops);
         OpcUa_Field_Clear(Byte, EventNotifier);
@@ -1570,6 +2353,9 @@ OpcUa_StatusCode OpcUa_ViewNode_GetSize(OpcUa_ViewNode* a_pValue, OpcUa_Encoder*
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Boolean, ContainsNoLoops);
     OpcUa_Field_GetSize(Byte, EventNotifier);
@@ -1601,6 +2387,9 @@ OpcUa_StatusCode OpcUa_ViewNode_Encode(OpcUa_ViewNode* a_pValue, OpcUa_Encoder* 
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Boolean, ContainsNoLoops);
     OpcUa_Field_Write(Byte, EventNotifier);
@@ -1632,6 +2421,9 @@ OpcUa_StatusCode OpcUa_ViewNode_Decode(OpcUa_ViewNode* a_pValue, OpcUa_Decoder* 
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Boolean, ContainsNoLoops);
     OpcUa_Field_Read(Byte, EventNotifier);
@@ -1678,8 +2470,12 @@ OpcUa_Void OpcUa_DataTypeNode_Initialize(OpcUa_DataTypeNode* a_pValue)
         OpcUa_Field_Initialize(LocalizedText, Description);
         OpcUa_Field_Initialize(UInt32, WriteMask);
         OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Initialize(UInt16, AccessRestrictions);
         OpcUa_Field_InitializeEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Initialize(Boolean, IsAbstract);
+        OpcUa_Field_Initialize(ExtensionObject, DataTypeDefinition);
     }
 }
 
@@ -1697,8 +2493,12 @@ OpcUa_Void OpcUa_DataTypeNode_Clear(OpcUa_DataTypeNode* a_pValue)
         OpcUa_Field_Clear(LocalizedText, Description);
         OpcUa_Field_Clear(UInt32, WriteMask);
         OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+        OpcUa_Field_Clear(UInt16, AccessRestrictions);
         OpcUa_Field_ClearEncodeableArray(OpcUa_ReferenceNode, References);
         OpcUa_Field_Clear(Boolean, IsAbstract);
+        OpcUa_Field_Clear(ExtensionObject, DataTypeDefinition);
     }
 }
 
@@ -1724,8 +2524,12 @@ OpcUa_StatusCode OpcUa_DataTypeNode_GetSize(OpcUa_DataTypeNode* a_pValue, OpcUa_
     OpcUa_Field_GetSize(LocalizedText, Description);
     OpcUa_Field_GetSize(UInt32, WriteMask);
     OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_GetSize(UInt16, AccessRestrictions);
     OpcUa_Field_GetSizeEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_GetSize(Boolean, IsAbstract);
+    OpcUa_Field_GetSize(ExtensionObject, DataTypeDefinition);
 
     *a_pSize = iSize;
 
@@ -1754,8 +2558,12 @@ OpcUa_StatusCode OpcUa_DataTypeNode_Encode(OpcUa_DataTypeNode* a_pValue, OpcUa_E
     OpcUa_Field_Write(LocalizedText, Description);
     OpcUa_Field_Write(UInt32, WriteMask);
     OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Write(UInt16, AccessRestrictions);
     OpcUa_Field_WriteEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Write(Boolean, IsAbstract);
+    OpcUa_Field_Write(ExtensionObject, DataTypeDefinition);
 
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
@@ -1784,8 +2592,12 @@ OpcUa_StatusCode OpcUa_DataTypeNode_Decode(OpcUa_DataTypeNode* a_pValue, OpcUa_D
     OpcUa_Field_Read(LocalizedText, Description);
     OpcUa_Field_Read(UInt32, WriteMask);
     OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, RolePermissions);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_RolePermissionType, UserRolePermissions);
+    OpcUa_Field_Read(UInt16, AccessRestrictions);
     OpcUa_Field_ReadEncodeableArray(OpcUa_ReferenceNode, References);
     OpcUa_Field_Read(Boolean, IsAbstract);
+    OpcUa_Field_Read(ExtensionObject, DataTypeDefinition);
 
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
@@ -2184,6 +2996,132 @@ struct _OpcUa_EncodeableType OpcUa_EnumValueType_EncodeableType =
     (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_EnumValueType_GetSize,
     (OpcUa_EncodeableObject_PfnEncode*)OpcUa_EnumValueType_Encode,
     (OpcUa_EncodeableObject_PfnDecode*)OpcUa_EnumValueType_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_EnumField
+/*============================================================================
+ * OpcUa_EnumField_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_EnumField_Initialize(OpcUa_EnumField* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(Int64, Value);
+        OpcUa_Field_Initialize(LocalizedText, DisplayName);
+        OpcUa_Field_Initialize(LocalizedText, Description);
+        OpcUa_Field_Initialize(String, Name);
+    }
+}
+
+/*============================================================================
+ * OpcUa_EnumField_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_EnumField_Clear(OpcUa_EnumField* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(Int64, Value);
+        OpcUa_Field_Clear(LocalizedText, DisplayName);
+        OpcUa_Field_Clear(LocalizedText, Description);
+        OpcUa_Field_Clear(String, Name);
+    }
+}
+
+/*============================================================================
+ * OpcUa_EnumField_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EnumField_GetSize(OpcUa_EnumField* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EnumField_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(Int64, Value);
+    OpcUa_Field_GetSize(LocalizedText, DisplayName);
+    OpcUa_Field_GetSize(LocalizedText, Description);
+    OpcUa_Field_GetSize(String, Name);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EnumField_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EnumField_Encode(OpcUa_EnumField* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EnumField_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(Int64, Value);
+    OpcUa_Field_Write(LocalizedText, DisplayName);
+    OpcUa_Field_Write(LocalizedText, Description);
+    OpcUa_Field_Write(String, Name);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EnumField_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_EnumField_Decode(OpcUa_EnumField* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "EnumField_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_EnumField_Initialize(a_pValue);
+
+    OpcUa_Field_Read(Int64, Value);
+    OpcUa_Field_Read(LocalizedText, DisplayName);
+    OpcUa_Field_Read(LocalizedText, Description);
+    OpcUa_Field_Read(String, Name);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_EnumField_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_EnumField_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_EnumField_EncodeableType =
+{
+    "EnumField",
+    OpcUaId_EnumField,
+    OpcUaId_EnumField_Encoding_DefaultBinary,
+    OpcUaId_EnumField_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_EnumField),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_EnumField_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_EnumField_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_EnumField_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_EnumField_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_EnumField_Decode
 };
 #endif
 
@@ -2965,6 +3903,258 @@ struct _OpcUa_EncodeableType OpcUa_ServiceFault_EncodeableType =
     (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_ServiceFault_GetSize,
     (OpcUa_EncodeableObject_PfnEncode*)OpcUa_ServiceFault_Encode,
     (OpcUa_EncodeableObject_PfnDecode*)OpcUa_ServiceFault_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_SessionlessInvokeRequestType
+/*============================================================================
+ * OpcUa_SessionlessInvokeRequestType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_SessionlessInvokeRequestType_Initialize(OpcUa_SessionlessInvokeRequestType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_InitializeArray(UInt32, UrisVersion);
+        OpcUa_Field_InitializeArray(String, NamespaceUris);
+        OpcUa_Field_InitializeArray(String, ServerUris);
+        OpcUa_Field_InitializeArray(String, LocaleIds);
+        OpcUa_Field_Initialize(UInt32, ServiceId);
+    }
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeRequestType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_SessionlessInvokeRequestType_Clear(OpcUa_SessionlessInvokeRequestType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_ClearArray(UInt32, UrisVersion);
+        OpcUa_Field_ClearArray(String, NamespaceUris);
+        OpcUa_Field_ClearArray(String, ServerUris);
+        OpcUa_Field_ClearArray(String, LocaleIds);
+        OpcUa_Field_Clear(UInt32, ServiceId);
+    }
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeRequestType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_SessionlessInvokeRequestType_GetSize(OpcUa_SessionlessInvokeRequestType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "SessionlessInvokeRequestType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSizeArray(UInt32, UrisVersion);
+    OpcUa_Field_GetSizeArray(String, NamespaceUris);
+    OpcUa_Field_GetSizeArray(String, ServerUris);
+    OpcUa_Field_GetSizeArray(String, LocaleIds);
+    OpcUa_Field_GetSize(UInt32, ServiceId);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeRequestType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_SessionlessInvokeRequestType_Encode(OpcUa_SessionlessInvokeRequestType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "SessionlessInvokeRequestType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_WriteArray(UInt32, UrisVersion);
+    OpcUa_Field_WriteArray(String, NamespaceUris);
+    OpcUa_Field_WriteArray(String, ServerUris);
+    OpcUa_Field_WriteArray(String, LocaleIds);
+    OpcUa_Field_Write(UInt32, ServiceId);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeRequestType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_SessionlessInvokeRequestType_Decode(OpcUa_SessionlessInvokeRequestType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "SessionlessInvokeRequestType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_SessionlessInvokeRequestType_Initialize(a_pValue);
+
+    OpcUa_Field_ReadArray(UInt32, UrisVersion);
+    OpcUa_Field_ReadArray(String, NamespaceUris);
+    OpcUa_Field_ReadArray(String, ServerUris);
+    OpcUa_Field_ReadArray(String, LocaleIds);
+    OpcUa_Field_Read(UInt32, ServiceId);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_SessionlessInvokeRequestType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeRequestType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_SessionlessInvokeRequestType_EncodeableType =
+{
+    "SessionlessInvokeRequestType",
+    OpcUaId_SessionlessInvokeRequestType,
+    OpcUaId_SessionlessInvokeRequestType_Encoding_DefaultBinary,
+    OpcUaId_SessionlessInvokeRequestType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_SessionlessInvokeRequestType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_SessionlessInvokeRequestType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_SessionlessInvokeRequestType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_SessionlessInvokeRequestType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_SessionlessInvokeRequestType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_SessionlessInvokeRequestType_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_SessionlessInvokeResponseType
+/*============================================================================
+ * OpcUa_SessionlessInvokeResponseType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_SessionlessInvokeResponseType_Initialize(OpcUa_SessionlessInvokeResponseType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_InitializeArray(String, NamespaceUris);
+        OpcUa_Field_InitializeArray(String, ServerUris);
+        OpcUa_Field_Initialize(UInt32, ServiceId);
+    }
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeResponseType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_SessionlessInvokeResponseType_Clear(OpcUa_SessionlessInvokeResponseType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_ClearArray(String, NamespaceUris);
+        OpcUa_Field_ClearArray(String, ServerUris);
+        OpcUa_Field_Clear(UInt32, ServiceId);
+    }
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeResponseType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_SessionlessInvokeResponseType_GetSize(OpcUa_SessionlessInvokeResponseType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "SessionlessInvokeResponseType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSizeArray(String, NamespaceUris);
+    OpcUa_Field_GetSizeArray(String, ServerUris);
+    OpcUa_Field_GetSize(UInt32, ServiceId);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeResponseType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_SessionlessInvokeResponseType_Encode(OpcUa_SessionlessInvokeResponseType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "SessionlessInvokeResponseType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_WriteArray(String, NamespaceUris);
+    OpcUa_Field_WriteArray(String, ServerUris);
+    OpcUa_Field_Write(UInt32, ServiceId);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeResponseType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_SessionlessInvokeResponseType_Decode(OpcUa_SessionlessInvokeResponseType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "SessionlessInvokeResponseType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_SessionlessInvokeResponseType_Initialize(a_pValue);
+
+    OpcUa_Field_ReadArray(String, NamespaceUris);
+    OpcUa_Field_ReadArray(String, ServerUris);
+    OpcUa_Field_Read(UInt32, ServiceId);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_SessionlessInvokeResponseType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_SessionlessInvokeResponseType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_SessionlessInvokeResponseType_EncodeableType =
+{
+    "SessionlessInvokeResponseType",
+    OpcUaId_SessionlessInvokeResponseType,
+    OpcUaId_SessionlessInvokeResponseType_Encoding_DefaultBinary,
+    OpcUaId_SessionlessInvokeResponseType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_SessionlessInvokeResponseType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_SessionlessInvokeResponseType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_SessionlessInvokeResponseType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_SessionlessInvokeResponseType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_SessionlessInvokeResponseType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_SessionlessInvokeResponseType_Decode
 };
 #endif
 
@@ -7397,15 +8587,18 @@ static struct _OpcUa_EnumeratedValue g_OpcUa_NodeAttributesMask_EnumeratedValues
     { "ValueRank", 524288 },
     { "WriteMask", 1048576 },
     { "Value", 2097152 },
-    { "All", 4194303 },
-    { "BaseNode", 1335396 },
-    { "Object", 1335524 },
-    { "ObjectTypeOrDataType", 1337444 },
-    { "Variable", 4026999 },
-    { "VariableType", 3958902 },
-    { "Method", 1466724 },
-    { "ReferenceType", 1371236 },
-    { "View", 1335532 },
+    { "DataTypeDefinition", 4194304 },
+    { "RolePermissions", 8388608 },
+    { "AccessRestrictions", 16777216 },
+    { "All", 33554431 },
+    { "BaseNode", 26501220 },
+    { "Object", 26501348 },
+    { "ObjectType", 26503268 },
+    { "Variable", 26571383 },
+    { "VariableType", 28600438 },
+    { "Method", 26632548 },
+    { "ReferenceType", 26537060 },
+    { "View", 26501356 },
     { OpcUa_Null, 0 }
 };
 
@@ -8707,6 +9900,258 @@ struct _OpcUa_EncodeableType OpcUa_ViewAttributes_EncodeableType =
     (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_ViewAttributes_GetSize,
     (OpcUa_EncodeableObject_PfnEncode*)OpcUa_ViewAttributes_Encode,
     (OpcUa_EncodeableObject_PfnDecode*)OpcUa_ViewAttributes_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_GenericAttributeValue
+/*============================================================================
+ * OpcUa_GenericAttributeValue_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_GenericAttributeValue_Initialize(OpcUa_GenericAttributeValue* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(UInt32, AttributeId);
+        OpcUa_Field_Initialize(Variant, Value);
+    }
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributeValue_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_GenericAttributeValue_Clear(OpcUa_GenericAttributeValue* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(UInt32, AttributeId);
+        OpcUa_Field_Clear(Variant, Value);
+    }
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributeValue_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_GenericAttributeValue_GetSize(OpcUa_GenericAttributeValue* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "GenericAttributeValue_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(UInt32, AttributeId);
+    OpcUa_Field_GetSize(Variant, Value);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributeValue_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_GenericAttributeValue_Encode(OpcUa_GenericAttributeValue* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "GenericAttributeValue_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(UInt32, AttributeId);
+    OpcUa_Field_Write(Variant, Value);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributeValue_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_GenericAttributeValue_Decode(OpcUa_GenericAttributeValue* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "GenericAttributeValue_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_GenericAttributeValue_Initialize(a_pValue);
+
+    OpcUa_Field_Read(UInt32, AttributeId);
+    OpcUa_Field_Read(Variant, Value);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_GenericAttributeValue_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributeValue_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_GenericAttributeValue_EncodeableType =
+{
+    "GenericAttributeValue",
+    OpcUaId_GenericAttributeValue,
+    OpcUaId_GenericAttributeValue_Encoding_DefaultBinary,
+    OpcUaId_GenericAttributeValue_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_GenericAttributeValue),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_GenericAttributeValue_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_GenericAttributeValue_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_GenericAttributeValue_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_GenericAttributeValue_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_GenericAttributeValue_Decode
+};
+#endif
+
+#ifndef OPCUA_EXCLUDE_GenericAttributes
+/*============================================================================
+ * OpcUa_GenericAttributes_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_GenericAttributes_Initialize(OpcUa_GenericAttributes* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(UInt32, SpecifiedAttributes);
+        OpcUa_Field_Initialize(LocalizedText, DisplayName);
+        OpcUa_Field_Initialize(LocalizedText, Description);
+        OpcUa_Field_Initialize(UInt32, WriteMask);
+        OpcUa_Field_Initialize(UInt32, UserWriteMask);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_GenericAttributeValue, AttributeValues);
+    }
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributes_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_GenericAttributes_Clear(OpcUa_GenericAttributes* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(UInt32, SpecifiedAttributes);
+        OpcUa_Field_Clear(LocalizedText, DisplayName);
+        OpcUa_Field_Clear(LocalizedText, Description);
+        OpcUa_Field_Clear(UInt32, WriteMask);
+        OpcUa_Field_Clear(UInt32, UserWriteMask);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_GenericAttributeValue, AttributeValues);
+    }
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributes_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_GenericAttributes_GetSize(OpcUa_GenericAttributes* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "GenericAttributes_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(UInt32, SpecifiedAttributes);
+    OpcUa_Field_GetSize(LocalizedText, DisplayName);
+    OpcUa_Field_GetSize(LocalizedText, Description);
+    OpcUa_Field_GetSize(UInt32, WriteMask);
+    OpcUa_Field_GetSize(UInt32, UserWriteMask);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_GenericAttributeValue, AttributeValues);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributes_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_GenericAttributes_Encode(OpcUa_GenericAttributes* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "GenericAttributes_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(UInt32, SpecifiedAttributes);
+    OpcUa_Field_Write(LocalizedText, DisplayName);
+    OpcUa_Field_Write(LocalizedText, Description);
+    OpcUa_Field_Write(UInt32, WriteMask);
+    OpcUa_Field_Write(UInt32, UserWriteMask);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_GenericAttributeValue, AttributeValues);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributes_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_GenericAttributes_Decode(OpcUa_GenericAttributes* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "GenericAttributes_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_GenericAttributes_Initialize(a_pValue);
+
+    OpcUa_Field_Read(UInt32, SpecifiedAttributes);
+    OpcUa_Field_Read(LocalizedText, DisplayName);
+    OpcUa_Field_Read(LocalizedText, Description);
+    OpcUa_Field_Read(UInt32, WriteMask);
+    OpcUa_Field_Read(UInt32, UserWriteMask);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_GenericAttributeValue, AttributeValues);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_GenericAttributes_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_GenericAttributes_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_GenericAttributes_EncodeableType =
+{
+    "GenericAttributes",
+    OpcUaId_GenericAttributes,
+    OpcUaId_GenericAttributes_Encoding_DefaultBinary,
+    OpcUaId_GenericAttributes_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_GenericAttributes),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_GenericAttributes_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_GenericAttributes_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_GenericAttributes_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_GenericAttributes_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_GenericAttributes_Decode
 };
 #endif
 
@@ -10335,6 +11780,10 @@ static struct _OpcUa_EnumeratedValue g_OpcUa_AttributeWriteMask_EnumeratedValues
     { "ValueRank", 524288 },
     { "WriteMask", 1048576 },
     { "ValueForVariableType", 2097152 },
+    { "DataTypeDefinition", 4194304 },
+    { "RolePermissions", 8388608 },
+    { "AccessRestrictions", 16777216 },
+    { "AccessLevelEx", 33554432 },
     { OpcUa_Null, 0 }
 };
 
@@ -27451,6 +28900,172 @@ struct _OpcUa_EncodeableType OpcUa_ProgramDiagnosticDataType_EncodeableType =
 };
 #endif
 
+#ifndef OPCUA_EXCLUDE_ProgramDiagnostic2DataType
+/*============================================================================
+ * OpcUa_ProgramDiagnostic2DataType_Initialize
+ *===========================================================================*/
+OpcUa_Void OpcUa_ProgramDiagnostic2DataType_Initialize(OpcUa_ProgramDiagnostic2DataType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Initialize(NodeId, CreateSessionId);
+        OpcUa_Field_Initialize(String, CreateClientName);
+        OpcUa_Field_Initialize(DateTime, InvocationCreationTime);
+        OpcUa_Field_Initialize(DateTime, LastTransitionTime);
+        OpcUa_Field_Initialize(String, LastMethodCall);
+        OpcUa_Field_Initialize(NodeId, LastMethodSessionId);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_Argument, LastMethodInputArguments);
+        OpcUa_Field_InitializeEncodeableArray(OpcUa_Argument, LastMethodOutputArguments);
+        OpcUa_Field_InitializeArray(Variant, LastMethodInputValues);
+        OpcUa_Field_InitializeArray(Variant, LastMethodOutputValues);
+        OpcUa_Field_Initialize(DateTime, LastMethodCallTime);
+        OpcUa_Field_InitializeEncodeable(OpcUa_StatusResult, LastMethodReturnStatus);
+    }
+}
+
+/*============================================================================
+ * OpcUa_ProgramDiagnostic2DataType_Clear
+ *===========================================================================*/
+OpcUa_Void OpcUa_ProgramDiagnostic2DataType_Clear(OpcUa_ProgramDiagnostic2DataType* a_pValue)
+{
+    if (a_pValue != OpcUa_Null)
+    {
+        OpcUa_Field_Clear(NodeId, CreateSessionId);
+        OpcUa_Field_Clear(String, CreateClientName);
+        OpcUa_Field_Clear(DateTime, InvocationCreationTime);
+        OpcUa_Field_Clear(DateTime, LastTransitionTime);
+        OpcUa_Field_Clear(String, LastMethodCall);
+        OpcUa_Field_Clear(NodeId, LastMethodSessionId);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_Argument, LastMethodInputArguments);
+        OpcUa_Field_ClearEncodeableArray(OpcUa_Argument, LastMethodOutputArguments);
+        OpcUa_Field_ClearArray(Variant, LastMethodInputValues);
+        OpcUa_Field_ClearArray(Variant, LastMethodOutputValues);
+        OpcUa_Field_Clear(DateTime, LastMethodCallTime);
+        OpcUa_Field_ClearEncodeable(OpcUa_StatusResult, LastMethodReturnStatus);
+    }
+}
+
+/*============================================================================
+ * OpcUa_ProgramDiagnostic2DataType_GetSize
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_ProgramDiagnostic2DataType_GetSize(OpcUa_ProgramDiagnostic2DataType* a_pValue, OpcUa_Encoder* a_pEncoder, OpcUa_Int32* a_pSize)
+{
+    OpcUa_Int32 iSize = 0;
+
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "ProgramDiagnostic2DataType_GetSize");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSize);
+
+    *a_pSize = -1;
+
+    OpcUa_Field_GetSize(NodeId, CreateSessionId);
+    OpcUa_Field_GetSize(String, CreateClientName);
+    OpcUa_Field_GetSize(DateTime, InvocationCreationTime);
+    OpcUa_Field_GetSize(DateTime, LastTransitionTime);
+    OpcUa_Field_GetSize(String, LastMethodCall);
+    OpcUa_Field_GetSize(NodeId, LastMethodSessionId);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_Argument, LastMethodInputArguments);
+    OpcUa_Field_GetSizeEncodeableArray(OpcUa_Argument, LastMethodOutputArguments);
+    OpcUa_Field_GetSizeArray(Variant, LastMethodInputValues);
+    OpcUa_Field_GetSizeArray(Variant, LastMethodOutputValues);
+    OpcUa_Field_GetSize(DateTime, LastMethodCallTime);
+    OpcUa_Field_GetSizeEncodeable(OpcUa_StatusResult, LastMethodReturnStatus);
+
+    *a_pSize = iSize;
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    *a_pSize = -1;
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_ProgramDiagnostic2DataType_Encode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_ProgramDiagnostic2DataType_Encode(OpcUa_ProgramDiagnostic2DataType* a_pValue, OpcUa_Encoder* a_pEncoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "ProgramDiagnostic2DataType_Encode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pEncoder);
+
+    OpcUa_Field_Write(NodeId, CreateSessionId);
+    OpcUa_Field_Write(String, CreateClientName);
+    OpcUa_Field_Write(DateTime, InvocationCreationTime);
+    OpcUa_Field_Write(DateTime, LastTransitionTime);
+    OpcUa_Field_Write(String, LastMethodCall);
+    OpcUa_Field_Write(NodeId, LastMethodSessionId);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_Argument, LastMethodInputArguments);
+    OpcUa_Field_WriteEncodeableArray(OpcUa_Argument, LastMethodOutputArguments);
+    OpcUa_Field_WriteArray(Variant, LastMethodInputValues);
+    OpcUa_Field_WriteArray(Variant, LastMethodOutputValues);
+    OpcUa_Field_Write(DateTime, LastMethodCallTime);
+    OpcUa_Field_WriteEncodeable(OpcUa_StatusResult, LastMethodReturnStatus);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    /* nothing to do */
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_ProgramDiagnostic2DataType_Decode
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_ProgramDiagnostic2DataType_Decode(OpcUa_ProgramDiagnostic2DataType* a_pValue, OpcUa_Decoder* a_pDecoder)
+{
+    OpcUa_InitializeStatus(OpcUa_Module_Serializer, "ProgramDiagnostic2DataType_Decode");
+
+    OpcUa_ReturnErrorIfArgumentNull(a_pValue);
+    OpcUa_ReturnErrorIfArgumentNull(a_pDecoder);
+
+    OpcUa_ProgramDiagnostic2DataType_Initialize(a_pValue);
+
+    OpcUa_Field_Read(NodeId, CreateSessionId);
+    OpcUa_Field_Read(String, CreateClientName);
+    OpcUa_Field_Read(DateTime, InvocationCreationTime);
+    OpcUa_Field_Read(DateTime, LastTransitionTime);
+    OpcUa_Field_Read(String, LastMethodCall);
+    OpcUa_Field_Read(NodeId, LastMethodSessionId);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_Argument, LastMethodInputArguments);
+    OpcUa_Field_ReadEncodeableArray(OpcUa_Argument, LastMethodOutputArguments);
+    OpcUa_Field_ReadArray(Variant, LastMethodInputValues);
+    OpcUa_Field_ReadArray(Variant, LastMethodOutputValues);
+    OpcUa_Field_Read(DateTime, LastMethodCallTime);
+    OpcUa_Field_ReadEncodeable(OpcUa_StatusResult, LastMethodReturnStatus);
+
+    OpcUa_ReturnStatusCode;
+    OpcUa_BeginErrorHandling;
+
+    OpcUa_ProgramDiagnostic2DataType_Clear(a_pValue);
+
+    OpcUa_FinishErrorHandling;
+}
+
+/*============================================================================
+ * OpcUa_ProgramDiagnostic2DataType_EncodeableType
+ *===========================================================================*/
+struct _OpcUa_EncodeableType OpcUa_ProgramDiagnostic2DataType_EncodeableType =
+{
+    "ProgramDiagnostic2DataType",
+    OpcUaId_ProgramDiagnostic2DataType,
+    OpcUaId_ProgramDiagnostic2DataType_Encoding_DefaultBinary,
+    OpcUaId_ProgramDiagnostic2DataType_Encoding_DefaultXml,
+    OpcUa_Null,
+    sizeof(OpcUa_ProgramDiagnostic2DataType),
+    (OpcUa_EncodeableObject_PfnInitialize*)OpcUa_ProgramDiagnostic2DataType_Initialize,
+    (OpcUa_EncodeableObject_PfnClear*)OpcUa_ProgramDiagnostic2DataType_Clear,
+    (OpcUa_EncodeableObject_PfnGetSize*)OpcUa_ProgramDiagnostic2DataType_GetSize,
+    (OpcUa_EncodeableObject_PfnEncode*)OpcUa_ProgramDiagnostic2DataType_Encode,
+    (OpcUa_EncodeableObject_PfnDecode*)OpcUa_ProgramDiagnostic2DataType_Decode
+};
+#endif
+
 #ifndef OPCUA_EXCLUDE_Annotation
 /*============================================================================
  * OpcUa_Annotation_Initialize
@@ -27598,6 +29213,18 @@ struct _OpcUa_EnumeratedType OpcUa_ExceptionDeviationFormat_EnumeratedType =
  *===========================================================================*/
 static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
 {
+    #ifndef OPCUA_EXCLUDE_RolePermissionType
+    &OpcUa_RolePermissionType_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_StructureField
+    &OpcUa_StructureField_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_StructureDefinition
+    &OpcUa_StructureDefinition_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_EnumDefinition
+    &OpcUa_EnumDefinition_EncodeableType,
+    #endif
     #ifndef OPCUA_EXCLUDE_Node
     &OpcUa_Node_EncodeableType,
     #endif
@@ -27640,6 +29267,9 @@ static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
     #ifndef OPCUA_EXCLUDE_EnumValueType
     &OpcUa_EnumValueType_EncodeableType,
     #endif
+    #ifndef OPCUA_EXCLUDE_EnumField
+    &OpcUa_EnumField_EncodeableType,
+    #endif
     #ifndef OPCUA_EXCLUDE_OptionSet
     &OpcUa_OptionSet_EncodeableType,
     #endif
@@ -27657,6 +29287,12 @@ static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
     #endif
     #ifndef OPCUA_EXCLUDE_ServiceFault
     &OpcUa_ServiceFault_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_SessionlessInvokeRequestType
+    &OpcUa_SessionlessInvokeRequestType_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_SessionlessInvokeResponseType
+    &OpcUa_SessionlessInvokeResponseType_EncodeableType,
     #endif
     #ifndef OPCUA_EXCLUDE_FindServers
     &OpcUa_FindServersRequest_EncodeableType,
@@ -27767,6 +29403,12 @@ static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
     #endif
     #ifndef OPCUA_EXCLUDE_ViewAttributes
     &OpcUa_ViewAttributes_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_GenericAttributeValue
+    &OpcUa_GenericAttributeValue_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_GenericAttributes
+    &OpcUa_GenericAttributes_EncodeableType,
     #endif
     #ifndef OPCUA_EXCLUDE_AddNodesItem
     &OpcUa_AddNodesItem_EncodeableType,
@@ -28152,6 +29794,9 @@ static OpcUa_EncodeableType* g_OpcUa_KnownEncodeableTypes[] =
     #endif
     #ifndef OPCUA_EXCLUDE_ProgramDiagnosticDataType
     &OpcUa_ProgramDiagnosticDataType_EncodeableType,
+    #endif
+    #ifndef OPCUA_EXCLUDE_ProgramDiagnostic2DataType
+    &OpcUa_ProgramDiagnostic2DataType_EncodeableType,
     #endif
     #ifndef OPCUA_EXCLUDE_Annotation
     &OpcUa_Annotation_EncodeableType,

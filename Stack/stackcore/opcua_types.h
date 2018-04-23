@@ -43,12 +43,13 @@ struct _OpcUa_EnumeratedType;
 /*============================================================================
  * The IdType enumeration.
  *===========================================================================*/
+/** @brief Enumeration for the different identifier types of NodeIds. */
 typedef enum _OpcUa_IdType
 {
-    OpcUa_IdType_Numeric = 0,
-    OpcUa_IdType_String  = 1,
-    OpcUa_IdType_Guid    = 2,
-    OpcUa_IdType_Opaque  = 3
+    OpcUa_IdType_Numeric = 0,/*!< The identifier is a 32bit unsigned integer. */
+    OpcUa_IdType_String  = 1,/*!< The identifier is a string. */
+    OpcUa_IdType_Guid    = 2,/*!< The identifier is a GUID (byte field with 16 bytes) */
+    OpcUa_IdType_Opaque  = 3 /*!< The identifier is a free byte string. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_IdType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -66,17 +67,19 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_IdType_EnumeratedType;
 /*============================================================================
  * The NodeClass enumeration.
  *===========================================================================*/
+/** @brief Enumeration for the different node classes (= nodes in the server).
+Each Node has an attribute which identifies the node type by this enumeration type. */
 typedef enum _OpcUa_NodeClass
 {
-    OpcUa_NodeClass_Unspecified   = 0,
-    OpcUa_NodeClass_Object        = 1,
-    OpcUa_NodeClass_Variable      = 2,
-    OpcUa_NodeClass_Method        = 4,
-    OpcUa_NodeClass_ObjectType    = 8,
-    OpcUa_NodeClass_VariableType  = 16,
-    OpcUa_NodeClass_ReferenceType = 32,
-    OpcUa_NodeClass_DataType      = 64,
-    OpcUa_NodeClass_View          = 128
+    OpcUa_NodeClass_Unspecified   = 0,  /*!< Base node class. A concrete node can not be of that type. */
+    OpcUa_NodeClass_Object        = 1,  /*!< Object node class (see Object class definition) */
+    OpcUa_NodeClass_Variable      = 2,  /*!< Variable node class (see Variable class definition). */
+    OpcUa_NodeClass_Method        = 4,  /*!< Method node class (see Method class definition). */
+    OpcUa_NodeClass_ObjectType    = 8,  /*!< ObjectType node class (see ObjectType class definition). */
+    OpcUa_NodeClass_VariableType  = 16, /*!< VariableType node class (see VariableType class definition). */
+    OpcUa_NodeClass_ReferenceType = 32, /*!< ReferenceType node class (see ReferenceType class definition). */
+    OpcUa_NodeClass_DataType      = 64, /*!< DataType node class (see DataType class definition). */
+    OpcUa_NodeClass_View          = 128 /*!< View node class (see Viewclass definition). */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_NodeClass_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -88,6 +91,323 @@ OpcUa_NodeClass;
 #define OpcUa_NodeClass_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_NodeClass_Unspecified)
 
 OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_NodeClass_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_PermissionType
+/*============================================================================
+ * The PermissionType enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_PermissionType
+{
+    OpcUa_PermissionType_None                 = 0,
+    OpcUa_PermissionType_Browse               = 1,
+    OpcUa_PermissionType_ReadRolePermissions  = 2,
+    OpcUa_PermissionType_WriteAttribute       = 4,
+    OpcUa_PermissionType_WriteRolePermissions = 8,
+    OpcUa_PermissionType_WriteHistorizing     = 16,
+    OpcUa_PermissionType_Read                 = 32,
+    OpcUa_PermissionType_Write                = 64,
+    OpcUa_PermissionType_ReadHistory          = 128,
+    OpcUa_PermissionType_InsertHistory        = 256,
+    OpcUa_PermissionType_ModifyHistory        = 512,
+    OpcUa_PermissionType_DeleteHistory        = 1024,
+    OpcUa_PermissionType_ReceiveEvents        = 2048,
+    OpcUa_PermissionType_Call                 = 4096,
+    OpcUa_PermissionType_AddReference         = 8192,
+    OpcUa_PermissionType_RemoveReference      = 16384,
+    OpcUa_PermissionType_DeleteNode           = 32768,
+    OpcUa_PermissionType_AddNode              = 65536,
+    OpcUa_PermissionType_All                  = 131071
+#if OPCUA_FORCE_INT32_ENUMS
+    ,_OpcUa_PermissionType_MaxEnumerationValue = OpcUa_Int32_Max
+#endif
+}
+OpcUa_PermissionType;
+
+#define OpcUa_PermissionType_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, OpcUa_PermissionType_None)
+
+#define OpcUa_PermissionType_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_PermissionType_None)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_PermissionType_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_AccessLevelType
+/*============================================================================
+ * The AccessLevelType enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_AccessLevelType
+{
+    OpcUa_AccessLevelType_None           = 0,
+    OpcUa_AccessLevelType_CurrentRead    = 1,
+    OpcUa_AccessLevelType_CurrentWrite   = 2,
+    OpcUa_AccessLevelType_HistoryRead    = 4,
+    OpcUa_AccessLevelType_HistoryWrite   = 16,
+    OpcUa_AccessLevelType_StatusWrite    = 32,
+    OpcUa_AccessLevelType_TimestampWrite = 64
+#if OPCUA_FORCE_INT32_ENUMS
+    ,_OpcUa_AccessLevelType_MaxEnumerationValue = OpcUa_Int32_Max
+#endif
+}
+OpcUa_AccessLevelType;
+
+#define OpcUa_AccessLevelType_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, OpcUa_AccessLevelType_None)
+
+#define OpcUa_AccessLevelType_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_AccessLevelType_None)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_AccessLevelType_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_AccessLevelExType
+/*============================================================================
+ * The AccessLevelExType enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_AccessLevelExType
+{
+    OpcUa_AccessLevelExType_None               = 0,
+    OpcUa_AccessLevelExType_CurrentRead        = 1,
+    OpcUa_AccessLevelExType_CurrentWrite       = 2,
+    OpcUa_AccessLevelExType_HistoryRead        = 4,
+    OpcUa_AccessLevelExType_HistoryWrite       = 16,
+    OpcUa_AccessLevelExType_StatusWrite        = 32,
+    OpcUa_AccessLevelExType_TimestampWrite     = 64,
+    OpcUa_AccessLevelExType_NonatomicRead      = 65536,
+    OpcUa_AccessLevelExType_NonatomicWrite     = 131072,
+    OpcUa_AccessLevelExType_WriteFullArrayOnly = 262144
+#if OPCUA_FORCE_INT32_ENUMS
+    ,_OpcUa_AccessLevelExType_MaxEnumerationValue = OpcUa_Int32_Max
+#endif
+}
+OpcUa_AccessLevelExType;
+
+#define OpcUa_AccessLevelExType_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, OpcUa_AccessLevelExType_None)
+
+#define OpcUa_AccessLevelExType_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_AccessLevelExType_None)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_AccessLevelExType_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_EventNotifierType
+/*============================================================================
+ * The EventNotifierType enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_EventNotifierType
+{
+    OpcUa_EventNotifierType_None              = 0,
+    OpcUa_EventNotifierType_SubscribeToEvents = 1,
+    OpcUa_EventNotifierType_HistoryRead       = 4,
+    OpcUa_EventNotifierType_HistoryWrite      = 8
+#if OPCUA_FORCE_INT32_ENUMS
+    ,_OpcUa_EventNotifierType_MaxEnumerationValue = OpcUa_Int32_Max
+#endif
+}
+OpcUa_EventNotifierType;
+
+#define OpcUa_EventNotifierType_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, OpcUa_EventNotifierType_None)
+
+#define OpcUa_EventNotifierType_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_EventNotifierType_None)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_EventNotifierType_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_AccessRestrictionType
+/*============================================================================
+ * The AccessRestrictionType enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_AccessRestrictionType
+{
+    OpcUa_AccessRestrictionType_None               = 0,
+    OpcUa_AccessRestrictionType_SigningRequired    = 1,
+    OpcUa_AccessRestrictionType_EncryptionRequired = 2,
+    OpcUa_AccessRestrictionType_SessionRequired    = 4
+#if OPCUA_FORCE_INT32_ENUMS
+    ,_OpcUa_AccessRestrictionType_MaxEnumerationValue = OpcUa_Int32_Max
+#endif
+}
+OpcUa_AccessRestrictionType;
+
+#define OpcUa_AccessRestrictionType_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, OpcUa_AccessRestrictionType_None)
+
+#define OpcUa_AccessRestrictionType_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_AccessRestrictionType_None)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_AccessRestrictionType_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_RolePermissionType
+/*============================================================================
+ * The RolePermissionType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_RolePermissionType
+{
+    OpcUa_NodeId RoleId;
+    OpcUa_UInt32 Permissions;
+}
+OpcUa_RolePermissionType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_RolePermissionType_Initialize(OpcUa_RolePermissionType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_RolePermissionType_Clear(OpcUa_RolePermissionType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_RolePermissionType_GetSize(OpcUa_RolePermissionType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_RolePermissionType_Encode(OpcUa_RolePermissionType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_RolePermissionType_Decode(OpcUa_RolePermissionType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_RolePermissionType_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_StructureType
+/*============================================================================
+ * The StructureType enumeration.
+ *===========================================================================*/
+typedef enum _OpcUa_StructureType
+{
+    OpcUa_StructureType_Structure                   = 0,
+    OpcUa_StructureType_StructureWithOptionalFields = 1,
+    OpcUa_StructureType_Union                       = 2
+#if OPCUA_FORCE_INT32_ENUMS
+    ,_OpcUa_StructureType_MaxEnumerationValue = OpcUa_Int32_Max
+#endif
+}
+OpcUa_StructureType;
+
+#define OpcUa_StructureType_Clear(xValue) OpcUa_EnumeratedType_Clear(xValue, OpcUa_StructureType_Structure)
+
+#define OpcUa_StructureType_Initialize(xValue) OpcUa_EnumeratedType_Initialize(xValue, OpcUa_StructureType_Structure)
+
+OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_StructureType_EnumeratedType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_StructureField
+/*============================================================================
+ * The StructureField structure.
+ *===========================================================================*/
+typedef struct _OpcUa_StructureField
+{
+    OpcUa_String        Name;
+    OpcUa_LocalizedText Description;
+    OpcUa_NodeId        DataType;
+    OpcUa_Int32         ValueRank;
+    OpcUa_Int32         NoOfArrayDimensions;
+    OpcUa_UInt32*       ArrayDimensions;
+    OpcUa_UInt32        MaxStringLength;
+    OpcUa_Boolean       IsOptional;
+}
+OpcUa_StructureField;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_StructureField_Initialize(OpcUa_StructureField* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_StructureField_Clear(OpcUa_StructureField* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_StructureField_GetSize(OpcUa_StructureField* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_StructureField_Encode(OpcUa_StructureField* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_StructureField_Decode(OpcUa_StructureField* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_StructureField_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_StructureDefinition
+/*============================================================================
+ * The StructureDefinition structure.
+ *===========================================================================*/
+typedef struct _OpcUa_StructureDefinition
+{
+    OpcUa_NodeId          DefaultEncodingId;
+    OpcUa_NodeId          BaseDataType;
+    OpcUa_StructureType   StructureType;
+    OpcUa_Int32           NoOfFields;
+    OpcUa_StructureField* Fields;
+}
+OpcUa_StructureDefinition;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_StructureDefinition_Initialize(OpcUa_StructureDefinition* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_StructureDefinition_Clear(OpcUa_StructureDefinition* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_StructureDefinition_GetSize(OpcUa_StructureDefinition* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_StructureDefinition_Encode(OpcUa_StructureDefinition* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_StructureDefinition_Decode(OpcUa_StructureDefinition* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_StructureDefinition_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_EnumValueType
+/*============================================================================
+ * The EnumValueType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_EnumValueType
+{
+    OpcUa_Int64         Value;
+    OpcUa_LocalizedText DisplayName;
+    OpcUa_LocalizedText Description;
+}
+OpcUa_EnumValueType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EnumValueType_Initialize(OpcUa_EnumValueType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EnumValueType_Clear(OpcUa_EnumValueType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumValueType_GetSize(OpcUa_EnumValueType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumValueType_Encode(OpcUa_EnumValueType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumValueType_Decode(OpcUa_EnumValueType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EnumValueType_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_EnumField
+/*============================================================================
+ * The EnumField structure.
+ *===========================================================================*/
+typedef struct _OpcUa_EnumField
+{
+    OpcUa_Int64         Value;
+    OpcUa_LocalizedText DisplayName;
+    OpcUa_LocalizedText Description;
+    OpcUa_String        Name;
+}
+OpcUa_EnumField;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EnumField_Initialize(OpcUa_EnumField* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EnumField_Clear(OpcUa_EnumField* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumField_GetSize(OpcUa_EnumField* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumField_Encode(OpcUa_EnumField* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumField_Decode(OpcUa_EnumField* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EnumField_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_EnumDefinition
+/*============================================================================
+ * The EnumDefinition structure.
+ *===========================================================================*/
+typedef struct _OpcUa_EnumDefinition
+{
+    OpcUa_Int32      NoOfFields;
+    OpcUa_EnumField* Fields;
+}
+OpcUa_EnumDefinition;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EnumDefinition_Initialize(OpcUa_EnumDefinition* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_EnumDefinition_Clear(OpcUa_EnumDefinition* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumDefinition_GetSize(OpcUa_EnumDefinition* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumDefinition_Encode(OpcUa_EnumDefinition* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumDefinition_Decode(OpcUa_EnumDefinition* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EnumDefinition_EncodeableType;
 #endif
 
 #ifndef OPCUA_EXCLUDE_ReferenceNode
@@ -119,17 +439,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ReferenceNode_Encodeabl
 /*============================================================================
  * The Node structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_Node
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
 }
 OpcUa_Node;
 
@@ -150,17 +476,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_Node_EncodeableType;
 /*============================================================================
  * The InstanceNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_InstanceNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
 }
 OpcUa_InstanceNode;
 
@@ -181,17 +513,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_InstanceNode_Encodeable
 /*============================================================================
  * The TypeNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_TypeNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
 }
 OpcUa_TypeNode;
 
@@ -212,18 +550,24 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_TypeNode_EncodeableType
 /*============================================================================
  * The ObjectNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_ObjectNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Byte           EventNotifier;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Byte                EventNotifier;
 }
 OpcUa_ObjectNode;
 
@@ -244,18 +588,24 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ObjectNode_EncodeableTy
 /*============================================================================
  * The ObjectTypeNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_ObjectTypeNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Boolean        IsAbstract;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Boolean             IsAbstract;
 }
 OpcUa_ObjectTypeNode;
 
@@ -276,26 +626,33 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ObjectTypeNode_Encodeab
 /*============================================================================
  * The VariableNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_VariableNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Variant        Value;
-    OpcUa_NodeId         DataType;
-    OpcUa_Int32          ValueRank;
-    OpcUa_Int32          NoOfArrayDimensions;
-    OpcUa_UInt32*        ArrayDimensions;
-    OpcUa_Byte           AccessLevel;
-    OpcUa_Byte           UserAccessLevel;
-    OpcUa_Double         MinimumSamplingInterval;
-    OpcUa_Boolean        Historizing;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Variant             Value;
+    OpcUa_NodeId              DataType;
+    OpcUa_Int32               ValueRank;
+    OpcUa_Int32               NoOfArrayDimensions;
+    OpcUa_UInt32*             ArrayDimensions;
+    OpcUa_Byte                AccessLevel;
+    OpcUa_Byte                UserAccessLevel;
+    OpcUa_Double              MinimumSamplingInterval;
+    OpcUa_Boolean             Historizing;
+    OpcUa_UInt32              AccessLevelEx;
 }
 OpcUa_VariableNode;
 
@@ -316,23 +673,29 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_VariableNode_Encodeable
 /*============================================================================
  * The VariableTypeNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_VariableTypeNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Variant        Value;
-    OpcUa_NodeId         DataType;
-    OpcUa_Int32          ValueRank;
-    OpcUa_Int32          NoOfArrayDimensions;
-    OpcUa_UInt32*        ArrayDimensions;
-    OpcUa_Boolean        IsAbstract;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Variant             Value;
+    OpcUa_NodeId              DataType;
+    OpcUa_Int32               ValueRank;
+    OpcUa_Int32               NoOfArrayDimensions;
+    OpcUa_UInt32*             ArrayDimensions;
+    OpcUa_Boolean             IsAbstract;
 }
 OpcUa_VariableTypeNode;
 
@@ -353,20 +716,26 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_VariableTypeNode_Encode
 /*============================================================================
  * The ReferenceTypeNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_ReferenceTypeNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Boolean        IsAbstract;
-    OpcUa_Boolean        Symmetric;
-    OpcUa_LocalizedText  InverseName;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Boolean             IsAbstract;
+    OpcUa_Boolean             Symmetric;
+    OpcUa_LocalizedText       InverseName;
 }
 OpcUa_ReferenceTypeNode;
 
@@ -387,19 +756,25 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ReferenceTypeNode_Encod
 /*============================================================================
  * The MethodNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_MethodNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Boolean        Executable;
-    OpcUa_Boolean        UserExecutable;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Boolean             Executable;
+    OpcUa_Boolean             UserExecutable;
 }
 OpcUa_MethodNode;
 
@@ -420,19 +795,25 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_MethodNode_EncodeableTy
 /*============================================================================
  * The ViewNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_ViewNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Boolean        ContainsNoLoops;
-    OpcUa_Byte           EventNotifier;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Boolean             ContainsNoLoops;
+    OpcUa_Byte                EventNotifier;
 }
 OpcUa_ViewNode;
 
@@ -453,18 +834,25 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ViewNode_EncodeableType
 /*============================================================================
  * The DataTypeNode structure.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef struct _OpcUa_DataTypeNode
 {
-    OpcUa_NodeId         NodeId;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_LocalizedText  Description;
-    OpcUa_UInt32         WriteMask;
-    OpcUa_UInt32         UserWriteMask;
-    OpcUa_Int32          NoOfReferences;
-    OpcUa_ReferenceNode* References;
-    OpcUa_Boolean        IsAbstract;
+    OpcUa_NodeId              NodeId;
+    OpcUa_NodeClass           NodeClass;
+    OpcUa_QualifiedName       BrowseName;
+    OpcUa_LocalizedText       DisplayName;
+    OpcUa_LocalizedText       Description;
+    OpcUa_UInt32              WriteMask;
+    OpcUa_UInt32              UserWriteMask;
+    OpcUa_Int32               NoOfRolePermissions;
+    OpcUa_RolePermissionType* RolePermissions;
+    OpcUa_Int32               NoOfUserRolePermissions;
+    OpcUa_RolePermissionType* UserRolePermissions;
+    OpcUa_UInt16              AccessRestrictions;
+    OpcUa_Int32               NoOfReferences;
+    OpcUa_ReferenceNode*      References;
+    OpcUa_Boolean             IsAbstract;
+    OpcUa_ExtensionObject     DataTypeDefinition;
 }
 OpcUa_DataTypeNode;
 
@@ -507,31 +895,6 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Argument_Encode(OpcUa_Argument* pValue, stru
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Argument_Decode(OpcUa_Argument* pValue, struct _OpcUa_Decoder* pDecoder);
 
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_Argument_EncodeableType;
-#endif
-
-#ifndef OPCUA_EXCLUDE_EnumValueType
-/*============================================================================
- * The EnumValueType structure.
- *===========================================================================*/
-typedef struct _OpcUa_EnumValueType
-{
-    OpcUa_Int64         Value;
-    OpcUa_LocalizedText DisplayName;
-    OpcUa_LocalizedText Description;
-}
-OpcUa_EnumValueType;
-
-OPCUA_EXPORT OpcUa_Void OpcUa_EnumValueType_Initialize(OpcUa_EnumValueType* pValue);
-
-OPCUA_EXPORT OpcUa_Void OpcUa_EnumValueType_Clear(OpcUa_EnumValueType* pValue);
-
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumValueType_GetSize(OpcUa_EnumValueType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
-
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumValueType_Encode(OpcUa_EnumValueType* pValue, struct _OpcUa_Encoder* pEncoder);
-
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_EnumValueType_Decode(OpcUa_EnumValueType* pValue, struct _OpcUa_Decoder* pDecoder);
-
-OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EnumValueType_EncodeableType;
 #endif
 
 #ifndef OPCUA_EXCLUDE_OptionSet
@@ -586,12 +949,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_TimeZoneDataType_Encode
 /*============================================================================
  * The ApplicationType enumeration.
  *===========================================================================*/
+/** @brief The type of application. */
 typedef enum _OpcUa_ApplicationType
 {
-    OpcUa_ApplicationType_Server          = 0,
-    OpcUa_ApplicationType_Client          = 1,
-    OpcUa_ApplicationType_ClientAndServer = 2,
-    OpcUa_ApplicationType_DiscoveryServer = 3
+    OpcUa_ApplicationType_Server          = 0,  /*!< The application is a Server. */
+    OpcUa_ApplicationType_Client          = 1,  /*!< The application is a Client. */
+    OpcUa_ApplicationType_ClientAndServer = 2,  /*!< The application is a Client and a Server. */
+    OpcUa_ApplicationType_DiscoveryServer = 3   /*!< The application is a DiscoveryServer. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_ApplicationType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -609,16 +973,28 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_ApplicationType_Enumera
 /*============================================================================
  * The ApplicationDescription structure.
  *===========================================================================*/
+/** @brief Specifies an application that is available */
 typedef struct _OpcUa_ApplicationDescription
 {
-    OpcUa_String          ApplicationUri;
-    OpcUa_String          ProductUri;
-    OpcUa_LocalizedText   ApplicationName;
-    OpcUa_ApplicationType ApplicationType;
-    OpcUa_String          GatewayServerUri;
-    OpcUa_String          DiscoveryProfileUri;
-    OpcUa_Int32           NoOfDiscoveryUrls;
-    OpcUa_String*         DiscoveryUrls;
+    OpcUa_String          ApplicationUri;       /*!< The globally unique identifier for the application instance.
+                                                * This URI is used as ServerUri in Services if the application is a Server*/
+    OpcUa_String          ProductUri;           /*!< The globally unique identifier for the product. */
+    OpcUa_LocalizedText   ApplicationName;      /*!< A localized descriptive name for the application. */
+    OpcUa_ApplicationType ApplicationType;      /*!< The type of application.
+                                                * This value is an enumeration with one of the following values:
+                                                * SERVER_0 The application is a Server.
+                                                * CLIENT_1 The application is a Client.
+                                                * CLIENTANDSERVER_2 The application is a Client and a Server.
+                                                * DISCOVERYSERVER_3 The application is a DiscoveryServer. */
+    OpcUa_String          GatewayServerUri;     /*!< A URI that identifies the Gateway Server associated with the discoveryUrls.
+                                                * This value is not specified if the Server can be accessed directly.
+                                                * This field is not used if the applicationType is CLIENT_1. */
+    OpcUa_String          DiscoveryProfileUri;  /*!< A URI that identifies the discovery profile supported by the URLs provided.
+                                                * This field is not used if the applicationType is CLIENT_1.
+                                                * If this value is not specified then the Endpoints shall support the Discovery Services. */
+    OpcUa_Int32           NoOfDiscoveryUrls;    /*!< the Size of DiscoveryUrls list */
+    OpcUa_String*         DiscoveryUrls;        /*!< A list of URLs for the discovery Endpoints provided by the application.
+                                                * If the applicationType is CLIENT_1, this field shall contain an empty list. */
 }
 OpcUa_ApplicationDescription;
 
@@ -639,15 +1015,72 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ApplicationDescription_
 /*============================================================================
  * The RequestHeader structure.
  *===========================================================================*/
+/** @brief Common parameters for all requests submitted on a Session. */
 typedef struct _OpcUa_RequestHeader
 {
-    OpcUa_NodeId          AuthenticationToken;
-    OpcUa_DateTime        Timestamp;
-    OpcUa_UInt32          RequestHandle;
-    OpcUa_UInt32          ReturnDiagnostics;
-    OpcUa_String          AuditEntryId;
-    OpcUa_UInt32          TimeoutHint;
-    OpcUa_ExtensionObject AdditionalHeader;
+    OpcUa_NodeId          AuthenticationToken;  /*!< The secret Session identifier used to verify that the request is associated with the Session. */
+    OpcUa_DateTime        Timestamp;            /*!< The time the Client sent the request.
+                                                * The parameter is only used for diagnostic and logging purposes in the server. */
+    OpcUa_UInt32          RequestHandle;        /*!< A requestHandle associated with the request.
+                                                * This client defined handle can be used to cancel the request.
+                                                * It is also returned in the response. */
+    OpcUa_UInt32          ReturnDiagnostics;    /*!< A bit mask that identifies the types of vendor-specific diagnostics to be returned in
+                                                * diagnosticInfo response parameters.
+                                                * The value of this parameter may consist of zero, one or more of the following values.
+                                                * No value indicates that diagnostics are not to be returned.
+                                                *
+                                                * Bit Value Diagnostics to return
+                                                * @li 0x0000 0001 ServiceLevel / SymbolicId
+                                                * @li 0x0000 0002 ServiceLevel / LocalizedText
+                                                * @li 0x0000 0004 ServiceLevel / AdditionalInfo
+                                                * @li 0x0000 0008 ServiceLevel / Inner StatusCode
+                                                * @li 0x0000 0010 ServiceLevel / Inner Diagnostics
+                                                * @li 0x0000 0020 OperationLevel / SymbolicId
+                                                * @li 0x0000 0040 OperationLevel / LocalizedText
+                                                * @li 0x0000 0080 OperationLevel / AdditionalInfo
+                                                * @li 0x0000 0100 OperationLevel / Inner StatusCode
+                                                * @li 0x0000 0200 OperationLevel / Inner Diagnostics
+                                                *
+                                                * Each of these values is composed of two components, level and type, as described below.
+                                                * If none are requested, as indicated by a 0 value, or if no diagnostic information was encountered
+                                                * in processing of the request,
+                                                * then diagnostics information is not returned.
+                                                *
+                                                * Level:
+                                                * @li ServiceLevel return diagnostics in the diagnosticInfo of the Service.
+                                                * @li OperationLevel return diagnostics in the diagnosticInfo defined for individual operations
+                                                *     requested in the Service.
+                                                *
+                                                * Type:
+                                                * @li SymbolicId return a namespace-qualified, symbolic identifier for an error or condition.
+                                                *     The maximum length of this identifier is 32 characters.
+                                                * @li LocalizedText return up to 256 bytes of localized text that describes the symbolic id.
+                                                * @li AdditionalInfo return a byte string that contains additional diagnostic information, such as
+                                                *     a memory image.
+                                                *     The format of this byte string is vendor-specific, and may depend on the type of error or
+                                                *     condition encountered.
+                                                * @li InnerStatusCode return the inner StatusCode associated with the operation or Service.
+                                                * @li InnerDiagnostics return the inner diagnostic info associated with the operation or Service.
+                                                *     The contents of the inner diagnostic info structure are determined by other bits in the mask.
+                                                *     Note that setting this bit could cause multiple levels of nested diagnostic info structures to
+                                                *     be returned. */
+    OpcUa_String          AuditEntryId;         /*!< An identifier that identifies the Client‟s security audit log entry associated with
+                                                * this request.
+                                                * An empty string value means that this parameter is not used.
+                                                * The AuditEntryId typically contains who initiated the action and from where it was initiated.
+                                                * The AuditEventId is included in the AuditEvent to allow human readers to correlate an Event with
+                                                * the initiating action. */
+    OpcUa_UInt32          TimeoutHint;          /*!< This timeout in milliseconds is used in the Client side Communication Stack to set the timeout
+                                                * on a per-call base.
+                                                * For a Server this timeout is only a hint and can be used to cancel long running operations to free
+                                                * resources.
+                                                * If the Server detects a timeout, he can cancel the operation by sending the Service
+                                                * result Bad_Timeout.
+                                                * The Server should wait at minimum the timeout after he received the request before cancelling
+                                                * the operation.
+                                                * The value of 0 indicates no timeout. */
+    OpcUa_ExtensionObject AdditionalHeader;     /*!< Reserved for future use.
+                                                * Applications that do not understand the header should ignore it. */
 }
 OpcUa_RequestHeader;
 
@@ -668,15 +1101,21 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_RequestHeader_Encodeabl
 /*============================================================================
  * The ResponseHeader structure.
  *===========================================================================*/
+/** @brief Common parameters for all responses. */
 typedef struct _OpcUa_ResponseHeader
 {
-    OpcUa_DateTime        Timestamp;
-    OpcUa_UInt32          RequestHandle;
-    OpcUa_StatusCode      ServiceResult;
-    OpcUa_DiagnosticInfo  ServiceDiagnostics;
-    OpcUa_Int32           NoOfStringTable;
-    OpcUa_String*         StringTable;
-    OpcUa_ExtensionObject AdditionalHeader;
+    OpcUa_DateTime        Timestamp;            /*!< The time the Server sent the response. */
+    OpcUa_UInt32          RequestHandle;        /*!< The requestHandle given by the Client to the request. */
+    OpcUa_StatusCode      ServiceResult;        /*!< OPC UA-defined result of the Service invocation. */
+    OpcUa_DiagnosticInfo  ServiceDiagnostics;   /*!< Diagnostic information for the Service invocation.
+                                                * This parameter is empty if diagnostics information was not requested in the request header. */
+    OpcUa_Int32           NoOfStringTable;      /*!< Size of StringTable list */
+    OpcUa_String*         StringTable;          /*!< There is one string in this list for each unique namespace, symbolic identifier,
+                                                * and localized text string contained in all of the diagnostics information parameters
+                                                * contained in the response.
+                                                * Each is identified within this table by its zero-based index. */
+    OpcUa_ExtensionObject AdditionalHeader;     /*!< Reserved for future use.
+                                                * Applications that do not understand the header should ignore it. */
 }
 OpcUa_ResponseHeader;
 
@@ -697,9 +1136,12 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ResponseHeader_Encodeab
 /*============================================================================
  * The ServiceFault structure.
  *===========================================================================*/
+/** @brief An error response sent when a service level error occurs. */
 typedef struct _OpcUa_ServiceFault
 {
-    OpcUa_ResponseHeader ResponseHeader;
+    OpcUa_ResponseHeader ResponseHeader;    /*!< Common response parameters
+                                            *
+                                            * @see OpcUa_ResponseHeader */
 }
 OpcUa_ServiceFault;
 
@@ -714,6 +1156,64 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ServiceFault_Encode(OpcUa_ServiceFault* pVal
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_ServiceFault_Decode(OpcUa_ServiceFault* pValue, struct _OpcUa_Decoder* pDecoder);
 
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ServiceFault_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_SessionlessInvokeRequestType
+/*============================================================================
+ * The SessionlessInvokeRequestType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_SessionlessInvokeRequestType
+{
+    OpcUa_Int32   NoOfUrisVersion;
+    OpcUa_UInt32* UrisVersion;
+    OpcUa_Int32   NoOfNamespaceUris;
+    OpcUa_String* NamespaceUris;
+    OpcUa_Int32   NoOfServerUris;
+    OpcUa_String* ServerUris;
+    OpcUa_Int32   NoOfLocaleIds;
+    OpcUa_String* LocaleIds;
+    OpcUa_UInt32  ServiceId;
+}
+OpcUa_SessionlessInvokeRequestType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_SessionlessInvokeRequestType_Initialize(OpcUa_SessionlessInvokeRequestType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_SessionlessInvokeRequestType_Clear(OpcUa_SessionlessInvokeRequestType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SessionlessInvokeRequestType_GetSize(OpcUa_SessionlessInvokeRequestType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SessionlessInvokeRequestType_Encode(OpcUa_SessionlessInvokeRequestType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SessionlessInvokeRequestType_Decode(OpcUa_SessionlessInvokeRequestType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_SessionlessInvokeRequestType_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_SessionlessInvokeResponseType
+/*============================================================================
+ * The SessionlessInvokeResponseType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_SessionlessInvokeResponseType
+{
+    OpcUa_Int32   NoOfNamespaceUris;
+    OpcUa_String* NamespaceUris;
+    OpcUa_Int32   NoOfServerUris;
+    OpcUa_String* ServerUris;
+    OpcUa_UInt32  ServiceId;
+}
+OpcUa_SessionlessInvokeResponseType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_SessionlessInvokeResponseType_Initialize(OpcUa_SessionlessInvokeResponseType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_SessionlessInvokeResponseType_Clear(OpcUa_SessionlessInvokeResponseType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SessionlessInvokeResponseType_GetSize(OpcUa_SessionlessInvokeResponseType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SessionlessInvokeResponseType_Encode(OpcUa_SessionlessInvokeResponseType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_SessionlessInvokeResponseType_Decode(OpcUa_SessionlessInvokeResponseType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_SessionlessInvokeResponseType_EncodeableType;
 #endif
 
 #ifndef OPCUA_EXCLUDE_FindServers
@@ -857,12 +1357,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_FindServersOnNetworkRes
 /*============================================================================
  * The MessageSecurityMode enumeration.
  *===========================================================================*/
+/** @brief Define the possible message security modes, that can be used for communication. */
 typedef enum _OpcUa_MessageSecurityMode
 {
-    OpcUa_MessageSecurityMode_Invalid        = 0,
-    OpcUa_MessageSecurityMode_None           = 1,
-    OpcUa_MessageSecurityMode_Sign           = 2,
-    OpcUa_MessageSecurityMode_SignAndEncrypt = 3
+    OpcUa_MessageSecurityMode_Invalid        = 0,   /*!< An invalid value. */
+    OpcUa_MessageSecurityMode_None           = 1,   /*!< No security mode. Messages are neither signed nor encrypted. */
+    OpcUa_MessageSecurityMode_Sign           = 2,   /*!< Messages are only signed. */
+    OpcUa_MessageSecurityMode_SignAndEncrypt = 3    /*!< Messages are signed and encrypted. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_MessageSecurityMode_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -880,12 +1381,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_MessageSecurityMode_Enu
 /*============================================================================
  * The UserTokenType enumeration.
  *===========================================================================*/
+/** @brief Enumeration of different user authentication types. */
 typedef enum _OpcUa_UserTokenType
 {
-    OpcUa_UserTokenType_Anonymous   = 0,
-    OpcUa_UserTokenType_UserName    = 1,
-    OpcUa_UserTokenType_Certificate = 2,
-    OpcUa_UserTokenType_IssuedToken = 3
+    OpcUa_UserTokenType_Anonymous   = 0,/*!< No authentication. The user is anonymous. */
+    OpcUa_UserTokenType_UserName    = 1,/*!< Authentication via user name and password. */
+    OpcUa_UserTokenType_Certificate = 2,/*!< Authentication via user specific certificates. */
+    OpcUa_UserTokenType_IssuedToken = 3 /*!< Authentication via issued token. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_UserTokenType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -903,13 +1405,31 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_UserTokenType_Enumerate
 /*============================================================================
  * The UserTokenPolicy structure.
  *===========================================================================*/
+/** @brief Specifies a UserIdentityToken that a Server will accept. */
 typedef struct _OpcUa_UserTokenPolicy
 {
-    OpcUa_String        PolicyId;
-    OpcUa_UserTokenType TokenType;
-    OpcUa_String        IssuedTokenType;
-    OpcUa_String        IssuerEndpointUrl;
-    OpcUa_String        SecurityPolicyUri;
+    OpcUa_String        PolicyId;           /*!< An identifier for the UserTokenPolicy assigned by the Server.
+                                            * The Client specifies this value when it constructs a UserIdentityToken that conforms to the policy.
+                                            * This value is only unique within the context of a single Server. */
+    OpcUa_UserTokenType TokenType;          /*!< The type of user identity token required.
+                                            *
+                                            * This value is an enumeration with one of the following values:
+                                            * @li ANONYMOUS_0 No token is required.
+                                            * @li USERNAME_1 A username/password token.
+                                            * @li CERTIFICATE_2 An X509v3 certificate token.
+                                            * @li ISSUEDTOKEN_3 Any WS-Security defined token.
+                                            *
+                                            * A tokenType of ANONYMOUS indicates that the Server does not require any user identification.
+                                            * In this case the Client application instance Certificate is used as the user identification. */
+    OpcUa_String        IssuedTokenType;    /*!< A URI for the type of token.
+                                            * Part 6 defines URIs for common issued token types.
+                                            * Vendors may specify their own token.
+                                            * This field may only be specified if TokenType is ISSUEDTOKEN_3. */
+    OpcUa_String        IssuerEndpointUrl;  /*!< An optional URL for the token issuing service.
+                                            * The meaning of this value depends on the issuedTokenType. */
+    OpcUa_String        SecurityPolicyUri;  /*!< The security policy to use when encrypting or signing the UserIdentityToken when it is
+                                            * passed to the Server in the ActivateSession request.
+                                            * The security policy for the SecureChannel is used if this value is omitted. */
 }
 OpcUa_UserTokenPolicy;
 
@@ -930,17 +1450,25 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_UserTokenPolicy_Encodea
 /*============================================================================
  * The EndpointDescription structure.
  *===========================================================================*/
+/** @brief Describes an Endpoint for a Server. */
 typedef struct _OpcUa_EndpointDescription
 {
-    OpcUa_String                 EndpointUrl;
-    OpcUa_ApplicationDescription Server;
-    OpcUa_ByteString             ServerCertificate;
-    OpcUa_MessageSecurityMode    SecurityMode;
-    OpcUa_String                 SecurityPolicyUri;
-    OpcUa_Int32                  NoOfUserIdentityTokens;
-    OpcUa_UserTokenPolicy*       UserIdentityTokens;
-    OpcUa_String                 TransportProfileUri;
-    OpcUa_Byte                   SecurityLevel;
+    OpcUa_String                 EndpointUrl;               /*!< The URL for the Endpoint described. */
+    OpcUa_ApplicationDescription Server;                    /*!< The description for the Server that the Endpoint belongs to. */
+    OpcUa_ByteString             ServerCertificate;         /*!< The application instance Certificate issued to the Server. */
+    OpcUa_MessageSecurityMode    SecurityMode;              /*!< The type of security to apply to the messages.
+                                                            * A SecureChannel may have to be created even if the securityMode is NONE.
+                                                            * The exact behavior depends on the mapping used. */
+    OpcUa_String                 SecurityPolicyUri;         /*!< The URI for SecurityPolicy to use when securing messages. */
+    OpcUa_Int32                  NoOfUserIdentityTokens;    /*!< Size of UserIdentityTokens list */
+    OpcUa_UserTokenPolicy*       UserIdentityTokens;        /*!< The user identity tokens that the Server will accept.
+                                                            * The Client shall pass one of the UserIdentityTokens in the ActivateSession request. */
+    OpcUa_String                 TransportProfileUri;       /*!< The URI of the Transport Profile supported by the Endpoint. */
+    OpcUa_Byte                   SecurityLevel;             /*!< A numeric value that indicates how secure the EndpointDescription is
+                                                            * compared to other EndpointDescriptions for the same Server.
+                                                            * A value of 0 indicates that the EndpointDescription is not recommended and is only
+                                                            * supported for backward compatibility.
+                                                            * A higher value indicates better security. */
 }
 OpcUa_EndpointDescription;
 
@@ -1177,10 +1705,11 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_RegisterServer2Response
 /*============================================================================
  * The SecurityTokenRequestType enumeration.
  *===========================================================================*/
+/** @brief The type of SecurityToken request */
 typedef enum _OpcUa_SecurityTokenRequestType
 {
-    OpcUa_SecurityTokenRequestType_Issue = 0,
-    OpcUa_SecurityTokenRequestType_Renew = 1
+    OpcUa_SecurityTokenRequestType_Issue = 0,   /*!< creates a new SecurityToken for a new SecureChannel. */
+    OpcUa_SecurityTokenRequestType_Renew = 1    /*!< creates a new SecurityToken for an existing SecureChannel. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_SecurityTokenRequestType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -1198,12 +1727,16 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_SecurityTokenRequestTyp
 /*============================================================================
  * The ChannelSecurityToken structure.
  *===========================================================================*/
+/** @brief The ChannelSecurityToken structure. */
 typedef struct _OpcUa_ChannelSecurityToken
 {
-    OpcUa_UInt32   ChannelId;
-    OpcUa_UInt32   TokenId;
-    OpcUa_DateTime CreatedAt;
-    OpcUa_UInt32   RevisedLifetime;
+    OpcUa_UInt32   ChannelId;       /*!< A unique identifier for the SecureChannel.
+                                    * This is the identifier that shall be supplied whenever the SecureChannel is renewed. */
+    OpcUa_UInt32   TokenId;         /*!< A unique identifier for a single SecurityToken within the channel.
+                                    * This is the identifier that shall be passed with each Message secured with the SecurityToken. */
+    OpcUa_DateTime CreatedAt;       /*!< The time when the SecurityToken was created. */
+    OpcUa_UInt32   RevisedLifetime; /*!< The lifetime of the SecurityToken in milliseconds.
+                                    * The UTC expiration time for the token may be calculated by adding the lifetime to the createdAt time. */
 }
 OpcUa_ChannelSecurityToken;
 
@@ -1330,8 +1863,8 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CloseSecureChannelRespo
  *===========================================================================*/
 typedef struct _OpcUa_SignedSoftwareCertificate
 {
-    OpcUa_ByteString CertificateData;
-    OpcUa_ByteString Signature;
+    OpcUa_ByteString CertificateData;   /*!< The encoded Certificate. */
+    OpcUa_ByteString Signature;         /*!< The signature created by the Issuer. */
 }
 OpcUa_SignedSoftwareCertificate;
 
@@ -1352,10 +1885,12 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_SignedSoftwareCertifica
 /*============================================================================
  * The SignatureData structure.
  *===========================================================================*/
+/** @brief Contains a digital signature created with a Certificate. */
 typedef struct _OpcUa_SignatureData
 {
-    OpcUa_String     Algorithm;
-    OpcUa_ByteString Signature;
+    OpcUa_String     Algorithm; /*!< This is a signature generated with the private key associated with a Certificate. */
+    OpcUa_ByteString Signature; /*!< A string containing the URI of the algorithm.
+                                * The URI string values are defined as part of the security profiles. */
 }
 OpcUa_SignatureData;
 
@@ -1443,9 +1978,10 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CreateSessionResponse_E
 /*============================================================================
  * The UserIdentityToken structure.
  *===========================================================================*/
+/** @brief The UserIdentityToken structure. */
 typedef struct _OpcUa_UserIdentityToken
 {
-    OpcUa_String PolicyId;
+    OpcUa_String PolicyId;  /*!< An identifier for the UserTokenPolicy that the token conforms to. */
 }
 OpcUa_UserIdentityToken;
 
@@ -1466,9 +2002,10 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_UserIdentityToken_Encod
 /*============================================================================
  * The AnonymousIdentityToken structure.
  *===========================================================================*/
+/** @brief An anonymous user identity. */
 typedef struct _OpcUa_AnonymousIdentityToken
 {
-    OpcUa_String PolicyId;
+    OpcUa_String PolicyId;  /*!< An identifier for the UserTokenPolicy that the token conforms to. */
 }
 OpcUa_AnonymousIdentityToken;
 
@@ -1489,12 +2026,17 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_AnonymousIdentityToken_
 /*============================================================================
  * The UserNameIdentityToken structure.
  *===========================================================================*/
+/** @brief UserName value. */
 typedef struct _OpcUa_UserNameIdentityToken
 {
-    OpcUa_String     PolicyId;
-    OpcUa_String     UserName;
-    OpcUa_ByteString Password;
-    OpcUa_String     EncryptionAlgorithm;
+    OpcUa_String     PolicyId;              /*!< An identifier for the UserTokenPolicy that the token conforms to. */
+    OpcUa_String     UserName;              /*!< A string that identifies the user. */
+    OpcUa_ByteString Password;              /*!< The password for the user. The password can be an empty string.
+                                            * This parameter shall be encrypted with the Server‟s Certificate using the algorithm specified by the
+                                            * SecurityPolicy. */
+    OpcUa_String     EncryptionAlgorithm;   /*!< A string containing the URI of the AsymmetricEncryptionAlgorithm.
+                                            * The URI string values are defined names that may be used as part of the security profiles.
+                                            * This parameter is null if the password is not encrypted. */
 }
 OpcUa_UserNameIdentityToken;
 
@@ -1565,16 +2107,61 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_IssuedIdentityToken_Enc
 /*============================================================================
  * The ActivateSessionRequest structure.
  *===========================================================================*/
+/** This Service is used by the Client to submit its SoftwareCertificates
+ * to the Server for validation and to specify the identity of the user
+ * associated with the Session. This Service request shall be issued by the
+ * Client before it issues any other Service request after CreateSession.
+ * Failure to do so shall cause the Server to close the Session.
+ * */
 typedef struct _OpcUa_ActivateSessionRequest
 {
-    OpcUa_RequestHeader              RequestHeader;
-    OpcUa_SignatureData              ClientSignature;
-    OpcUa_Int32                      NoOfClientSoftwareCertificates;
-    OpcUa_SignedSoftwareCertificate* ClientSoftwareCertificates;
-    OpcUa_Int32                      NoOfLocaleIds;
-    OpcUa_String*                    LocaleIds;
-    OpcUa_ExtensionObject            UserIdentityToken;
-    OpcUa_SignatureData              UserTokenSignature;
+    OpcUa_RequestHeader              RequestHeader;                     /*!< Common request parameters.
+                                                                        *
+                                                                        * @see OpcUa_RequestHeader*/
+    OpcUa_SignatureData              ClientSignature;                   /*!< This is a signature generated with the private key associated with the
+                                                                        * clientCertificate.
+                                                                        * The SignatureAlgorithm shall be the AsymmetricSignatureAlgorithm specified
+                                                                        * in the SecurityPolicy for the Endpoint.
+                                                                        *
+                                                                        * @see OpcUa_SignatureData*/
+    OpcUa_Int32                      NoOfClientSoftwareCertificates;    /*!< the Size of ClientSoftwareCertificates list */
+    OpcUa_SignedSoftwareCertificate* ClientSoftwareCertificates;        /*!< These are the SoftwareCertificates which have been issued to the Client
+                                                                        * application.
+                                                                        * The productUri contained in the SoftwareCertificates shall match the
+                                                                        * productUri in the ApplicationDescription passed by the Client in the
+                                                                        * CreateSession requests.
+                                                                        * Certificates without matching productUri should be ignored.
+                                                                        * Servers may reject connections from Clients if they are not satisfied with
+                                                                        * the SoftwareCertificates provided by the Client.
+                                                                        * This parameter only needs to be specified in the first ActivateSession
+                                                                        * request after CreateSession.
+                                                                        * It shall always be omitted if the maxRequestMessageSize returned from the
+                                                                        * Server in the CreateSession response is less than one megabyte. */
+    OpcUa_Int32                      NoOfLocaleIds;                     /*!< the Size of LocaleIds list */
+    OpcUa_String*                    LocaleIds;                         /*!< List of locale ids in priority order for localized strings.
+                                                                        * The first LocaleId in the list has the highest priority.
+                                                                        * If the Server returns a localized string to the Client, the Server shall
+                                                                        * return the translation with the highest priority that it can.
+                                                                        * If it does not have a translation for any of the locales identified in this
+                                                                        * list, then it shall return the string value that it has and include the
+                                                                        * locale id with the string.
+                                                                        * If the Client fails to specify at least one locale id, the Server shall
+                                                                        * use any that it has.
+                                                                        * This parameter only needs to be specified during the first call to
+                                                                        * ActivateSession during a single application Session.
+                                                                        * If it is not specified the Server shall keep using the current
+                                                                        * localeIds for the Session. */
+    OpcUa_ExtensionObject            UserIdentityToken;                 /*!< The credentials of the user associated with the Client application.
+                                                                        * The Server uses these credentials to determine whether the Client should
+                                                                        * be allowed to activate a Session and what resources the Client has access
+                                                                        * to during this Session.
+                                                                        * The UserIdentityToken is an extensible parameter type defined in 7.35.
+                                                                        * The EndpointDescription specifies what UserIdentityTokens the Server
+                                                                        * shall accept. */
+    OpcUa_SignatureData              UserTokenSignature;                /*!< If the Client specified a user identity token that supports digital
+                                                                        * signatures, then it shall create a signature and pass it as this parameter.
+                                                                        * Otherwise the parameter is omitted.
+                                                                        * The SignatureAlgorithm depends on the identity token type. */
 }
 OpcUa_ActivateSessionRequest;
 
@@ -1595,14 +2182,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ActivateSessionRequest_
 /*============================================================================
  * The ActivateSessionResponse structure.
  *===========================================================================*/
+/** brief the response to the OpcUa_ActivateSessionRequest */
 typedef struct _OpcUa_ActivateSessionResponse
 {
-    OpcUa_ResponseHeader  ResponseHeader;
-    OpcUa_ByteString      ServerNonce;
-    OpcUa_Int32           NoOfResults;
-    OpcUa_StatusCode*     Results;
-    OpcUa_Int32           NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo* DiagnosticInfos;
+    OpcUa_ResponseHeader  ResponseHeader;       /*!< Common response parameters
+                                                *
+                                                * @see OpcUa_ResponseHeader */
+    OpcUa_ByteString      ServerNonce;          /*!< A random number that should never be used in any other request.
+                                                * This number shall have a minimum length of 32 bytes.
+                                                * The Client shall use this value to prove possession of its application instance Certificate in the
+                                                * next call to ActivateSession request. */
+    OpcUa_Int32           NoOfResults;          /*!< Size of Results list */
+    OpcUa_StatusCode*     Results;              /*!< List of validation results for the SoftwareCertificates */
+    OpcUa_Int32           NoOfDiagnosticInfos;  /*!< Size of DiagnosticInfos list */
+    OpcUa_DiagnosticInfo* DiagnosticInfos;      /*!< List of diagnostic information associated with SoftwareCertificate validation errors
+                                                * (see 7.8 for DiagnosticInfo definition).
+                                                * This list is empty if diagnostics information was not requested in the request header or if
+                                                * no diagnostic information was encountered in processing of the request. */
 }
 OpcUa_ActivateSessionResponse;
 
@@ -1625,10 +2221,15 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ActivateSessionResponse
 /*============================================================================
  * The CloseSessionRequest structure.
  *===========================================================================*/
+/** @brief This Service is used to terminate a Session. */
 typedef struct _OpcUa_CloseSessionRequest
 {
-    OpcUa_RequestHeader RequestHeader;
-    OpcUa_Boolean       DeleteSubscriptions;
+    OpcUa_RequestHeader RequestHeader;          /*!< Common request parameters
+                                                *
+                                                * @see OpcUa_RequestHeader */
+    OpcUa_Boolean       DeleteSubscriptions;    /*!< If the value is TRUE, the Server deletes all Subscriptions associated with the Session.
+                                                * If the value is FALSE, the Server keeps the Subscriptions associated with the Session until they
+                                                * timeout based on their own lifetime. */
 }
 OpcUa_CloseSessionRequest;
 
@@ -1649,9 +2250,12 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CloseSessionRequest_Enc
 /*============================================================================
  * The CloseSessionResponse structure.
  *===========================================================================*/
+/** Response of the OpcUa_CloseSessionRequest */
 typedef struct _OpcUa_CloseSessionResponse
 {
-    OpcUa_ResponseHeader ResponseHeader;
+    OpcUa_ResponseHeader ResponseHeader; /*!< Common response parameters
+                                         *
+                                         * @see OpcUa_ResponseHeader */
 }
 OpcUa_CloseSessionResponse;
 
@@ -1723,6 +2327,7 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CancelResponse_Encodeab
 /*============================================================================
  * The NodeAttributesMask enumeration.
  *===========================================================================*/
+/** @brief This type is not defined in the specification and should not be in the UANodeSet. */
 typedef enum _OpcUa_NodeAttributesMask
 {
     OpcUa_NodeAttributesMask_None                    = 0,
@@ -1748,15 +2353,18 @@ typedef enum _OpcUa_NodeAttributesMask
     OpcUa_NodeAttributesMask_ValueRank               = 524288,
     OpcUa_NodeAttributesMask_WriteMask               = 1048576,
     OpcUa_NodeAttributesMask_Value                   = 2097152,
-    OpcUa_NodeAttributesMask_All                     = 4194303,
-    OpcUa_NodeAttributesMask_BaseNode                = 1335396,
-    OpcUa_NodeAttributesMask_Object                  = 1335524,
-    OpcUa_NodeAttributesMask_ObjectTypeOrDataType    = 1337444,
-    OpcUa_NodeAttributesMask_Variable                = 4026999,
-    OpcUa_NodeAttributesMask_VariableType            = 3958902,
-    OpcUa_NodeAttributesMask_Method                  = 1466724,
-    OpcUa_NodeAttributesMask_ReferenceType           = 1371236,
-    OpcUa_NodeAttributesMask_View                    = 1335532
+    OpcUa_NodeAttributesMask_DataTypeDefinition      = 4194304,
+    OpcUa_NodeAttributesMask_RolePermissions         = 8388608,
+    OpcUa_NodeAttributesMask_AccessRestrictions      = 16777216,
+    OpcUa_NodeAttributesMask_All                     = 33554431,
+    OpcUa_NodeAttributesMask_BaseNode                = 26501220,
+    OpcUa_NodeAttributesMask_Object                  = 26501348,
+    OpcUa_NodeAttributesMask_ObjectType              = 26503268,
+    OpcUa_NodeAttributesMask_Variable                = 26571383,
+    OpcUa_NodeAttributesMask_VariableType            = 28600438,
+    OpcUa_NodeAttributesMask_Method                  = 26632548,
+    OpcUa_NodeAttributesMask_ReferenceType           = 26537060,
+    OpcUa_NodeAttributesMask_View                    = 26501356
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_NodeAttributesMask_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -2036,6 +2644,59 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ViewAttributes_Encode(OpcUa_ViewAttributes* 
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_ViewAttributes_Decode(OpcUa_ViewAttributes* pValue, struct _OpcUa_Decoder* pDecoder);
 
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ViewAttributes_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_GenericAttributeValue
+/*============================================================================
+ * The GenericAttributeValue structure.
+ *===========================================================================*/
+typedef struct _OpcUa_GenericAttributeValue
+{
+    OpcUa_UInt32  AttributeId;
+    OpcUa_Variant Value;
+}
+OpcUa_GenericAttributeValue;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_GenericAttributeValue_Initialize(OpcUa_GenericAttributeValue* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_GenericAttributeValue_Clear(OpcUa_GenericAttributeValue* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_GenericAttributeValue_GetSize(OpcUa_GenericAttributeValue* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_GenericAttributeValue_Encode(OpcUa_GenericAttributeValue* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_GenericAttributeValue_Decode(OpcUa_GenericAttributeValue* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_GenericAttributeValue_EncodeableType;
+#endif
+
+#ifndef OPCUA_EXCLUDE_GenericAttributes
+/*============================================================================
+ * The GenericAttributes structure.
+ *===========================================================================*/
+typedef struct _OpcUa_GenericAttributes
+{
+    OpcUa_UInt32                 SpecifiedAttributes;
+    OpcUa_LocalizedText          DisplayName;
+    OpcUa_LocalizedText          Description;
+    OpcUa_UInt32                 WriteMask;
+    OpcUa_UInt32                 UserWriteMask;
+    OpcUa_Int32                  NoOfAttributeValues;
+    OpcUa_GenericAttributeValue* AttributeValues;
+}
+OpcUa_GenericAttributes;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_GenericAttributes_Initialize(OpcUa_GenericAttributes* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_GenericAttributes_Clear(OpcUa_GenericAttributes* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_GenericAttributes_GetSize(OpcUa_GenericAttributes* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_GenericAttributes_Encode(OpcUa_GenericAttributes* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_GenericAttributes_Decode(OpcUa_GenericAttributes* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_GenericAttributes_EncodeableType;
 #endif
 
 #ifndef OPCUA_EXCLUDE_AddNodesItem
@@ -2390,31 +3051,39 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_DeleteReferencesRespons
 /*============================================================================
  * The AttributeWriteMask enumeration.
  *===========================================================================*/
+/** @brief Bit mask for WriteMask */
 typedef enum _OpcUa_AttributeWriteMask
 {
-    OpcUa_AttributeWriteMask_None                    = 0,
-    OpcUa_AttributeWriteMask_AccessLevel             = 1,
-    OpcUa_AttributeWriteMask_ArrayDimensions         = 2,
-    OpcUa_AttributeWriteMask_BrowseName              = 4,
-    OpcUa_AttributeWriteMask_ContainsNoLoops         = 8,
-    OpcUa_AttributeWriteMask_DataType                = 16,
-    OpcUa_AttributeWriteMask_Description             = 32,
-    OpcUa_AttributeWriteMask_DisplayName             = 64,
-    OpcUa_AttributeWriteMask_EventNotifier           = 128,
-    OpcUa_AttributeWriteMask_Executable              = 256,
-    OpcUa_AttributeWriteMask_Historizing             = 512,
-    OpcUa_AttributeWriteMask_InverseName             = 1024,
-    OpcUa_AttributeWriteMask_IsAbstract              = 2048,
-    OpcUa_AttributeWriteMask_MinimumSamplingInterval = 4096,
-    OpcUa_AttributeWriteMask_NodeClass               = 8192,
-    OpcUa_AttributeWriteMask_NodeId                  = 16384,
-    OpcUa_AttributeWriteMask_Symmetric               = 32768,
-    OpcUa_AttributeWriteMask_UserAccessLevel         = 65536,
-    OpcUa_AttributeWriteMask_UserExecutable          = 131072,
-    OpcUa_AttributeWriteMask_UserWriteMask           = 262144,
-    OpcUa_AttributeWriteMask_ValueRank               = 524288,
-    OpcUa_AttributeWriteMask_WriteMask               = 1048576,
-    OpcUa_AttributeWriteMask_ValueForVariableType    = 2097152
+    OpcUa_AttributeWriteMask_None                    = 0,        /*!< None */
+    OpcUa_AttributeWriteMask_AccessLevel             = 1,        /*!< Indicates if the AccessLevel Attribute is writable. */
+    OpcUa_AttributeWriteMask_ArrayDimensions         = 2,        /*!< Indicates if the ArrayDimensions Attribute is writable. */
+    OpcUa_AttributeWriteMask_BrowseName              = 4,        /*!< Indicates if the BrowseName Attribute is writable. */
+    OpcUa_AttributeWriteMask_ContainsNoLoops         = 8,        /*!< Indicates if the ContainsNoLoops Attribute is writable. */
+    OpcUa_AttributeWriteMask_DataType                = 16,       /*!< Indicates if the DataType Attribute is writable. */
+    OpcUa_AttributeWriteMask_Description             = 32,       /*!< Indicates if the Description Attribute is writable. */
+    OpcUa_AttributeWriteMask_DisplayName             = 64,       /*!< Indicates if the DisplayName Attribute is writable. */
+    OpcUa_AttributeWriteMask_EventNotifier           = 128,      /*!< Indicates if the EventNotifier Attribute is writable. */
+    OpcUa_AttributeWriteMask_Executable              = 256,      /*!< Indicates if the Executable Attribute is writable. */
+    OpcUa_AttributeWriteMask_Historizing             = 512,      /*!< Indicates if the Historizing Attribute is writable. */
+    OpcUa_AttributeWriteMask_InverseName             = 1024,     /*!< Indicates if the InverseName Attribute is writable. */
+    OpcUa_AttributeWriteMask_IsAbstract              = 2048,     /*!< Indicates if the IsAbstract Attribute is writable. */
+    OpcUa_AttributeWriteMask_MinimumSamplingInterval = 4096,     /*!< Indicates if the MinimumSamplingInterval Attribute is writable. */
+    OpcUa_AttributeWriteMask_NodeClass               = 8192,     /*!< Indicates if the NodeClass Attribute is writable. */
+    OpcUa_AttributeWriteMask_NodeId                  = 16384,    /*!< Indicates if the NodeId Attribute is writable. */
+    OpcUa_AttributeWriteMask_Symmetric               = 32768,    /*!< Indicates if the Symmetric Attribute is writable. */
+    OpcUa_AttributeWriteMask_UserAccessLevel         = 65536,    /*!< Indicates if the UserAccessLevel Attribute is writable. */
+    OpcUa_AttributeWriteMask_UserExecutable          = 131072,   /*!< Indicates if the UserExecutable Attribute is writable. */
+    OpcUa_AttributeWriteMask_UserWriteMask           = 262144,   /*!< Indicates if the UserWriteMask Attribute is writable. */
+    OpcUa_AttributeWriteMask_ValueRank               = 524288,   /*!< Indicates if the ValueRank Attribute is writable. */
+    OpcUa_AttributeWriteMask_WriteMask               = 1048576,  /*!< Indicates if the WriteMask Attribute is writable. */
+    OpcUa_AttributeWriteMask_ValueForVariableType    = 2097152,  /*!< Indicates if the Value Attribute is writable for a VariableType.
+                                                                 * It does not apply for Variables since this is handled by the AccessLevel and
+                                                                 * UserAccessLevel Attributes for the Variable.
+                                                                 * For Variables this bit shall be set to 0. */
+    OpcUa_AttributeWriteMask_DataTypeDefinition      = 4194304,  /*!< Indicates if the DataTypeDefinition Attribute is writable. */
+    OpcUa_AttributeWriteMask_RolePermissions         = 8388608,  /*!< Indicates if the RolePermissions Attribute is writable. */
+    OpcUa_AttributeWriteMask_AccessRestrictions      = 16777216, /*!< Indicates if the AccessRestrictions Attribute is writable. */
+    OpcUa_AttributeWriteMask_AccessLevelEx           = 33554432  /*!< Indicates if the AccessLevelEx Attribute is writable. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_AttributeWriteMask_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -2432,12 +3101,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_AttributeWriteMask_Enum
 /*============================================================================
  * The BrowseDirection enumeration.
  *===========================================================================*/
+/** @brief An enumeration that specifies the direction of References to follow. */
 typedef enum _OpcUa_BrowseDirection
 {
-    OpcUa_BrowseDirection_Forward = 0,
-    OpcUa_BrowseDirection_Inverse = 1,
-    OpcUa_BrowseDirection_Both    = 2,
-    OpcUa_BrowseDirection_Invalid = 3
+    OpcUa_BrowseDirection_Forward = 0,  /*!< select only forward References. */
+    OpcUa_BrowseDirection_Inverse = 1,  /*!< select only inverse References. */
+    OpcUa_BrowseDirection_Both    = 2,  /*!< select forward and inverse References. */
+    OpcUa_BrowseDirection_Invalid = 3   /*!< invalid */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_BrowseDirection_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -2455,11 +3125,19 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_BrowseDirection_Enumera
 /*============================================================================
  * The ViewDescription structure.
  *===========================================================================*/
+/** @brief Specifies a View. */
 typedef struct _OpcUa_ViewDescription
 {
-    OpcUa_NodeId   ViewId;
-    OpcUa_DateTime Timestamp;
-    OpcUa_UInt32   ViewVersion;
+    OpcUa_NodeId   ViewId;      /*!< NodeId of the View to Query. A null value indicates the entire AddressSpace. */
+    OpcUa_DateTime Timestamp;   /*!< The time date desired. The corresponding version is the one with the closest previous creation timestamp.
+                                * Either the Timestamp or the viewVersion parameter may be set by a Client, but not both.
+                                * If ViewVersion is set this parameter shall be null. */
+    OpcUa_UInt32   ViewVersion; /*!< The version number for the View desired.
+                                * When Nodes are added to or removed from a View, the value of a View‟s ViewVersion Property is updated.
+                                * Either the Timestamp or the viewVersion parameter may be set by a Client, but not both.
+                                * The ViewVersion Property is defined in Part 3.
+                                * If timestamp is set this parameter shall be 0.
+                                * The current view is used if timestamp is null and viewVersion is 0. */
 }
 OpcUa_ViewDescription;
 
@@ -2480,14 +3158,47 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ViewDescription_Encodea
 /*============================================================================
  * The BrowseDescription structure.
  *===========================================================================*/
+/*! @brief A structure that contains the requested information for a browse service */
 typedef struct _OpcUa_BrowseDescription
 {
-    OpcUa_NodeId          NodeId;
-    OpcUa_BrowseDirection BrowseDirection;
-    OpcUa_NodeId          ReferenceTypeId;
-    OpcUa_Boolean         IncludeSubtypes;
-    OpcUa_UInt32          NodeClassMask;
-    OpcUa_UInt32          ResultMask;
+    OpcUa_NodeId          NodeId;           /*!< NodeId of the Node to be browsed. If a view is provided, it shall include this Node. */
+    OpcUa_BrowseDirection BrowseDirection;  /*!< An enumeration that specifies the direction of References to follow.
+                                            * It has the following values:
+                                            * FORWARD_0 select only forward References.
+                                            * INVERSE_1 select only inverse References.
+                                            * BOTH_2 select forward and inverse References.
+                                            * The returned References do indicate the direction the Server followed in the isForward parameter
+                                            * of the ReferenceDescription.
+                                            * Symmetric References are always considered to be in forward direction therefore the isForward flag is
+                                            * always set to TRUE and symmetric References are not returned if browseDirection is set to INVERSE_1. */
+    OpcUa_NodeId          ReferenceTypeId;  /*!< Specifies the NodeId of the ReferenceType to follow.
+                                            * Only instances of this ReferenceType or its subtypes are returned.
+                                            * If not specified then all References are returned and includeSubtypes is ignored. */
+    OpcUa_Boolean         IncludeSubtypes;  /*!< Indicates whether subtypes of the ReferenceType should be included in the browse.
+                                            * If TRUE, then instances of referenceTypeId and all of its subtypes are returned. */
+    OpcUa_UInt32          NodeClassMask;    /*!< Specifies the NodeClasses of the TargetNodes.
+                                            * Only TargetNodes with the selected NodeClasses are returned.
+                                            * The NodeClasses are assigned the following bits:
+                                            * Bit  NodeClass
+                                            * @li 0  Object
+                                            * @li 1  Variable
+                                            * @li 2  Method
+                                            * @li 3  ObjectType
+                                            * @li 4  VariableType
+                                            * @li 5  ReferenceType
+                                            * @li 6  DataType
+                                            * @li 7  View
+                                            *
+                                            * If set to zero, then all NodeClasses are returned. */
+    OpcUa_UInt32          ResultMask;       /*!< Specifies the fields in the ReferenceDescription structure that should be returned.
+                                            * The fields are assigned the following bits:
+                                            * Bit  Result
+                                            * @li 0  ReferenceType
+                                            * @li 1  IsForward
+                                            * @li 2  NodeClass
+                                            * @li 3  BrowseName
+                                            * @li 4  DisplayName
+                                            * @li 5  TypeDefinition */
 }
 OpcUa_BrowseDescription;
 
@@ -2508,18 +3219,26 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowseDescription_Encod
 /*============================================================================
  * The BrowseResultMask enumeration.
  *===========================================================================*/
+/** @brief Bit coded enumeration Defining additional results to be returned from a browse call.
+A browse call defines with a combination of the single values the results to be returned.
+ */
 typedef enum _OpcUa_BrowseResultMask
 {
-    OpcUa_BrowseResultMask_None              = 0,
-    OpcUa_BrowseResultMask_ReferenceTypeId   = 1,
-    OpcUa_BrowseResultMask_IsForward         = 2,
-    OpcUa_BrowseResultMask_NodeClass         = 4,
-    OpcUa_BrowseResultMask_BrowseName        = 8,
-    OpcUa_BrowseResultMask_DisplayName       = 16,
-    OpcUa_BrowseResultMask_TypeDefinition    = 32,
-    OpcUa_BrowseResultMask_All               = 63,
-    OpcUa_BrowseResultMask_ReferenceTypeInfo = 3,
-    OpcUa_BrowseResultMask_TargetInfo        = 60
+    OpcUa_BrowseResultMask_None              = 0,   /*!< None of the possible additional results is contained in the browse result
+                                                    * (means the result contains only the NodeId of the target node). */
+    OpcUa_BrowseResultMask_ReferenceTypeId   = 1,   /*!< If set the reference type of the used reference leading to the node will be returned.
+                                                    * E.g. if the found node is bound by a "HasComponent" reference to the source node that type
+                                                    * will be returned. */
+    OpcUa_BrowseResultMask_IsForward         = 2,   /*!< If set the returned result contains a "true" for forward references and a false for
+                                                    * backward references.
+                                                    * The flag is only useful if browseDirection both is used in the browse call. */
+    OpcUa_BrowseResultMask_NodeClass         = 4,   /*!< If set the node class of the result node is returned. */
+    OpcUa_BrowseResultMask_BrowseName        = 8,   /*!< If set the BrowseName of the result node is returned in the browse result. */
+    OpcUa_BrowseResultMask_DisplayName       = 16,  /*!< If set the DisplayName of the result node is returned in the browse result. */
+    OpcUa_BrowseResultMask_TypeDefinition    = 32,  /*!< If set the TypeDefinition NodeId of the found node is contained in the browse result. */
+    OpcUa_BrowseResultMask_All               = 63,  /*!< All possible values are contained in the browse result. */
+    OpcUa_BrowseResultMask_ReferenceTypeInfo = 3,   /*!< All ReferenceType information */
+    OpcUa_BrowseResultMask_TargetInfo        = 60   /*!< All TargetNodeInformation */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_BrowseResultMask_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -2537,15 +3256,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_BrowseResultMask_Enumer
 /*============================================================================
  * The ReferenceDescription structure.
  *===========================================================================*/
+/** @brief Reference parameters returned for the Browse Service. */
 typedef struct _OpcUa_ReferenceDescription
 {
-    OpcUa_NodeId         ReferenceTypeId;
-    OpcUa_Boolean        IsForward;
-    OpcUa_ExpandedNodeId NodeId;
-    OpcUa_QualifiedName  BrowseName;
-    OpcUa_LocalizedText  DisplayName;
-    OpcUa_NodeClass      NodeClass;
-    OpcUa_ExpandedNodeId TypeDefinition;
+    OpcUa_NodeId         ReferenceTypeId;   /*!< NodeId of the ReferenceType that defines the Reference. */
+    OpcUa_Boolean        IsForward;         /*!< If the value is TRUE, the Server followed a forward Reference.
+                                            * If the value is FALSE, the Server followed an inverse Reference. */
+    OpcUa_ExpandedNodeId NodeId;            /*!< NodeId of the TargetNode as assigned by the Server identified by the Server index.
+                                            * The ExpandedNodeId type is defined in 7.10.
+                                            * If the serverIndex indicates that the TargetNode is a remote Node, then the nodeId shall contain the
+                                            * absolute namespace URI.
+                                            * If the TargetNode is a local Node the nodeId shall contain the namespace index. */
+    OpcUa_QualifiedName  BrowseName;        /*!< The BrowseName of the TargetNode. */
+    OpcUa_LocalizedText  DisplayName;       /*!< The DisplayName of the TargetNode. */
+    OpcUa_NodeClass      NodeClass;         /*!< NodeClass of the TargetNode. */
+    OpcUa_ExpandedNodeId TypeDefinition;    /*!< Type definition NodeId of the TargetNode.
+                                            * Type definitions are only available for the NodeClasses Object and Variable.
+                                            * For all other NodeClasses a null NodeId shall be returned. */
 }
 OpcUa_ReferenceDescription;
 
@@ -2566,12 +3293,17 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ReferenceDescription_En
 /*============================================================================
  * The BrowseResult structure.
  *===========================================================================*/
+/** @brief The results of a Browse operation. */
 typedef struct _OpcUa_BrowseResult
 {
-    OpcUa_StatusCode            StatusCode;
-    OpcUa_ByteString            ContinuationPoint;
-    OpcUa_Int32                 NoOfReferences;
-    OpcUa_ReferenceDescription* References;
+    OpcUa_StatusCode            StatusCode;         /*!< The status for the BrowseDescription.
+                                                    * This value is set to Good if there are still references to return for the BrowseDescription. */
+    OpcUa_ByteString            ContinuationPoint;  /*!< A Server defined opaque value that identifies the continuation point. */
+    OpcUa_Int32                 NoOfReferences;     /*!< Size of  list */
+    OpcUa_ReferenceDescription* References;         /*!< The set of references that meet the criteria specified in the BrowseDescription.
+                                                    * Empty, if no References met the criteria.
+                                                    *
+                                                    * @see OpcUa_ReferenceDescription */
 }
 OpcUa_BrowseResult;
 
@@ -2593,13 +3325,27 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowseResult_Encodeable
 /*============================================================================
  * The BrowseRequest structure.
  *===========================================================================*/
+/** @brief the structure for a BrowseRequest */
 typedef struct _OpcUa_BrowseRequest
 {
-    OpcUa_RequestHeader      RequestHeader;
-    OpcUa_ViewDescription    View;
-    OpcUa_UInt32             RequestedMaxReferencesPerNode;
-    OpcUa_Int32              NoOfNodesToBrowse;
-    OpcUa_BrowseDescription* NodesToBrowse;
+    OpcUa_RequestHeader      RequestHeader;                 /*!< Common request parameters
+                                                            *
+                                                            * @see OpcUa_RequestHeader */
+    OpcUa_ViewDescription    View;                          /*!< Description of the View to browse. An empty ViewDescription value indicates the
+                                                            * entire AddressSpace.
+                                                            * Use of the empty ViewDescription value causes all References of the nodesToBrowse
+                                                            * to be returned.
+                                                            * Use of any other View causes only the References of the nodesToBrowse that are defined
+                                                            * for that View to be returned.
+                                                            *
+                                                            * @see OpcUa_ViewDescription definition */
+    OpcUa_UInt32             RequestedMaxReferencesPerNode; /*!< Indicates the maximum number of references to return for each starting Node
+                                                            * specified in the request.
+                                                            * The value 0 indicates that the Client is imposing no limitation. */
+    OpcUa_Int32              NoOfNodesToBrowse;             /*!< Size of NodesToBrowse list*/
+    OpcUa_BrowseDescription* NodesToBrowse;                 /*!< A list of nodes to Browse.
+                                                            *
+                                                            * @see OpcUa_BrowseDescription */
 }
 OpcUa_BrowseRequest;
 
@@ -2620,13 +3366,22 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowseRequest_Encodeabl
 /*============================================================================
  * The BrowseResponse structure.
  *===========================================================================*/
+/** Response of the _OpcUa_BrowseRequest */
 typedef struct _OpcUa_BrowseResponse
 {
-    OpcUa_ResponseHeader  ResponseHeader;
-    OpcUa_Int32           NoOfResults;
-    OpcUa_BrowseResult*   Results;
-    OpcUa_Int32           NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo* DiagnosticInfos;
+    OpcUa_ResponseHeader  ResponseHeader;       /*!< Common response parameters
+                                                *
+                                                * @see OpcUa_ResponseHeader */
+    OpcUa_Int32           NoOfResults;          /*!< Size of Results list */
+    OpcUa_BrowseResult*   Results;              /*!< A list of BrowseResults. The size and order of the list matches the size and order of the
+                                                * nodesToBrowse specified in the request
+                                                *
+                                                * @see OpcUa_BrowseResult */
+    OpcUa_Int32           NoOfDiagnosticInfos;  /*!< Size of DiagnosticInfos list */
+    OpcUa_DiagnosticInfo* DiagnosticInfos;      /*!< List of diagnostic information for the results (currently not supported).
+                                                * The size and order of the list matches the size and order of the results response parameter.
+                                                * This list is empty if diagnostics information was not requested in the request header or if no
+                                                * diagnostic information was encountered in processing of the request. */
 }
 OpcUa_BrowseResponse;
 
@@ -2649,12 +3404,28 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowseResponse_Encodeab
 /*============================================================================
  * The BrowseNextRequest structure.
  *===========================================================================*/
+/** @brief This Service is used to request the next set of Browse or BrowseNext response information that is too large to be sent in a single response. */
 typedef struct _OpcUa_BrowseNextRequest
 {
-    OpcUa_RequestHeader RequestHeader;
-    OpcUa_Boolean       ReleaseContinuationPoints;
-    OpcUa_Int32         NoOfContinuationPoints;
-    OpcUa_ByteString*   ContinuationPoints;
+    OpcUa_RequestHeader RequestHeader;              /*!< Common request parameters
+                                                    *
+                                                    * @see OpcUa_RequestHeader */
+    OpcUa_Boolean       ReleaseContinuationPoints;  /*!< A Boolean parameter with the following values:
+                                                    * TRUE passed continuationPoints shall be reset to free resources in the Server.
+                                                    * The continuation points are released and the results and diagnosticInfos arrays are empty.
+                                                    * FALSE passed continuationPoints shall be used to get the next set of browse information.
+                                                    * A Client shall always use the continuation point returned by a Browse or BrowseNext response
+                                                    * to free the resources for the continuation point in the Server.
+                                                    * If the Client does not want to get the next set of browse information, BrowseNext shall be
+                                                    * called with this parameter set to TRUE. */
+    OpcUa_Int32         NoOfContinuationPoints;     /*!< Size of ContinuationPoints list */
+    OpcUa_ByteString*   ContinuationPoints;         /*!< A list of Server-defined opaque values that represent continuation points.
+                                                    * The value for a continuation point was returned to the Client in a previous Browse
+                                                    * or BrowseNext response.
+                                                    * These values are used to identify the previously processed Browse or BrowseNext request
+                                                    * that is being continued and the point in the result set from which the browse response
+                                                    * is to continue.
+                                                    * Clients may mix continuation points from different Browse or BrowseNext responses. */
 }
 OpcUa_BrowseNextRequest;
 
@@ -2675,13 +3446,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowseNextRequest_Encod
 /*============================================================================
  * The BrowseNextResponse structure.
  *===========================================================================*/
+/** Response of OpcUa_BrowseNextRequest */
 typedef struct _OpcUa_BrowseNextResponse
 {
-    OpcUa_ResponseHeader  ResponseHeader;
-    OpcUa_Int32           NoOfResults;
-    OpcUa_BrowseResult*   Results;
-    OpcUa_Int32           NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo* DiagnosticInfos;
+    OpcUa_ResponseHeader  ResponseHeader;       /*!< Common response parameters
+                                                *
+                                                * @see OpcUa_ResponseHeader */
+    OpcUa_Int32           NoOfResults;          /*!< Size of Results list */
+    OpcUa_BrowseResult*   Results;              /*!< A list of references that met the criteria specified in the original Browse request.
+                                                * The size and order of this list matches the size and order of the continuationPoints
+                                                * request parameter.
+                                                *
+                                                * @see OpcUa_BrowseResult */
+    OpcUa_Int32           NoOfDiagnosticInfos;  /*!< Size of DiagnosticInfos list */
+    OpcUa_DiagnosticInfo* DiagnosticInfos;      /*!< List of diagnostic information for the results (currently not supported).
+                                                * The size and order of the list matches the size and order of the results response parameter.
+                                                * This list is empty if diagnostics information was not requested in the request header or if no
+                                                * diagnostic information was encountered in processing of the request. */
 }
 OpcUa_BrowseNextResponse;
 
@@ -2703,12 +3484,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowseNextResponse_Enco
 /*============================================================================
  * The RelativePathElement structure.
  *===========================================================================*/
+/** @brief References and BrowseNames to follow. */
 typedef struct _OpcUa_RelativePathElement
 {
-    OpcUa_NodeId        ReferenceTypeId;
-    OpcUa_Boolean       IsInverse;
-    OpcUa_Boolean       IncludeSubtypes;
-    OpcUa_QualifiedName TargetName;
+    OpcUa_NodeId        ReferenceTypeId;    /*!< The type of reference to follow from the current node.
+                                            * The current path cannot be followed any further if the referenceTypeId is not available on
+                                            * the Node instance.
+                                            * If not specified then all References are included and the parameter includeSubtypes is ignored. */
+    OpcUa_Boolean       IsInverse;          /*!< Indicates whether the inverse Reference should be followed.
+                                            * The inverse reference is followed if this value is TRUE. */
+    OpcUa_Boolean       IncludeSubtypes;    /*!< Indicates whether subtypes of the ReferenceType should be followed.
+                                            * Subtypes are included if this value is TRUE. */
+    OpcUa_QualifiedName TargetName;         /*!< The BrowseName of the target node.
+                                            * The final element may have an empty targetName.
+                                            * In this situation all targets of the references identified by the referenceTypeId are the
+                                            * targets of the RelativePath.
+                                            * The targetName shall be specified for all other elements.
+                                            * The current path cannot be followed any further if no targets with the specified BrowseName exist. */
 }
 OpcUa_RelativePathElement;
 
@@ -2729,10 +3521,17 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_RelativePathElement_Enc
 /*============================================================================
  * The RelativePath structure.
  *===========================================================================*/
+/** Defines a sequence of References and BrowseNames to follow. */
 typedef struct _OpcUa_RelativePath
 {
-    OpcUa_Int32                NoOfElements;
-    OpcUa_RelativePathElement* Elements;
+    OpcUa_Int32                NoOfElements;    /*!< Size of Elements list */
+    OpcUa_RelativePathElement* Elements;        /*!< A sequence of References and BrowseNames to follow.
+                                                * This structure is defined in-line with the following indented items.
+                                                * Each element in the sequence is processed by finding the targets and then using those targets as
+                                                * the starting nodes for the next element.
+                                                * The targets of the final element are the target of the RelativePath.
+                                                *
+                                                * @see OpcUa_RelativePathElement */
 }
 OpcUa_RelativePath;
 
@@ -2753,10 +3552,16 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_RelativePath_Encodeable
 /*============================================================================
  * The BrowsePath structure.
  *===========================================================================*/
+/** the BrowsePath for the TranlateBrowsePathsToNodeIds */
 typedef struct _OpcUa_BrowsePath
 {
-    OpcUa_NodeId       StartingNode;
-    OpcUa_RelativePath RelativePath;
+    OpcUa_NodeId       StartingNode; /*!< NodeId of the starting Node for the browse path. */
+    OpcUa_RelativePath RelativePath; /*!< The path to follow from the startingNode.
+                                     * The last element in the relativePath shall always have a targetName specified.
+                                     * This further restricts the definition of the RelativePath type.
+                                     * The Server shall return Bad_BrowseNameInvalid if the targetName is missing.
+                                     *
+                                     * @see OpcUa_RelativePath */
 }
 OpcUa_BrowsePath;
 
@@ -2777,10 +3582,14 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowsePath_EncodeableTy
 /*============================================================================
  * The BrowsePathTarget structure.
  *===========================================================================*/
+/** @brief A Server may encounter a Reference to a Node in another Server which it cannot follow while it is processing the RelativePath.
+ * If this happens the Server returns the NodeId of the external Node and sets the remainingPathIndex parameter to indicate which RelativePath elements still need to be processed. To complete the operation the Client shall connect to the other Server and call this service again using the target as the startingNode and the unprocessed elements as the relativePath. */
 typedef struct _OpcUa_BrowsePathTarget
 {
-    OpcUa_ExpandedNodeId TargetId;
-    OpcUa_UInt32         RemainingPathIndex;
+    OpcUa_ExpandedNodeId TargetId;              /*!< The identifier for a target of the RelativePath. */
+    OpcUa_UInt32         RemainingPathIndex;    /*!< The index of the first unprocessed element in the RelativePath.
+                                                * This value shall be equal to the maximum value of Index data type if all
+                                                * elements were processed. */
 }
 OpcUa_BrowsePathTarget;
 
@@ -2801,11 +3610,14 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowsePathTarget_Encode
 /*============================================================================
  * The BrowsePathResult structure.
  *===========================================================================*/
+/** @brief a structure for a result of an TranslateBrowsePathsToNodeIds */
 typedef struct _OpcUa_BrowsePathResult
 {
-    OpcUa_StatusCode        StatusCode;
-    OpcUa_Int32             NoOfTargets;
-    OpcUa_BrowsePathTarget* Targets;
+    OpcUa_StatusCode        StatusCode;     /*!< StatusCode for the browse path */
+    OpcUa_Int32             NoOfTargets;    /*!< Size of Targets list */
+    OpcUa_BrowsePathTarget* Targets;        /*!< List of targets for the relativePath from the startingNode.
+                                            *
+                                            * @see OpcUa_BrowsePathTarget */
 }
 OpcUa_BrowsePathResult;
 
@@ -2827,11 +3639,16 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BrowsePathResult_Encode
 /*============================================================================
  * The TranslateBrowsePathsToNodeIdsRequest structure.
  *===========================================================================*/
+/** @brief Request for TranslateBrowsePathsToNodeIds */
 typedef struct _OpcUa_TranslateBrowsePathsToNodeIdsRequest
 {
-    OpcUa_RequestHeader RequestHeader;
-    OpcUa_Int32         NoOfBrowsePaths;
-    OpcUa_BrowsePath*   BrowsePaths;
+    OpcUa_RequestHeader RequestHeader;      /*!< Common request parameters
+                                            *
+                                            * @see OpcUa_RequestHeader */
+    OpcUa_Int32         NoOfBrowsePaths;    /*!< Size of BrowsePaths list */
+    OpcUa_BrowsePath*   BrowsePaths;        /*!< List of browse paths for which NodeIds are being requested.
+                                            *
+                                            * @see OpcUa_BrowsePath */
 }
 OpcUa_TranslateBrowsePathsToNodeIdsRequest;
 
@@ -2852,13 +3669,22 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_TranslateBrowsePathsToN
 /*============================================================================
  * The TranslateBrowsePathsToNodeIdsResponse structure.
  *===========================================================================*/
+/** Response for the OpcUa_TranslateBrowsePathsToNodeIdsRequest */
 typedef struct _OpcUa_TranslateBrowsePathsToNodeIdsResponse
 {
-    OpcUa_ResponseHeader    ResponseHeader;
-    OpcUa_Int32             NoOfResults;
-    OpcUa_BrowsePathResult* Results;
-    OpcUa_Int32             NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo*   DiagnosticInfos;
+    OpcUa_ResponseHeader    ResponseHeader;         /*!< Common response parameters
+                                                    *
+                                                    * @see OpcUa_ResponseHeader */
+    OpcUa_Int32             NoOfResults;            /*!< Size of Results list */
+    OpcUa_BrowsePathResult* Results;                /*!< List of results for the list of browse paths.
+                                                    * The size and order of the list matches the size and order of the browsePaths request parameter.
+                                                    *
+                                                    * @see OpcUa_BrowsePathResult */
+    OpcUa_Int32             NoOfDiagnosticInfos;    /*!< Size of DiagnosticInfos list */
+    OpcUa_DiagnosticInfo*   DiagnosticInfos;        /*!< List of diagnostic information for the list of browse paths (currently not supported).
+                                                    * The size and order of the list matches the size and order of the browsePaths request parameter.
+                                                    * This list is empty if diagnostics information was not requested in the request header or if
+                                                    * no diagnostic information was encountered in processing of the request. */
 }
 OpcUa_TranslateBrowsePathsToNodeIdsResponse;
 
@@ -3064,26 +3890,162 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_NodeTypeDescription_Enc
 /*============================================================================
  * The FilterOperator enumeration.
  *===========================================================================*/
+/** @brief All filter operator types. */
 typedef enum _OpcUa_FilterOperator
 {
-    OpcUa_FilterOperator_Equals             = 0,
-    OpcUa_FilterOperator_IsNull             = 1,
-    OpcUa_FilterOperator_GreaterThan        = 2,
-    OpcUa_FilterOperator_LessThan           = 3,
-    OpcUa_FilterOperator_GreaterThanOrEqual = 4,
-    OpcUa_FilterOperator_LessThanOrEqual    = 5,
-    OpcUa_FilterOperator_Like               = 6,
-    OpcUa_FilterOperator_Not                = 7,
-    OpcUa_FilterOperator_Between            = 8,
-    OpcUa_FilterOperator_InList             = 9,
-    OpcUa_FilterOperator_And                = 10,
-    OpcUa_FilterOperator_Or                 = 11,
-    OpcUa_FilterOperator_Cast               = 12,
-    OpcUa_FilterOperator_InView             = 13,
-    OpcUa_FilterOperator_OfType             = 14,
-    OpcUa_FilterOperator_RelatedTo          = 15,
-    OpcUa_FilterOperator_BitwiseAnd         = 16,
-    OpcUa_FilterOperator_BitwiseOr          = 17
+    OpcUa_FilterOperator_Equals             = 0,    /*!< TRUE if operand[0] is equal to operand[1].
+                                                    * If the operands have different types then it is tried to convert them
+                                                    * implicit to a common type.
+                                                    * If this fails then FALSE is returned. */
+    OpcUa_FilterOperator_IsNull             = 1,    /*!< TRUE if operand[0] is a null value. */
+    OpcUa_FilterOperator_GreaterThan        = 2,    /*!< TRUE if operand[0] is greater than operand[1].
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to an ordered value.
+                                                    * @li [1]: Any operand that resolves to an ordered value.
+                                                    *
+                                                    * The same conversion rules as defined for Equals apply. */
+    OpcUa_FilterOperator_LessThan           = 3,    /*!< TRUE if operand[0] is less than operand[1].
+                                                    * The same conversion rules and restrictions as defined for GreaterThan apply. */
+    OpcUa_FilterOperator_GreaterThanOrEqual = 4,    /*!< TRUE if operand[0] is greater than or equal to operand[1].
+                                                    * The same conversion rules and restrictions as defined for GreaterThan apply. */
+    OpcUa_FilterOperator_LessThanOrEqual    = 5,    /*!< TRUE if operand[0] is less than or equal to operand[1].
+                                                    * The same conversion rules and restrictions as defined for GreaterThan apply. */
+    OpcUa_FilterOperator_Like               = 6,    /*!< String pattern matching.  This operator can be used to perform wildcard comparisons.
+                                                    * Several special characters can be included in the second operand of the Like operator.
+                                                    *
+                                                    * The valid characters:
+                                                    * @li '': Match any string of zero or more characters (i.e. 'main' would match any string that
+                                                    *     starts with 'main', 'en' would match any string that contains the letters 'en' such as
+                                                    *     'entail', 'green' and 'content'.)
+                                                    *     If a '' sign is intend in a string the list operand can be used
+                                                    *     (i.e. 5[%] would match '5').
+                                                    * @li '_': Match any single character (i.e. 'ould' would match 'would', 'could').
+                                                    *     If the '' is intended in a string then the list operand can be used
+                                                    *     (i.e. 5[_] would match '5_').
+                                                    * @li '\': Escape character allows literal interpretation (i.e. \ is \, % is %, _ is _)
+                                                    * @li '[]': Match any single character in a list
+                                                    *     (i.e. 'abc[13-68] would match 'abc1','abc3','abc4','abc5','abc6', and 'abc8'.
+                                                    *     'xyz[c-f]' would match 'xyzc', 'xyzd', 'xyze', 'xyzf').
+                                                    * @li '[^]': Not Matching any single character in a list.
+                                                    *     The ^ shall be the first character inside on the []
+                                                    *     (i.e. 'ABC[^13-5]' would NOT match 'ABC1', 'ABC3', 'ABC4', and 'ABC5'.
+                                                    *     xyz[^dgh] would NOT match 'xyzd', 'xyzg', 'xyzh'.) */
+    OpcUa_FilterOperator_Not                = 7,    /*!< TRUE if operand[0] is FALSE. The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to a Boolean.
+                                                    *
+                                                    * If the operand can not be resolved to a Boolean, the result is a NULL. */
+    OpcUa_FilterOperator_Between            = 8,    /*!< TRUE if operand[0] is greater or equal to operand[1] and less than or equal to operand[2].
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to an ordered value.
+                                                    * @li [1]: Any operand that resolves to an ordered value.
+                                                    * @li [2]: Any operand that resolves to an ordered value.
+                                                    *
+                                                    * If the operands are of different types, it is tried to convert them implicit to a common type.
+                                                    * If this fails then FALSE is returned. */
+    OpcUa_FilterOperator_InList             = 9,    /*!< TRUE if operand[0] is equal to one or more of the remaining operands.
+                                                    * The Equals Operator is evaluated for operand[0] and each remaining operand in the list.
+                                                    * If any Equals evaluation is TRUE, InList returns TRUE. */
+    OpcUa_FilterOperator_And                = 10,   /*!< TRUE if operand[0] and operand[1] are TRUE.
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to a Boolean.
+                                                    * @li [1]: Any operand that resolves to a Boolean.
+                                                    *
+                                                    * If any operand can not be resolved to a Boolean it is considered a NULL. */
+    OpcUa_FilterOperator_Or                 = 11,   /*!< TRUE if operand[0] or operand[1] are TRUE.
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to a Boolean.
+                                                    * @li [1]: Any operand that resolves to a Boolean.
+                                                    *
+                                                    * If any operand can not be resolved to a Boolean it is considered a NULL. */
+    OpcUa_FilterOperator_Cast               = 12,   /*!< Converts operand[0] to a value with a data type with a NodeId identified by operand[1].
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand.
+                                                    * @li [1]: Any operand that resolves to a NodeId or ExpandedNodeId where the Node is of the
+                                                    * NodeClass DataType.
+                                                    *
+                                                    * If there is any error in conversion or in any of the parameters then the Cast Operation
+                                                    * evaluates to a NULL. */
+    OpcUa_FilterOperator_InView             = 13,   /*!< TRUE if the target Node is contained in the View defined by operand[0].
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to a NodeId that identifies a View Node.
+                                                    *
+                                                    * If operand[0] does not resolve to a NodeId that identifies a View Node, this operation returns
+                                                    * FALSE. */
+    OpcUa_FilterOperator_OfType             = 14,   /*!< TRUE if the target Node is of type operand[0] or of a subtype of operand[0].
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to a NodeId that identifies an ObjectType or
+                                                    * VariableType Node.
+                                                    *
+                                                    * If operand[0] does not resolve to a NodeId that identifies an ObjectType or VariableType Node,
+                                                    * this operation returns FALSE. */
+    OpcUa_FilterOperator_RelatedTo          = 15,   /*!< TRUE if the target Node is of type operand[0] and is related to a NodeId of the type defined
+                                                    *  in operand[1] by the Reference type defined in operand[2].
+                                                    * Operand[0] or operand[1] can also point to an element Reference where the referred to element
+                                                    * is another RelatedTo operator.
+                                                    * This allows chaining of relationships (e.g.
+                                                    * A is related to B is related to C). In this case, the referred to element returns a list of
+                                                    * NodeIds instead of TRUE or FALSE.
+                                                    * In this case if any errors occur or any of the
+                                                    * operands can not be resolved to an appropriate value, the result of the chained relationship
+                                                    * is an empty list of nodes.
+                                                    * Operand[3] defines the number of hops the relationship should be followed.
+                                                    * If operand[3] is 1, then objects shall be directly related.
+                                                    * If a hop is greater than 1, then
+                                                    * a NodeId of the type described in operand[1] is checked for at the depth specified by the hop.
+                                                    * In this case, the type of the intermediate Node is undefined, and only the
+                                                    * Reference type used to reach the end Node is defined.
+                                                    * If the requested number of hops cannot be followed, then the result is FALSE, i.e.,
+                                                    * an empty Node list.
+                                                    * If operand[3] is 0, the relationship is followed to its logical end in a forward direction and
+                                                    * each Node is checked to be of the type specified in operand[1].
+                                                    * If any Node
+                                                    * satisfies this criteria, then the result is TRUE, i.e., the NodeId is included in the sublist.
+                                                    * Operand[4] defines if operand[0] and operand[1] should include support for subtypes
+                                                    * of the types
+                                                    * defined by these operands.
+                                                    * A TRUE indicates support for subtypes.
+                                                    * Operand[5] defines if operand[2] should include support for subtypes of the reference type.
+                                                    * A TRUE indicates support for subtypes.
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to a NodeId or ExpandedNodeId that identifies an ObjectType
+                                                    * or VariableType Node or a reference to another element which is a RelatedTo operator.
+                                                    * @li [1]: Any operand that resolves to a NodeId or ExpandedNodeId that identifies an ObjectType
+                                                    * or VariableType Node or a reference to another element which is a RelatedTo operator.
+                                                    * @li [2]: Any operand that resolves to a NodeId that identifies a ReferenceType Node.
+                                                    * @li [3]: Any operand that resolves to a value implicitly convertible to Int32.
+                                                    * @li [4]: Any operand that resolves to a value implicitly convertible to a boolean;
+                                                    * if this operand does not resolve to a Boolean, then a value of FALSE is used.
+                                                    * @li [5]: Any operand that resolves to a value implicitly convertible to a boolean; if
+                                                    * this operand does not resolve to a Boolean, then a value of FALSE is used.
+                                                    *
+                                                    * If any of the operands [0],[1],[2],[3] do not resolve to an appropriate value then the result
+                                                    * of this operation is FALSE (or an Empty set in the case of a nested relatedTo operand). */
+    OpcUa_FilterOperator_BitwiseAnd         = 16,   /*!< The result is an integer which matches the size of the largest operand and contains a
+                                                    * bitwise And operation of the two operands where both have been converted to the same
+                                                    * size (largest of the two operands)
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to an Integer.
+                                                    * @li [1]: Any operand that resolves to an Integer.
+                                                    *
+                                                    * If any operand can not be resolved to an integer it is considered a NULL. */
+    OpcUa_FilterOperator_BitwiseOr          = 17    /*!< The result is an integer which matches the size of the largest operand and contains a
+                                                    * bitwise Or operation of the two operands where both have been converted to the same
+                                                    * size (largest of the two operands)
+                                                    *
+                                                    * The following restrictions apply to the operands:
+                                                    * @li [0]: Any operand that resolves to an Integer.
+                                                    * @li [1]: Any operand that resolves to an Integer.
+                                                    *
+                                                    * If any operand can not be resolved to an Integer it is considered a NULL. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_FilterOperator_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -3498,13 +4460,21 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_QueryNextResponse_Encod
 /*============================================================================
  * The TimestampsToReturn enumeration.
  *===========================================================================*/
+/** @brief Enumeration defining the timestamps which have to be returned on different client services. */
 typedef enum _OpcUa_TimestampsToReturn
 {
-    OpcUa_TimestampsToReturn_Source  = 0,
-    OpcUa_TimestampsToReturn_Server  = 1,
-    OpcUa_TimestampsToReturn_Both    = 2,
-    OpcUa_TimestampsToReturn_Neither = 3,
-    OpcUa_TimestampsToReturn_Invalid = 4
+    OpcUa_TimestampsToReturn_Source  = 0,/*!< Return the source timestamp.
+                                         * If used in HistoryRead ('raw' or 'processed'), the source timestamp is used to determine which historical
+                                         * data values are returned. */
+    OpcUa_TimestampsToReturn_Server  = 1,/*!< Return the server timestamp.
+                                         * If used in HistoryRead ('raw' or 'processed'), the server timestamp is used to determine which historical
+                                         * data values are returned. */
+    OpcUa_TimestampsToReturn_Both    = 2,/*!< Return both the source and the server timestamp.
+                                         * If used in HistoryRead ('raw' or 'processed'), the source timestamp is used to determine which historical
+                                         * data values are returned. */
+    OpcUa_TimestampsToReturn_Neither = 3,/*!< This is the default value for monitored items if a variable value is not being accessed.
+                                         * For HistoryRead service calls this is not a valid setting. */
+    OpcUa_TimestampsToReturn_Invalid = 4 /*!< this is not a valid setting. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_TimestampsToReturn_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -3522,12 +4492,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_TimestampsToReturn_Enum
 /*============================================================================
  * The ReadValueId structure.
  *===========================================================================*/
+/** @brief The ReadValueId structure used in read service call */
 typedef struct _OpcUa_ReadValueId
 {
-    OpcUa_NodeId        NodeId;
-    OpcUa_UInt32        AttributeId;
-    OpcUa_String        IndexRange;
-    OpcUa_QualifiedName DataEncoding;
+    OpcUa_NodeId        NodeId;         /*!< The NodeId which shall be read */
+    OpcUa_UInt32        AttributeId;    /*!< The attribute id which shall be read */
+    OpcUa_String        IndexRange;     /*!< A string describing the index range if only a subset of an array shall be read */
+    OpcUa_QualifiedName DataEncoding;   /*!< The requested encoding of the data */
 }
 OpcUa_ReadValueId;
 
@@ -3549,13 +4520,39 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ReadValueId_EncodeableT
 /*============================================================================
  * The ReadRequest structure.
  *===========================================================================*/
+/** @brief The ReadRequest structure */
 typedef struct _OpcUa_ReadRequest
 {
-    OpcUa_RequestHeader      RequestHeader;
-    OpcUa_Double             MaxAge;
-    OpcUa_TimestampsToReturn TimestampsToReturn;
-    OpcUa_Int32              NoOfNodesToRead;
-    OpcUa_ReadValueId*       NodesToRead;
+    OpcUa_RequestHeader      RequestHeader;         /*!< Common request parameters
+                                                    *
+                                                    * @see OpcUa_RequestHeader */
+    OpcUa_Double             MaxAge;                /*!< Maximum age of the value to be read in milliseconds.
+                                                    * The age of the value is based on the difference between the ServerTimestamp and the time when
+                                                    * the Server starts processing the request.
+                                                    * For example if the Client specifies a maxAge of 500 milliseconds and it takes 100 milliseconds
+                                                    * until the Server starts processing the request, the age of the returned value could be 600
+                                                    * milliseconds prior to the time it was requested.
+                                                    * If the Server has one or more values of an Attribute that are within the maximum age,
+                                                    * it can return any one of the values or it can read a new value from the data source.
+                                                    * The number of values of an Attribute that a Server has depends on the number of MonitoredItems
+                                                    * that are defined for the Attribute.
+                                                    * In any case, the Client can make no assumption about which copy of the data will be returned.
+                                                    * If the Server does not have a value that is within the maximum age, it shall attempt to read
+                                                    * a new value from the data source.
+                                                    * If the Server cannot meet the requested maxAge, it returns its “best effort” value rather than
+                                                    * rejecting the request.
+                                                    * This may occur when the time it takes the Server to process and return the new data value after
+                                                    * it has been accessed is greater than the specified maximum age.
+                                                    * If maxAge is set to 0, the Server shall attempt to read a new value from the data source.
+                                                    * If maxAge is set to the max Int32 value or greater, the Server shall attempt to
+                                                    * get a cached value.
+                                                    * Negative values are invalid for maxAge. */
+    OpcUa_TimestampsToReturn TimestampsToReturn;    /*!< An enumeration that specifies the Timestamps to be returned for each requested Variable
+                                                    * Value Attribute. */
+    OpcUa_Int32              NoOfNodesToRead;       /*!< Size of NodesToRead list */
+    OpcUa_ReadValueId*       NodesToRead;           /*!< List of Nodes and their Attributes to read.
+                                                    * For each entry in this list, a StatusCode is returned, and if it indicates
+                                                    * success, the Attribute Value is also returned. */
 }
 OpcUa_ReadRequest;
 
@@ -3576,13 +4573,22 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ReadRequest_EncodeableT
 /*============================================================================
  * The ReadResponse structure.
  *===========================================================================*/
+/** @brief response for OpcUa_ReadRequest */
 typedef struct _OpcUa_ReadResponse
 {
-    OpcUa_ResponseHeader  ResponseHeader;
-    OpcUa_Int32           NoOfResults;
-    OpcUa_DataValue*      Results;
-    OpcUa_Int32           NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo* DiagnosticInfos;
+    OpcUa_ResponseHeader  ResponseHeader;       /*!< Common response parameters
+                                                *
+                                                * @see OpcUa_ResponseHeader */
+    OpcUa_Int32           NoOfResults;          /*!< Size of Results list */
+    OpcUa_DataValue*      Results;              /*!< List of Attribute values. The size and order of this list matches the size and order of the
+                                                * nodesToRead request parameter.
+                                                * There is one entry in this list for each Node contained in the nodesToRead parameter. */
+    OpcUa_Int32           NoOfDiagnosticInfos;  /*!< Size of DiagnosticInfos list */
+    OpcUa_DiagnosticInfo* DiagnosticInfos;      /*!< List of diagnostic information (currently not supported).
+                                                * The size and order of this list matches the size and order of the nodesToRead request parameter.
+                                                * There is one entry in this list for each Node contained in the nodesToRead parameter.
+                                                * This list is empty if diagnostics information was not requested in the request header or if
+                                                * no diagnostic information was encountered in processing of the request. */
 }
 OpcUa_ReadResponse;
 
@@ -3837,12 +4843,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_HistoryData_EncodeableT
 /*============================================================================
  * The HistoryUpdateType enumeration.
  *===========================================================================*/
+/** @brief The HistoryUpdateType enumeration. */
 typedef enum _OpcUa_HistoryUpdateType
 {
-    OpcUa_HistoryUpdateType_Insert  = 1,
-    OpcUa_HistoryUpdateType_Replace = 2,
-    OpcUa_HistoryUpdateType_Update  = 3,
-    OpcUa_HistoryUpdateType_Delete  = 4
+    OpcUa_HistoryUpdateType_Insert  = 1,    /*!< Data was inserted */
+    OpcUa_HistoryUpdateType_Replace = 2,    /*!< Data was replaced */
+    OpcUa_HistoryUpdateType_Update  = 3,    /*!< Data was inserted or replaced */
+    OpcUa_HistoryUpdateType_Delete  = 4     /*!< Data was deleted. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_HistoryUpdateType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -4016,12 +5023,36 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_HistoryReadResponse_Enc
 /*============================================================================
  * The WriteValue structure.
  *===========================================================================*/
+/** @brief Node and its Attribute to write. */
 typedef struct _OpcUa_WriteValue
 {
-    OpcUa_NodeId    NodeId;
-    OpcUa_UInt32    AttributeId;
-    OpcUa_String    IndexRange;
-    OpcUa_DataValue Value;
+    OpcUa_NodeId    NodeId;         /*!< NodeId of the Node that contains the Attributes. */
+    OpcUa_UInt32    AttributeId;    /*!< Id of the Attribute. This shall be a valid Attribute id. */
+    OpcUa_String    IndexRange;     /*!< This parameter is used to identify a single element of an array, or a single range of indexes for arrays.
+                                    * The first element is identified by index 0 (zero).
+                                    * This parameter is not used if the specified Attribute is not an array.
+                                    * However, if the specified Attribute is an array and this parameter is not used, then all elements are to be
+                                    * included in the range.
+                                    * The parameter is null if not used. */
+    OpcUa_DataValue Value;          /*!< The Node‟s Attribute value.
+                                    * If the indexRange parameter is specified then the Value shall be an array even if only one
+                                    * element is being written.
+                                    * If the SourceTimestamp or the ServerTimestamp is specified, the Server shall use these values.
+                                    * The Server returns a Bad_WriteNotSupported error if it does not support writing of timestamps.
+                                    * A Server shall return a Bad_TypeMismatch error if the data type of the written value is not the same type
+                                    * or subtype of the Attribute’s DataType.
+                                    * Based on the DataType hierarchy, subtypes of the Attribute DataType shall be accepted by the Server.
+                                    * For the Value Attribute the DataType is defined through the DataType Attribute.
+                                    * A ByteString is structurally the same as a one dimensional array of Byte.
+                                    * A Server shall accept a ByteString if an array of Byte is expected.
+                                    * The Server returns a Bad_DataEncodingUnsupported error if it does not support the provided data encoding.
+                                    * Simple DataTypes use the same representation on the wire as their supertypes and therefore writing a value of
+                                    * a simple DataType cannot be distinguished from writing a value of its supertype.
+                                    * The Server shall assume that by receiving the correct wire representation for a simple
+                                    * DataType the correct type was chosen.
+                                    * Servers are allowed to impose additional data validations on the value independent of the encoding (e.g.
+                                    * having an image in GIF format in a ByteString).
+                                    * In this case the Server shall return a Bad_TypeMismatch error if the validation fails. */
 }
 OpcUa_WriteValue;
 
@@ -4043,11 +5074,16 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_WriteValue_EncodeableTy
 /*============================================================================
  * The WriteRequest structure.
  *===========================================================================*/
+/** @brief The WriteRequest structure */
 typedef struct _OpcUa_WriteRequest
 {
-    OpcUa_RequestHeader RequestHeader;
-    OpcUa_Int32         NoOfNodesToWrite;
-    OpcUa_WriteValue*   NodesToWrite;
+    OpcUa_RequestHeader RequestHeader;      /*!< Common request parameters
+                                            *
+                                            * @see OpcUa_RequestHeader */
+    OpcUa_Int32         NoOfNodesToWrite;   /*!< Size of NodesToWrite list */
+    OpcUa_WriteValue*   NodesToWrite;       /*!< List of Nodes and their Attributes to write.
+                                            *
+                                            * @see OpcUa_WriteValue */
 }
 OpcUa_WriteRequest;
 
@@ -4068,13 +5104,21 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_WriteRequest_Encodeable
 /*============================================================================
  * The WriteResponse structure.
  *===========================================================================*/
+/** @brief Response for OpcUa_WriteRequest */
 typedef struct _OpcUa_WriteResponse
 {
-    OpcUa_ResponseHeader  ResponseHeader;
-    OpcUa_Int32           NoOfResults;
-    OpcUa_StatusCode*     Results;
-    OpcUa_Int32           NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo* DiagnosticInfos;
+    OpcUa_ResponseHeader  ResponseHeader;       /*!< Common response parameters
+                                                *
+                                                * @see OpcUa_ResponseHeader */
+    OpcUa_Int32           NoOfResults;          /*!< Size of Results list */
+    OpcUa_StatusCode*     Results;              /*!< List of results for the Nodes to write.
+                                                * The size and order of the list matches the size and order of the nodesToWrite request parameter.
+                                                * There is one entry in this list for each Node contained in the nodesToWrite parameter. */
+    OpcUa_Int32           NoOfDiagnosticInfos;  /*!< Size of DiagnosticInfos lis t*/
+    OpcUa_DiagnosticInfo* DiagnosticInfos;      /*!< List of diagnostic information for the Nodes to write.
+                                                * The size and order of the list matches the size and order of the nodesToWrite request parameter.
+                                                * This list is empty if diagnostics information was not requested in the request header or if no
+                                                * diagnostic information was encountered in processing of the request. */
 }
 OpcUa_WriteResponse;
 
@@ -4119,12 +5163,13 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_HistoryUpdateDetails_En
 /*============================================================================
  * The PerformUpdateType enumeration.
  *===========================================================================*/
+/** @brief The PerformUpdateType enumeration. */
 typedef enum _OpcUa_PerformUpdateType
 {
-    OpcUa_PerformUpdateType_Insert  = 1,
-    OpcUa_PerformUpdateType_Replace = 2,
-    OpcUa_PerformUpdateType_Update  = 3,
-    OpcUa_PerformUpdateType_Remove  = 4
+    OpcUa_PerformUpdateType_Insert  = 1,    /*!< Data is inserted */
+    OpcUa_PerformUpdateType_Replace = 2,    /*!< Data is replaced */
+    OpcUa_PerformUpdateType_Update  = 3,    /*!< Data is inserted or replaced */
+    OpcUa_PerformUpdateType_Remove  = 4     /*!< Data is deleted. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_PerformUpdateType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -4378,12 +5423,20 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_HistoryUpdateResponse_E
 /*============================================================================
  * The CallMethodRequest structure.
  *===========================================================================*/
+/** @brief The CallMethodRequest structure. */
 typedef struct _OpcUa_CallMethodRequest
 {
-    OpcUa_NodeId   ObjectId;
-    OpcUa_NodeId   MethodId;
-    OpcUa_Int32    NoOfInputArguments;
-    OpcUa_Variant* InputArguments;
+    OpcUa_NodeId   ObjectId;            /*!< The NodeId shall be that of the Object or ObjectType that is the source of a HasComponent Reference
+                                        * (or subtype of HasComponent Reference) to the Method specified in methodId. */
+    OpcUa_NodeId   MethodId;            /*!< NodeId of the Method to invoke.
+                                        * If the objectId is the NodeId of an Object, it is allowed to use the NodeId of a Method that is the target
+                                        * of a HasComponent Reference from the ObjectType of the Object. */
+    OpcUa_Int32    NoOfInputArguments;  /*!< Size of InputArguments list */
+    OpcUa_Variant* InputArguments;      /*!< List of input argument values. An empty list indicates that there are no input arguments.
+                                        * The size and order of this list matches the size and order of the input arguments defined by the input
+                                        * InputArguments Property of the Method.
+                                        * The name, a description and the data type of each argument are defined by the Argument structure in each
+                                        * element of the method‟s InputArguments Property. */
 }
 OpcUa_CallMethodRequest;
 
@@ -4404,15 +5457,28 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CallMethodRequest_Encod
 /*============================================================================
  * The CallMethodResult structure.
  *===========================================================================*/
+/** @brief Result of a MethodCall*/
 typedef struct _OpcUa_CallMethodResult
 {
-    OpcUa_StatusCode      StatusCode;
-    OpcUa_Int32           NoOfInputArgumentResults;
-    OpcUa_StatusCode*     InputArgumentResults;
-    OpcUa_Int32           NoOfInputArgumentDiagnosticInfos;
-    OpcUa_DiagnosticInfo* InputArgumentDiagnosticInfos;
-    OpcUa_Int32           NoOfOutputArguments;
-    OpcUa_Variant*        OutputArguments;
+    OpcUa_StatusCode      StatusCode;                       /*!< StatusCode of the Method executed in the server.
+                                                            * This StatusCode is set to the Bad_InvalidArgument StatusCode if at least one input
+                                                            * argument broke a constraint (e.g. wrong data type, value out of range).
+                                                            * This StatusCode is set to a bad StatusCode if the Method execution failed in the
+                                                            * server, e.g. based on an exception or an HRESULT. */
+    OpcUa_Int32           NoOfInputArgumentResults;         /*!< Size of InputArgumentResults list */
+    OpcUa_StatusCode*     InputArgumentResults;             /*!< List of StatusCodes corresponding to the inputArguments. */
+    OpcUa_Int32           NoOfInputArgumentDiagnosticInfos; /*!< Size of InputArgumentDiagnosticInfos list */
+    OpcUa_DiagnosticInfo* InputArgumentDiagnosticInfos;     /*!< List of diagnostic information corresponding to the inputArguments.
+                                                            * This list is empty if diagnostics information was not requested in the request header
+                                                            * or
+                                                            * if no diagnostic information was encountered in processing of the request. */
+    OpcUa_Int32           NoOfOutputArguments;              /*!< Size of OutputArguments list */
+    OpcUa_Variant*        OutputArguments;                  /*!< List of output argument values. An empty list indicates that there are no output
+                                                            * arguments.
+                                                            * The size and order of this list matches the size and order of the output arguments
+                                                            * defined by the OutputArguments Property of the Method.
+                                                            * The name, a description and the data type of each argument are defined by the Argument
+                                                            * structure in each element of the methods OutputArguments Property. */
 }
 OpcUa_CallMethodResult;
 
@@ -4434,11 +5500,16 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CallMethodResult_Encode
 /*============================================================================
  * The CallRequest structure.
  *===========================================================================*/
+/** @brief The CallRequest structure. */
 typedef struct _OpcUa_CallRequest
 {
-    OpcUa_RequestHeader      RequestHeader;
-    OpcUa_Int32              NoOfMethodsToCall;
-    OpcUa_CallMethodRequest* MethodsToCall;
+    OpcUa_RequestHeader      RequestHeader;     /*!< Common request parameters
+                                                *
+                                                * @see OpcUa_RequestHeader */
+    OpcUa_Int32              NoOfMethodsToCall; /*!< Size of MethodsToCall list */
+    OpcUa_CallMethodRequest* MethodsToCall;     /*!< List of Methods to call.
+                                                *
+                                                * @see OpcUa_CallMethodRequest */
 }
 OpcUa_CallRequest;
 
@@ -4459,13 +5530,18 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CallRequest_EncodeableT
 /*============================================================================
  * The CallResponse structure.
  *===========================================================================*/
+/** @brief Response for OpcUa_CallRequest */
 typedef struct _OpcUa_CallResponse
 {
-    OpcUa_ResponseHeader    ResponseHeader;
-    OpcUa_Int32             NoOfResults;
-    OpcUa_CallMethodResult* Results;
-    OpcUa_Int32             NoOfDiagnosticInfos;
-    OpcUa_DiagnosticInfo*   DiagnosticInfos;
+    OpcUa_ResponseHeader    ResponseHeader;         /*!<  */
+    OpcUa_Int32             NoOfResults;            /*!< Size of Results list */
+    OpcUa_CallMethodResult* Results;                /*!< Result for the Method calls.
+                                                    *
+                                                    * @see OpcUa_CallMethodResult */
+    OpcUa_Int32             NoOfDiagnosticInfos;    /*!< Size of DiagnosticInfos list */
+    OpcUa_DiagnosticInfo*   DiagnosticInfos;        /*!< List of diagnostic information for the statusCode of the results.
+                                                    * This list is empty if diagnostics information was not requested in the request header or
+                                                    * if no diagnostic information was encountered in processing of the request. */
 }
 OpcUa_CallResponse;
 
@@ -4487,11 +5563,17 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CallResponse_Encodeable
 /*============================================================================
  * The MonitoringMode enumeration.
  *===========================================================================*/
+/** @brief Specifies the possible monitoring states of a monitored item. */
 typedef enum _OpcUa_MonitoringMode
 {
-    OpcUa_MonitoringMode_Disabled  = 0,
-    OpcUa_MonitoringMode_Sampling  = 1,
-    OpcUa_MonitoringMode_Reporting = 2
+    OpcUa_MonitoringMode_Disabled  = 0, /*!< In this state a MonitoredItem is not collecting change notifications and also does not report
+                                        * anything to the client.
+                                        * If the MonitoredItem is "connected" the Item exists on the server.
+                                        * The Disabled state is foreseen to switch off reporting and sampling of MonitoredItems on a server
+                                        * where the item is still existing on the server. */
+    OpcUa_MonitoringMode_Sampling  = 1, /*!< In this state the MonitoredItem is collecting change notifications but not reporting them to the client.
+                                        * In addition, each sample is evaluated to determine if a Notification should be generated. */
+    OpcUa_MonitoringMode_Reporting = 2  /*!< In this state the MonitoredItem is collecting change notifications and reporting them to the client. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_MonitoringMode_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -4509,11 +5591,15 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_MonitoringMode_Enumerat
 /*============================================================================
  * The DataChangeTrigger enumeration.
  *===========================================================================*/
+/** @brief Specifies the conditions under which a data change notification should be reported. */
 typedef enum _OpcUa_DataChangeTrigger
 {
-    OpcUa_DataChangeTrigger_Status               = 0,
-    OpcUa_DataChangeTrigger_StatusValue          = 1,
-    OpcUa_DataChangeTrigger_StatusValueTimestamp = 2
+    OpcUa_DataChangeTrigger_Status               = 0,   /*!< Report a notification ONLY if the StatusCode associated with the value changes. */
+    OpcUa_DataChangeTrigger_StatusValue          = 1,   /*!< Report a notification if either the StatusCode or the value change.
+                                                        * The Deadband filter can be used in addition for filtering value changes.
+                                                        * This is the default setting if no filter is set. */
+    OpcUa_DataChangeTrigger_StatusValueTimestamp = 2    /*!< Report a notification if either StatusCode, value or the SourceTimestamp change.
+                                                        * The Deadband filter can be used in addition for filtering value changes. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_DataChangeTrigger_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -4531,11 +5617,21 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_DataChangeTrigger_Enume
 /*============================================================================
  * The DeadbandType enumeration.
  *===========================================================================*/
+/** @brief Defines the Deadband type and behavior. */
 typedef enum _OpcUa_DeadbandType
 {
-    OpcUa_DeadbandType_None     = 0,
-    OpcUa_DeadbandType_Absolute = 1,
-    OpcUa_DeadbandType_Percent  = 2
+    OpcUa_DeadbandType_None     = 0,    /*!< No Deadband calculation should be applied. */
+    OpcUa_DeadbandType_Absolute = 1,    /*!< For this type the deadbandValue contains the absolute change in a data value that will
+                                        * cause a Notification to be generated.
+                                        * This parameter applies only to Variables with any number data type. */
+    OpcUa_DeadbandType_Percent  = 2     /*!< For this type of deadband the deadbandValue is defined as the percentage of the EURange.
+                                        * That is, it applies only to AnalogItems with an EURange Property that defines the typical
+                                        * value range for the item.
+                                        * This range will be multiplied with the deadbandValue to generate an exception limit.
+                                        * An exception is determined as follows: Exception if
+                                        * (absolute value of (last cached value - current value) > (deadbandValue/100.0) * ((high-low) of EURange)))
+                                        * If the item is an array of values and any array element exceeds the deadbandValue, the entire
+                                        * monitored array is returned. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_DeadbandType_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -5071,15 +6167,48 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_DeleteMonitoredItemsRes
 /*============================================================================
  * The CreateSubscriptionRequest structure.
  *===========================================================================*/
+/** @brief The CreateSubscriptionRequest structure. */
 typedef struct _OpcUa_CreateSubscriptionRequest
 {
-    OpcUa_RequestHeader RequestHeader;
-    OpcUa_Double        RequestedPublishingInterval;
-    OpcUa_UInt32        RequestedLifetimeCount;
-    OpcUa_UInt32        RequestedMaxKeepAliveCount;
-    OpcUa_UInt32        MaxNotificationsPerPublish;
-    OpcUa_Boolean       PublishingEnabled;
-    OpcUa_Byte          Priority;
+    OpcUa_RequestHeader RequestHeader;                  /*!< Common request parameters
+                                                        *
+                                                        * @see OpcUa_RequestHeader */
+    OpcUa_Double        RequestedPublishingInterval;    /*!< This interval defines the cyclic rate that the Subscription is being requested to return
+                                                        * Notifications to the Client.
+                                                        * This interval is expressed in milliseconds.
+                                                        * This interval is represented by the publishing timer in the Subscription state table.
+                                                        * The negotiated value for this parameter returned in the response is used as the default
+                                                        * sampling interval for MonitoredItems assigned to this Subscription.
+                                                        * If the requested value is 0 or negative, the server shall revise with the fastest
+                                                        * supported publishing interval. */
+    OpcUa_UInt32        RequestedLifetimeCount;         /*!< Requested lifetime count. The lifetime count shall be a minimum of three times the
+                                                        * keep keep-alive count.
+                                                        * When the publishing timer has expired this number of times without a Publish request
+                                                        * being available to send a NotificationMessage, then the Subscription shall be deleted
+                                                        * by the Server. */
+    OpcUa_UInt32        RequestedMaxKeepAliveCount;     /*!< Requested maximum keep-alive count. When the publishing timer has expired this number
+                                                        * of times without requiring any NotificationMessage to be sent, the Subscription sends
+                                                        * a keep-alive Message to the Client.
+                                                        * The negotiated value for this parameter is returned in the response.
+                                                        * If the requested value is 0, the server shall revise with the smallest supported
+                                                        * keep-alive count. */
+    OpcUa_UInt32        MaxNotificationsPerPublish;     /*!< The maximum number of notifications that the Client wishes to receive in a single
+                                                        * Publish response.
+                                                        * A value of zero indicates that there is no limit.
+                                                        * The number of notifications per Publish is the sum of monitoredItems in the
+                                                        * DataChangeNotification and events in the EventNotificationList. */
+    OpcUa_Boolean       PublishingEnabled;              /*!< A Boolean parameter with the following values:
+                                                        * @li TRUE publishing is enabled for the Subscription.
+                                                        * @li FALSE publishing is disabled for the Subscription.
+                                                        *
+                                                        * The value of this parameter does not affect the value of the monitoring mode Attribute
+                                                        * of MonitoredItems. */
+    OpcUa_Byte          Priority;                       /*!< Indicates the relative priority of the Subscription.
+                                                        * When more than one Subscription needs to send Notifications, the Server should de-queue a
+                                                        * Publish request to the Subscription with the highest priority number.
+                                                        * For Subscriptions with equal priority the Server should de-queue Publish requests in a
+                                                        * round-robin fashion.
+                                                        * A Client that does not require special priority settings should set this value to zero. */
 }
 OpcUa_CreateSubscriptionRequest;
 
@@ -5100,13 +6229,23 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_CreateSubscriptionReque
 /*============================================================================
  * The CreateSubscriptionResponse structure.
  *===========================================================================*/
+/** brief response for OpcUa_CreateSubscriptionRequest */
 typedef struct _OpcUa_CreateSubscriptionResponse
 {
-    OpcUa_ResponseHeader ResponseHeader;
-    OpcUa_UInt32         SubscriptionId;
-    OpcUa_Double         RevisedPublishingInterval;
-    OpcUa_UInt32         RevisedLifetimeCount;
-    OpcUa_UInt32         RevisedMaxKeepAliveCount;
+    OpcUa_ResponseHeader ResponseHeader;            /*!< Common response parameters
+                                                    *
+                                                    * @see OpcUa_ResponseHeader */
+    OpcUa_UInt32         SubscriptionId;            /*!< The Server-assigned identifier for the Subscription.
+                                                    * This identifier shall be unique for the entire Server, not just for the Session, in order to
+                                                    * allow the Subscription to be transferred to another Session using the
+                                                    * TransferSubscriptions service. */
+    OpcUa_Double         RevisedPublishingInterval; /*!< The actual publishing interval that the Server will use, expressed in milliseconds.
+                                                    * The Server should attempt to honour the Client request for this parameter, but may negotiate
+                                                    * this value up or down to meet its own constraints. */
+    OpcUa_UInt32         RevisedLifetimeCount;      /*!< The lifetime of the Subscription shall be a minimum of three times the keep-alive interval
+                                                    * negotiated by the Server. */
+    OpcUa_UInt32         RevisedMaxKeepAliveCount;  /*!< The actual maximum keep-alive count. The Server should attempt to honour the Client request
+                                                    * for this parameter, but may negotiate this value up or down to meet its own constraints. */
 }
 OpcUa_CreateSubscriptionResponse;
 
@@ -5685,14 +6824,18 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_BuildInfo_EncodeableTyp
 /*============================================================================
  * The RedundancySupport enumeration.
  *===========================================================================*/
+/** @brief Specifies the redundancy support of the server. */
 typedef enum _OpcUa_RedundancySupport
 {
-    OpcUa_RedundancySupport_None           = 0,
-    OpcUa_RedundancySupport_Cold           = 1,
-    OpcUa_RedundancySupport_Warm           = 2,
-    OpcUa_RedundancySupport_Hot            = 3,
-    OpcUa_RedundancySupport_Transparent    = 4,
-    OpcUa_RedundancySupport_HotAndMirrored = 5
+    OpcUa_RedundancySupport_None           = 0, /*!< None means that there is no redundancy support. */
+    OpcUa_RedundancySupport_Cold           = 1, /*!< Cold means that the redundant servers are operational, but do not have
+                                                * any subscriptions defined and do not accept requests to create one. */
+    OpcUa_RedundancySupport_Warm           = 2, /*!< Warm means that the redundant servers have redundant subscriptions, but
+                                                * with sampling disabled. */
+    OpcUa_RedundancySupport_Hot            = 3, /*!< Hot means that the redundant servers have redundant subscriptions with
+                                                * sampling enabled, but not reporting. */
+    OpcUa_RedundancySupport_Transparent    = 4, /*!< Transparent means that the server supports transparent redundancy. */
+    OpcUa_RedundancySupport_HotAndMirrored = 5  /*!< HotAndMirrored means that the server supports redundant subscriptions with sampling enabled. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_RedundancySupport_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -5710,16 +6853,32 @@ OPCUA_IMEXPORT extern struct _OpcUa_EnumeratedType OpcUa_RedundancySupport_Enume
 /*============================================================================
  * The ServerState enumeration.
  *===========================================================================*/
+/** @brief Enumeration for the possible states of a UA server. */
 typedef enum _OpcUa_ServerState
 {
-    OpcUa_ServerState_Running            = 0,
-    OpcUa_ServerState_Failed             = 1,
-    OpcUa_ServerState_NoConfiguration    = 2,
-    OpcUa_ServerState_Suspended          = 3,
-    OpcUa_ServerState_Shutdown           = 4,
-    OpcUa_ServerState_Test               = 5,
-    OpcUa_ServerState_CommunicationFault = 6,
-    OpcUa_ServerState_Unknown            = 7
+    OpcUa_ServerState_Running            = 0,   /*!< The server is running normally. This is the usual state for a server. */
+    OpcUa_ServerState_Failed             = 1,   /*!< A vendor-specific fatal error has occurred within the server.
+                                                * The server is no longer functioning. The recovery procedure from this situation is vendor-specific.
+                                                * Most Service requests should be expected to fail. */
+    OpcUa_ServerState_NoConfiguration    = 2,   /*!< The server is running but has no configuration information loaded and therefore does not
+                                                * transfer data. */
+    OpcUa_ServerState_Suspended          = 3,   /*!< The server has been temporarily suspended by some vendor-specific method and is not receiving
+                                                * or sending data. */
+    OpcUa_ServerState_Shutdown           = 4,   /*!< The server has shut down or is in the process of shutting down.
+                                                * Depending on the implementation, this might or might not be visible to clients. */
+    OpcUa_ServerState_Test               = 5,   /*!< The server is in Test Mode.
+                                                * The outputs are disconnected from the real hardware, but the server will otherwise behave normally.
+                                                * Inputs may be real or may be simulated depending on the vendor implementation.
+                                                * StatusCode will generally be returned normally.*/
+    OpcUa_ServerState_CommunicationFault = 6,   /*!< The server is running properly, but is having difficulty accessing data from its data sources.
+                                                * This may be due to communication problems or some other problem preventing the underlying device,
+                                                * control system, etc.
+                                                * from returning valid data. It may be a complete failure, meaning that no data is available, or a
+                                                * partial failure, meaning that some data is still available.
+                                                * It is expected that items affected by the fault will individually return with a BAD FAILURE status
+                                                * code indication for the items. */
+    OpcUa_ServerState_Unknown            = 7    /*!< This state is used only to indicate that the OPC UA server does not know the state of
+                                                * underlying servers. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_ServerState_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -6098,13 +7257,21 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_SubscriptionDiagnostics
 /*============================================================================
  * The ModelChangeStructureVerbMask enumeration.
  *===========================================================================*/
+/** @brief Defines allowed bits in the verb field of the ModelChangeStructureDataType. */
 typedef enum _OpcUa_ModelChangeStructureVerbMask
 {
-    OpcUa_ModelChangeStructureVerbMask_NodeAdded        = 1,
-    OpcUa_ModelChangeStructureVerbMask_NodeDeleted      = 2,
-    OpcUa_ModelChangeStructureVerbMask_ReferenceAdded   = 4,
-    OpcUa_ModelChangeStructureVerbMask_ReferenceDeleted = 8,
-    OpcUa_ModelChangeStructureVerbMask_DataTypeChanged  = 16
+    OpcUa_ModelChangeStructureVerbMask_NodeAdded        = 1,    /*!< Indicates that the affected node has been added. */
+    OpcUa_ModelChangeStructureVerbMask_NodeDeleted      = 2,    /*!< Indicates that the affected node has been deleted. */
+    OpcUa_ModelChangeStructureVerbMask_ReferenceAdded   = 4,    /*!< Indicates that a reference has been added.
+                                                                * The affected node may be either the source or target of a reference.
+                                                                * Note that an added bidirectional reference is reflected by two
+                                                                * ModelChangeStructure entries. */
+    OpcUa_ModelChangeStructureVerbMask_ReferenceDeleted = 8,    /*!< Indicates that a reference has been removed.
+                                                                * The affected node may be either the source or target of a reference.
+                                                                * Note that an added bidirectional reference is reflected by two
+                                                                * ModelChangeStructure entries. */
+    OpcUa_ModelChangeStructureVerbMask_DataTypeChanged  = 16    /*!< Indicates that the DataType attribute of a Variable or VariableType
+                                                                * has changed. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_ModelChangeStructureVerbMask_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -6221,11 +7388,12 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_EUInformation_Encodeabl
 /*============================================================================
  * The AxisScaleEnumeration enumeration.
  *===========================================================================*/
+/** @brief AxisScaleEnumeration Values */
 typedef enum _OpcUa_AxisScaleEnumeration
 {
-    OpcUa_AxisScaleEnumeration_Linear = 0,
-    OpcUa_AxisScaleEnumeration_Log    = 1,
-    OpcUa_AxisScaleEnumeration_Ln     = 2
+    OpcUa_AxisScaleEnumeration_Linear = 0,  /*!< Linear scale */
+    OpcUa_AxisScaleEnumeration_Log    = 1,  /*!< Log base 10 scale */
+    OpcUa_AxisScaleEnumeration_Ln     = 2   /*!< Log base e scale */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_AxisScaleEnumeration_MaxEnumerationValue = OpcUa_Int32_Max
 #endif
@@ -6373,6 +7541,44 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ProgramDiagnosticDataType_Decode(OpcUa_Progr
 OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ProgramDiagnosticDataType_EncodeableType;
 #endif
 
+#ifndef OPCUA_EXCLUDE_ProgramDiagnostic2DataType
+/*============================================================================
+ * The ProgramDiagnostic2DataType structure.
+ *===========================================================================*/
+typedef struct _OpcUa_ProgramDiagnostic2DataType
+{
+    OpcUa_NodeId       CreateSessionId;
+    OpcUa_String       CreateClientName;
+    OpcUa_DateTime     InvocationCreationTime;
+    OpcUa_DateTime     LastTransitionTime;
+    OpcUa_String       LastMethodCall;
+    OpcUa_NodeId       LastMethodSessionId;
+    OpcUa_Int32        NoOfLastMethodInputArguments;
+    OpcUa_Argument*    LastMethodInputArguments;
+    OpcUa_Int32        NoOfLastMethodOutputArguments;
+    OpcUa_Argument*    LastMethodOutputArguments;
+    OpcUa_Int32        NoOfLastMethodInputValues;
+    OpcUa_Variant*     LastMethodInputValues;
+    OpcUa_Int32        NoOfLastMethodOutputValues;
+    OpcUa_Variant*     LastMethodOutputValues;
+    OpcUa_DateTime     LastMethodCallTime;
+    OpcUa_StatusResult LastMethodReturnStatus;
+}
+OpcUa_ProgramDiagnostic2DataType;
+
+OPCUA_EXPORT OpcUa_Void OpcUa_ProgramDiagnostic2DataType_Initialize(OpcUa_ProgramDiagnostic2DataType* pValue);
+
+OPCUA_EXPORT OpcUa_Void OpcUa_ProgramDiagnostic2DataType_Clear(OpcUa_ProgramDiagnostic2DataType* pValue);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_ProgramDiagnostic2DataType_GetSize(OpcUa_ProgramDiagnostic2DataType* pValue, struct _OpcUa_Encoder* pEncoder, OpcUa_Int32* pSize);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_ProgramDiagnostic2DataType_Encode(OpcUa_ProgramDiagnostic2DataType* pValue, struct _OpcUa_Encoder* pEncoder);
+
+OPCUA_EXPORT OpcUa_StatusCode OpcUa_ProgramDiagnostic2DataType_Decode(OpcUa_ProgramDiagnostic2DataType* pValue, struct _OpcUa_Decoder* pDecoder);
+
+OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_ProgramDiagnostic2DataType_EncodeableType;
+#endif
+
 #ifndef OPCUA_EXCLUDE_Annotation
 /*============================================================================
  * The Annotation structure.
@@ -6402,13 +7608,14 @@ OPCUA_IMEXPORT extern struct _OpcUa_EncodeableType OpcUa_Annotation_EncodeableTy
 /*============================================================================
  * The ExceptionDeviationFormat enumeration.
  *===========================================================================*/
+/** @brief The ExceptionDeviation specifies the minimum amount that the data for the HistoricalDataNode must change in order for the change to be reported to the history database. */
 typedef enum _OpcUa_ExceptionDeviationFormat
 {
-    OpcUa_ExceptionDeviationFormat_AbsoluteValue    = 0,
-    OpcUa_ExceptionDeviationFormat_PercentOfValue   = 1,
-    OpcUa_ExceptionDeviationFormat_PercentOfRange   = 2,
-    OpcUa_ExceptionDeviationFormat_PercentOfEURange = 3,
-    OpcUa_ExceptionDeviationFormat_Unknown          = 4
+    OpcUa_ExceptionDeviationFormat_AbsoluteValue    = 0,    /*!< ExceptionDeviation is an absolute Value. */
+    OpcUa_ExceptionDeviationFormat_PercentOfValue   = 1,    /*!< ExceptionDeviation is a percent of Value. */
+    OpcUa_ExceptionDeviationFormat_PercentOfRange   = 2,    /*!< ExceptionDeviation is a percent of InstrumentRange. */
+    OpcUa_ExceptionDeviationFormat_PercentOfEURange = 3,    /*!< ExceptionDeviation is a percent of EURange. */
+    OpcUa_ExceptionDeviationFormat_Unknown          = 4     /*!< ExceptionDeviation type is unknown or not specified. */
 #if OPCUA_FORCE_INT32_ENUMS
     ,_OpcUa_ExceptionDeviationFormat_MaxEnumerationValue = OpcUa_Int32_Max
 #endif

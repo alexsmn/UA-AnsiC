@@ -77,33 +77,39 @@
 /*============================================================================
 * DataType Exclusions
  *===========================================================================*/
-/* #define OPCUA_EXCLUDE_TrustListDataType */
-/* #define OPCUA_EXCLUDE_Node */
-/* #define OPCUA_EXCLUDE_InstanceNode */
-/* #define OPCUA_EXCLUDE_TypeNode */
-/* #define OPCUA_EXCLUDE_ObjectNode */
-/* #define OPCUA_EXCLUDE_ObjectTypeNode */
-/* #define OPCUA_EXCLUDE_VariableNode */
-/* #define OPCUA_EXCLUDE_VariableTypeNode */
-/* #define OPCUA_EXCLUDE_ReferenceTypeNode */
-/* #define OPCUA_EXCLUDE_MethodNode */
-/* #define OPCUA_EXCLUDE_ViewNode */
-/* #define OPCUA_EXCLUDE_DataTypeNode */
-/* #define OPCUA_EXCLUDE_ReferenceNode */
+/* #define OPCUA_EXCLUDE_RolePermissionType */
+/* #define OPCUA_EXCLUDE_StructureField */
+/* #define OPCUA_EXCLUDE_StructureDefinition */
+/* #define OPCUA_EXCLUDE_EnumDefinition */
+#define OPCUA_EXCLUDE_Node
+#define OPCUA_EXCLUDE_InstanceNode
+#define OPCUA_EXCLUDE_TypeNode
+#define OPCUA_EXCLUDE_ObjectNode
+#define OPCUA_EXCLUDE_ObjectTypeNode
+#define OPCUA_EXCLUDE_VariableNode
+#define OPCUA_EXCLUDE_VariableTypeNode
+#define OPCUA_EXCLUDE_ReferenceTypeNode
+#define OPCUA_EXCLUDE_MethodNode
+#define OPCUA_EXCLUDE_ViewNode
+#define OPCUA_EXCLUDE_DataTypeNode
+#define OPCUA_EXCLUDE_ReferenceNode
+/* #define OPCUA_EXCLUDE_AttributeWriteMask */
+#define OPCUA_EXCLUDE_NodeAttributesMask
 /* #define OPCUA_EXCLUDE_Argument */
 /* #define OPCUA_EXCLUDE_EnumValueType */
+/* #define OPCUA_EXCLUDE_EnumField */
 /* #define OPCUA_EXCLUDE_OptionSet */
-/* #define OPCUA_EXCLUDE_Union */
 /* #define OPCUA_EXCLUDE_TimeZoneDataType */
 /* #define OPCUA_EXCLUDE_ApplicationDescription */
 /* #define OPCUA_EXCLUDE_RequestHeader */
 /* #define OPCUA_EXCLUDE_ResponseHeader */
 /* #define OPCUA_EXCLUDE_ServiceFault */
+/* #define OPCUA_EXCLUDE_SessionlessInvokeRequestType */
+/* #define OPCUA_EXCLUDE_SessionlessInvokeResponseType */
 /* #define OPCUA_EXCLUDE_ServerOnNetwork */
 /* #define OPCUA_EXCLUDE_UserTokenPolicy */
 /* #define OPCUA_EXCLUDE_EndpointDescription */
 /* #define OPCUA_EXCLUDE_RegisteredServer */
-/* #define OPCUA_EXCLUDE_DiscoveryConfiguration */
 /* #define OPCUA_EXCLUDE_MdnsDiscoveryConfiguration */
 /* #define OPCUA_EXCLUDE_ChannelSecurityToken */
 /* #define OPCUA_EXCLUDE_SignedSoftwareCertificate */
@@ -122,6 +128,8 @@
 /* #define OPCUA_EXCLUDE_ReferenceTypeAttributes */
 /* #define OPCUA_EXCLUDE_DataTypeAttributes */
 /* #define OPCUA_EXCLUDE_ViewAttributes */
+/* #define OPCUA_EXCLUDE_GenericAttributeValue */
+/* #define OPCUA_EXCLUDE_GenericAttributes */
 /* #define OPCUA_EXCLUDE_AddNodesItem */
 /* #define OPCUA_EXCLUDE_AddNodesResult */
 /* #define OPCUA_EXCLUDE_AddReferencesItem */
@@ -143,7 +151,6 @@
 /* #define OPCUA_EXCLUDE_NodeReference */
 /* #define OPCUA_EXCLUDE_ContentFilterElement */
 /* #define OPCUA_EXCLUDE_ContentFilter */
-/* #define OPCUA_EXCLUDE_FilterOperand */
 /* #define OPCUA_EXCLUDE_ElementOperand */
 /* #define OPCUA_EXCLUDE_LiteralOperand */
 /* #define OPCUA_EXCLUDE_AttributeOperand */
@@ -154,7 +161,6 @@
 /* #define OPCUA_EXCLUDE_ReadValueId */
 /* #define OPCUA_EXCLUDE_HistoryReadValueId */
 /* #define OPCUA_EXCLUDE_HistoryReadResult */
-/* #define OPCUA_EXCLUDE_HistoryReadDetails */
 /* #define OPCUA_EXCLUDE_ReadEventDetails */
 /* #define OPCUA_EXCLUDE_ReadRawModifiedDetails */
 /* #define OPCUA_EXCLUDE_ReadProcessedDetails */
@@ -174,12 +180,10 @@
 /* #define OPCUA_EXCLUDE_HistoryUpdateResult */
 /* #define OPCUA_EXCLUDE_CallMethodRequest */
 /* #define OPCUA_EXCLUDE_CallMethodResult */
-/* #define OPCUA_EXCLUDE_MonitoringFilter */
 /* #define OPCUA_EXCLUDE_DataChangeFilter */
 /* #define OPCUA_EXCLUDE_EventFilter */
 /* #define OPCUA_EXCLUDE_AggregateConfiguration */
 /* #define OPCUA_EXCLUDE_AggregateFilter */
-/* #define OPCUA_EXCLUDE_MonitoringFilterResult */
 /* #define OPCUA_EXCLUDE_EventFilterResult */
 /* #define OPCUA_EXCLUDE_AggregateFilterResult */
 /* #define OPCUA_EXCLUDE_MonitoringParameters */
@@ -188,7 +192,6 @@
 /* #define OPCUA_EXCLUDE_MonitoredItemModifyRequest */
 /* #define OPCUA_EXCLUDE_MonitoredItemModifyResult */
 /* #define OPCUA_EXCLUDE_NotificationMessage */
-/* #define OPCUA_EXCLUDE_NotificationData */
 /* #define OPCUA_EXCLUDE_DataChangeNotification */
 /* #define OPCUA_EXCLUDE_MonitoredItemNotification */
 /* #define OPCUA_EXCLUDE_EventNotificationList */
@@ -218,7 +221,34 @@
 /* #define OPCUA_EXCLUDE_AxisInformation */
 /* #define OPCUA_EXCLUDE_XVType */
 /* #define OPCUA_EXCLUDE_ProgramDiagnosticDataType */
+/* #define OPCUA_EXCLUDE_ProgramDiagnostic2DataType */
 /* #define OPCUA_EXCLUDE_Annotation */
+/* #define OPCUA_EXCLUDE_AccessLevelExType */
+/* #define OPCUA_EXCLUDE_AccessLevelType */
+/* #define OPCUA_EXCLUDE_AccessRestrictionType */
+/* #define OPCUA_EXCLUDE_ApplicationType */
+/* #define OPCUA_EXCLUDE_AxisScaleEnumeration */
+/* #define OPCUA_EXCLUDE_BrowseDirection */
+/* #define OPCUA_EXCLUDE_BrowseResultMask */
+/* #define OPCUA_EXCLUDE_DataChangeTrigger */
+/* #define OPCUA_EXCLUDE_DeadbandType */
+/* #define OPCUA_EXCLUDE_EventNotifierType */
+/* #define OPCUA_EXCLUDE_ExceptionDeviationFormat */
+/* #define OPCUA_EXCLUDE_FilterOperator */
+/* #define OPCUA_EXCLUDE_HistoryUpdateType */
+/* #define OPCUA_EXCLUDE_IdType */
+/* #define OPCUA_EXCLUDE_MessageSecurityMode */
+/* #define OPCUA_EXCLUDE_ModelChangeStructureVerbMask */
+/* #define OPCUA_EXCLUDE_MonitoringMode */
+/* #define OPCUA_EXCLUDE_NodeClass */
+/* #define OPCUA_EXCLUDE_PerformUpdateType */
+/* #define OPCUA_EXCLUDE_PermissionType */
+/* #define OPCUA_EXCLUDE_RedundancySupport */
+/* #define OPCUA_EXCLUDE_SecurityTokenRequestType */
+/* #define OPCUA_EXCLUDE_ServerState */
+/* #define OPCUA_EXCLUDE_StructureType */
+/* #define OPCUA_EXCLUDE_TimestampsToReturn */
+/* #define OPCUA_EXCLUDE_UserTokenType */
 
 #endif /* _OpcUa_Exclusions_H_ */
 /* This is the last line of an autogenerated file. */

@@ -142,6 +142,31 @@ OPCUA_BEGIN_EXTERN_C
  *===========================================================================*/
 #define OpcUa_Attributes_UserExecutable 22
 
+/*============================================================================
+ * Provides the metadata and encoding information for custom DataTypes.
+ *===========================================================================*/
+#define OpcUa_Attributes_DataTypeDefinition 23
+
+/*============================================================================
+ * The permissions for the node granted to roles.
+ *===========================================================================*/
+#define OpcUa_Attributes_RolePermissions 24
+
+/*============================================================================
+ * The subset of permissions available for the roles available to the current session.
+ *===========================================================================*/
+#define OpcUa_Attributes_UserRolePermissions 25
+
+/*============================================================================
+ * The access restrictions assigned to the node.
+ *===========================================================================*/
+#define OpcUa_Attributes_AccessRestrictions 26
+
+/*============================================================================
+ * How a variable may be accessed.
+ *===========================================================================*/
+#define OpcUa_Attributes_AccessLevelEx 27
+
 OPCUA_END_EXTERN_C
 
 #endif /* _OpcUa_Attributes_H_ */

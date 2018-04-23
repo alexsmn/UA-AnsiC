@@ -143,6 +143,11 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BadSecurityChecksFailed 0x80130000
 
 /*============================================================================
+ * The certificate does not meet the requirements of the security policy.
+ *===========================================================================*/
+#define OpcUa_BadCertificatePolicyCheckFailed 0x81140000
+
+/*============================================================================
  * The certificate has expired or is not yet valid.
  *===========================================================================*/
 #define OpcUa_BadCertificateTimeInvalid 0x80140000
@@ -483,6 +488,11 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BadNodeNotInView 0x804E0000
 
 /*============================================================================
+ * The number was not accepted because of a numeric overflow.
+ *===========================================================================*/
+#define OpcUa_BadNumericOverflow 0x81120000
+
+/*============================================================================
  * The ServerUri is not a valid URI.
  *===========================================================================*/
 #define OpcUa_BadServerUriInvalid 0x804F0000
@@ -733,6 +743,11 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_BadArgumentsMissing 0x80760000
 
 /*============================================================================
+ * The executable attribute does not allow the execution of the method.
+ *===========================================================================*/
+#define OpcUa_BadNotExecutable 0x81110000
+
+/*============================================================================
  * The server has reached its  maximum number of subscriptions.
  *===========================================================================*/
 #define OpcUa_BadTooManySubscriptions 0x80770000
@@ -766,6 +781,11 @@ OPCUA_BEGIN_EXTERN_C
  * The sub-state machine is not currently active.
  *===========================================================================*/
 #define OpcUa_BadStateNotActive 0x80BF0000
+
+/*============================================================================
+ * An equivalent rule already exists.
+ *===========================================================================*/
+#define OpcUa_BadAlreadyExists 0x81150000
 
 /*============================================================================
  * The server cannot process the request because it is too busy.
@@ -1061,6 +1081,11 @@ OPCUA_BEGIN_EXTERN_C
  * The request was rejected by the server because it did not meet the criteria set by the server.
  *===========================================================================*/
 #define OpcUa_BadRequestNotAllowed 0x80E40000
+
+/*============================================================================
+ * The request has not been processed by the server yet.
+ *===========================================================================*/
+#define OpcUa_BadRequestNotComplete 0x81130000
 
 /*============================================================================
  * The value does not come from the real source and has been edited by the server.
