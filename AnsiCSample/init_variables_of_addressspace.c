@@ -38,10 +38,11 @@
 
 #include "addressspace.h"
 #include "general_header.h"
+#include "browseservice.h"
 
 OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(OpcUa_Void)
 {
-	extern OpcUa_Int			Continuation_Point_Identifier;
+	extern _my_continuationpoint_		Continuation_Point_Data;
 	extern OpcUa_Int			Cont_Point_Counter;
 	extern OpcUa_UInt32			session_flag;
 	extern OpcUa_String*		p_user_name;
@@ -50,7 +51,8 @@ OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(O
 	OpcUa_InitializeStatus(OpcUa_Module_Server, "initialize_value_attribute_of_variablenodes_variabletypenodes");
 
 /* Initialize relevant session variables. */
-	Continuation_Point_Identifier=0;
+	Continuation_Point_Data.Cont_Point_Identifier=0; /* None. */
+	OpcUa_BrowseDescription_Initialize(&Continuation_Point_Data.NodeToBrowse);
 	Cont_Point_Counter=0;
 	session_flag=SESSION_NOT_ACTIVATED;
 	p_user_name=OpcUa_Null;

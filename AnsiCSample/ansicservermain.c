@@ -103,13 +103,8 @@ OpcUa_StatusCode OPCUA_DLLCALL Timer_Callback(  OpcUa_Void*             pvCallba
 //---------------------------------------------------------------
 
 //CONTINUATION POINT--------------------------------
- OpcUa_Int			Continuation_Point_Identifier;
- OpcUa_Int			Cont_Point_Counter;
- enum
- {
-	free_to_use=0,
-	occupied=1
-}continuation_point;
+ _my_continuationpoint_	Continuation_Point_Data; /* Currently just one per session. */
+ OpcUa_Int		Cont_Point_Counter; /* Last continuation point ID used. Unique across sessions to make tracing more readable. */
 
  OpcUa_UInt32		max_ref_per_node;
 //--------------------------------------------------
@@ -368,6 +363,8 @@ static OpcUa_Void UaTestServer_SecurityClear(OpcUa_Void)
 /*===========================================================================================*/
 OpcUa_Void UaTestServer_Clear(OpcUa_Void)
 {
+	OpcUa_BrowseDescription_Clear(&Continuation_Point_Data.NodeToBrowse);
+
 	if(p_user_name!=OpcUa_Null)
 		username_free();
 	
@@ -967,6 +964,8 @@ OpcUa_StatusCode my_CloseSession(
 	
 	OpcUa_Timer_Delete(&Timer);
 	
+	Continuation_Point_Data.Cont_Point_Identifier=0;
+	OpcUa_BrowseDescription_Clear(&Continuation_Point_Data.NodeToBrowse);
 
 	session_flag=SESSION_NOT_ACTIVATED;
 
@@ -1345,7 +1344,7 @@ OpcUa_StatusCode response_header_fill(OpcUa_ResponseHeader*  a_pResponseHeader,c
 		if((OpcUa_UInt32)session_timeout<diff )
 		{
 			#ifndef NO_DEBUGGING_
-			MY_TRACE("\nService runtime:%u msec (TImeOut)\n", diff);
+			MY_TRACE("\nService runtime:%u msec (TimeOut)\n", diff);
 			#endif /*_DEBUGGING_*/
 			a_pResponseHeader->ServiceResult=OpcUa_BadTimeout;
 		}

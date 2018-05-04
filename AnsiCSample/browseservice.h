@@ -30,23 +30,21 @@
 #ifndef _browseservice_
 #define _browseservice_
 
+#include <opcua_memorystream.h>
+#include <opcua_binaryencoder.h>
+OPCUA_DECLARE_GENERIC_COMPARE(NodeId)
+OPCUA_DECLARE_GENERIC_COPY(NodeId)
+OPCUA_DECLARE_GENERIC_COPY(BrowseDescription)
+
 #define RESET_SESSION_COUNTER	msec_counter=0;
-
-#define Is_my_node(startNodeId,meinNode) (startNodeId.NamespaceIndex==meinNode.BaseAttribute.NodeId.NamespaceIndex) && (startNodeId.Identifier.Numeric==meinNode.BaseAttribute.NodeId.Identifier.Numeric) && (startNodeId.IdentifierType==meinNode.BaseAttribute.NodeId.IdentifierType)
-
-
 
 typedef struct
 {
-	OpcUa_Int					Cont_Point_Identifier;
-	OpcUa_Int					Current_Ref;
+	OpcUa_Int			Cont_Point_Identifier; /* Non-zero ID if in use, or 0 if free to use */
+	OpcUa_Int			Current_Ref;
 	OpcUa_BrowseDescription		NodeToBrowse;
 
 }_my_continuationpoint_;
-
-
- 
- 
 
 
 //@brief Browse Prototype
