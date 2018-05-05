@@ -506,7 +506,7 @@ OpcUa_StatusCode  fill_Variant_for_value_attribute(_VariableKnoten_*  p_Node, Op
 		case OpcUaId_String:
 			{
 				p_Results->Value.Value.Array.Value.StringArray=OpcUa_Memory_Alloc((all_ValueAttribute_of_VariableTypeNodes_VariableNodes[p_Node->ValueIndex].Value.Array.Length)*sizeof(OpcUa_String));
-				OpcUa_GotoErrorIfAllocFailed((p_Results->Value.Value.Array.Value.DoubleArray))
+				OpcUa_GotoErrorIfAllocFailed((p_Results->Value.Value.Array.Value.StringArray))
 
 				for(i=0;i<(all_ValueAttribute_of_VariableTypeNodes_VariableNodes[p_Node->ValueIndex].Value.Array.Length);i++)
 				{
