@@ -59,8 +59,8 @@ OpcUa_StatusCode my_BrowseNext(
     OpcUa_Int32*               a_pNoOfDiagnosticInfos,
     OpcUa_DiagnosticInfo**     a_pDiagnosticInfos)
 {
-	extern OpcUa_Int			Continuation_Point_Identifier;
-	OpcUa_Int m;
+	extern OpcUa_Int		Continuation_Point_Identifier;
+	OpcUa_Int               m;
 	extern OpcUa_UInt32		securechannelId;
 	extern OpcUa_UInt32		session_flag;
 	extern OpcUa_Double		msec_counter;
@@ -73,9 +73,7 @@ OpcUa_StatusCode my_BrowseNext(
 
     OpcUa_InitializeStatus(OpcUa_Module_Server, "OpcUa_ServerApi_BrowseNext");
 
-	
-	
-    /* validate arguments. */
+    /* Validate arguments. */
     OpcUa_ReturnErrorIfArgumentNull(a_hEndpoint);
     OpcUa_ReturnErrorIfArgumentNull(a_hContext);
     OpcUa_ReturnErrorIfArgumentNull(a_pRequestHeader);
@@ -92,19 +90,19 @@ OpcUa_StatusCode my_BrowseNext(
 
 	RESET_SESSION_COUNTER
 
-#ifndef NO_DEBUGING_
-	MY_TRACE("\n\n\nBROWSENEXTSERVICE=========================================\n");
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\n\n\nBROWSENEXT SERVICE=========================================\n");
 	if(p_user_name!=OpcUa_Null)
 		MY_TRACE("\nUser:%s\n",OpcUa_String_GetRawString(p_user_name)); 
-#endif /*_DEBUGING_*/
+#endif /*_DEBUGGING_*/
 
 
 	if(OpcUa_IsBad(session_flag))
 	{
-		//teile client mit , dass Session geschlossen ist
-#ifndef NO_DEBUGING_
-		MY_TRACE("\nSession nicht aktiv\n"); 
-#endif /*_DEBUGING_*/
+		/* Tell client that session is not active. */
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nSession not activated\n"); 
+#endif /*_DEBUGGING_*/
 		uStatus=OpcUa_BadSessionNotActivated;
 		OpcUa_GotoError;
 	}
@@ -112,9 +110,9 @@ OpcUa_StatusCode my_BrowseNext(
 	uStatus=check_authentication_token(a_pRequestHeader);
 	if(OpcUa_IsBad(uStatus))
 	{
-#ifndef NO_DEBUGING_
-		MY_TRACE("\nAuthentication Token ungültig.\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nInvalid Authentication Token.\n"); 
+#endif /*_DEBUGGING_*/
 		OpcUa_GotoError;
 	}
 
@@ -132,47 +130,47 @@ OpcUa_StatusCode my_BrowseNext(
 			OpcUa_BrowseResult_Initialize((*a_pResults+m));
 			if((a_pContinuationPoints+m)->Data!=OpcUa_Null && (a_pContinuationPoints+m)->Length>=sizeof(_my_continuationpoint_))
 			{
-				if((((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Cont_Point_Identiefer)==Continuation_Point_Identifier)
+				if((((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Cont_Point_Identifier)==Continuation_Point_Identifier)
 				{
-					#ifndef NO_DEBUGING_
-						MY_TRACE("\nContinuationPoint (Identifier:%d) wurde uebergeben.\n",(((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Cont_Point_Identiefer)); 
-					#endif /*_DEBUGING_*/
-					(*a_pResults+m)->StatusCode=browse(&(((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->NodeToBrowse),(*a_pResults+m),((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Aktuelle_Ref);
+					#ifndef NO_DEBUGGING_
+						MY_TRACE("\nContinuationPoint (Identifier:%d) was provided.\n",(((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Cont_Point_Identifier)); 
+					#endif /*_DEBUGGING_*/
+					(*a_pResults+m)->StatusCode=browse(&(((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->NodeToBrowse),(*a_pResults+m),((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Current_Ref);
 				}
 				else
 				{
 					(*a_pResults+m)->StatusCode=OpcUa_BadContinuationPointInvalid;
-					#ifndef NO_DEBUGING_
-						MY_TRACE("\n%d. ContinuationPoint Identifier ungueltig!!!\n",m); 
-					#endif /*_DEBUGING_*/
+					#ifndef NO_DEBUGGING_
+						MY_TRACE("\n%d. Invalid ContinuationPoint Identifier!!!\n", m); 
+					#endif /*_DEBUGGING_*/
 				}
 
 			}
 			else
 			{
 				(*a_pResults+m)->StatusCode=OpcUa_BadContinuationPointInvalid;
-				#ifndef NO_DEBUGING_
-					MY_TRACE("\n%d. ContinuationPoint ungueltig!!!\n",m); 
-				#endif /*_DEBUGING_*/
+				#ifndef NO_DEBUGGING_
+					MY_TRACE("\n%d. Invalid ContinuationPoint!!!\n", m); 
+				#endif /*_DEBUGGING_*/
 			}
 		}
 	}
 	else
 	{
 		Continuation_Point_Identifier=0;
-		#ifndef NO_DEBUGING_
-			MY_TRACE("\nBrowseNext aufgerufen, Cont.Point zu loeschen");
-			MY_TRACE("\n..................ContinuationPoint geloescht.\n");
-		#endif /*_DEBUGING_*/
+		#ifndef NO_DEBUGGING_
+			MY_TRACE("\nBrowseNext called, deleting Cont.Point");
+			MY_TRACE("\n..................ContinuationPoint deleted.\n");
+		#endif /*_DEBUGGING_*/
 	}
-	uStatus = response_header_ausfuellen(a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nSERVICE===ENDE============================================\n\n\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
+#endif /*_DEBUGGING_*/
 
 	RESET_SESSION_COUNTER
 
@@ -180,14 +178,14 @@ OpcUa_StatusCode my_BrowseNext(
     OpcUa_BeginErrorHandling;
 
     
-	uStatus = response_header_ausfuellen(a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nSERVICEENDE (IM SERVICE SIND FEHLER AUFGETRETTEN)===========\n\n\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
+#endif /*_DEBUGGING_*/
 	
 	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;

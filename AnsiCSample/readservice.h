@@ -47,11 +47,11 @@ OpcUa_StatusCode my_Read(
 							OpcUa_DataValue**          a_pResults,
 							OpcUa_Int32*               a_pNoOfDiagnosticInfos,
 							OpcUa_DiagnosticInfo**     a_pDiagnosticInfos);
-OpcUa_StatusCode  fill_Variant_for_value_attribute(_VariableKnoten_*  , OpcUa_String* , OpcUa_DataValue* );
+OpcUa_StatusCode  fill_Variant_for_value_attribute(_VariableNode_*  , OpcUa_String* , OpcUa_DataValue* );
 
 OpcUa_StatusCode fill_datatype_arraytype_in_my_Variant(OpcUa_DataValue* ,OpcUa_Byte, OpcUa_Byte,OpcUa_Int);
 
-OpcUa_StatusCode assigne_Timestamp(OpcUa_DataValue* ,OpcUa_TimestampsToReturn );
+OpcUa_StatusCode assign_Timestamp(OpcUa_DataValue* ,OpcUa_TimestampsToReturn );
 
 
 

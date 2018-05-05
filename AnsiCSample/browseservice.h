@@ -38,8 +38,8 @@
 
 typedef struct
 {
-	OpcUa_Int					Cont_Point_Identiefer;
-	OpcUa_Int					Aktuelle_Ref;
+	OpcUa_Int					Cont_Point_Identifier;
+	OpcUa_Int					Current_Ref;
 	OpcUa_BrowseDescription		NodeToBrowse;
 
 }_my_continuationpoint_;
@@ -57,7 +57,7 @@ OpcUa_StatusCode my_Browse(
 							const OpcUa_ViewDescription*   a_pView,
 							OpcUa_UInt32                   a_nRequestedMaxReferencesPerNode,
 							OpcUa_Int32                    a_nNoOfNodesToBrowse,
-							 OpcUa_BrowseDescription* a_pNodesToBrowse,
+							OpcUa_BrowseDescription*       a_pNodesToBrowse,
 							OpcUa_ResponseHeader*          a_pResponseHeader,
 							OpcUa_Int32*                   a_pNoOfResults,
 							OpcUa_BrowseResult**           a_pResults,
@@ -81,11 +81,11 @@ OpcUa_StatusCode my_BrowseNext(
 							OpcUa_DiagnosticInfo**     a_pDiagnosticInfos);
 
 
-OpcUa_StatusCode		browse						(OpcUa_BrowseDescription* ,OpcUa_BrowseResult*,OpcUa_Int );  //  besseren namen ausdenken!!!
+OpcUa_StatusCode		browse						(OpcUa_BrowseDescription* ,OpcUa_BrowseResult*,OpcUa_Int );  //  Think of better names!
 
 OpcUa_Void*				search_for_node				(OpcUa_NodeId );
 
-OpcUa_Boolean			ist_unterknoten				( OpcUa_NodeId , OpcUa_NodeId  ,OpcUa_Boolean   );
+OpcUa_Boolean			is_subnode				    (OpcUa_NodeId , OpcUa_NodeId  ,OpcUa_Boolean   );
 
 OpcUa_Boolean			check_Mask					(OpcUa_UInt32 ,OpcUa_UInt32 );
 
@@ -95,7 +95,7 @@ OpcUa_Boolean			need_continuationpoint		(OpcUa_BrowseDescription* ,OpcUa_Int);
 
 OpcUa_StatusCode		check_authentication_token	(const OpcUa_RequestHeader* );
 
-OpcUa_StatusCode		response_header_ausfuellen	(OpcUa_ResponseHeader*  ,const OpcUa_RequestHeader*, OpcUa_StatusCode);
+OpcUa_StatusCode		response_header_fill	    (OpcUa_ResponseHeader*  ,const OpcUa_RequestHeader*, OpcUa_StatusCode);
 
 
 

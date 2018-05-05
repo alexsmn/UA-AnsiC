@@ -55,12 +55,12 @@ typedef struct{
 typedef struct{
 	_BaseAttribute_		 BaseAttribute;
 	OpcUa_Boolean        IsAbstract;
-}_ObjectTypeKnoten_;
+}_ObjectTypeNode_;
 
 typedef struct{
 	_BaseAttribute_		 BaseAttribute;
 	OpcUa_Byte           EventNotifier;
-}_ObjectKnoten_;
+}_ObjectNode_;
 
 typedef struct{
 	_BaseAttribute_		BaseAttribute;
@@ -68,13 +68,13 @@ typedef struct{
     OpcUa_Boolean       Symmetric;
     OpcUa_StringA		InverseName_text;							 /*OpcUa_LocalizedText  InverseName;*/
 	OpcUa_StringA		InverseName_locale;							 /*OpcUa_LocalizedText  InverseName;*/
-}_ReferenceTypeKnoten_;
+}_ReferenceTypeNode_;
 
 
 typedef struct{
 	_BaseAttribute_		 BaseAttribute;
 	OpcUa_Boolean        IsAbstract;
-}_DataTypeKnoten_;
+}_DataTypeNode_;
 
 
 typedef union 
@@ -96,7 +96,7 @@ typedef struct
 }
 my_VariantArrayValue;
 
-/* A union that contains one of the built-in types,which are used in nano server addressspace. */
+/* A union that contains one of the built-in types that are used in nano server addressspace. */
 typedef union 
 {
     OpcUa_UInt32             UInt32;
@@ -131,7 +131,7 @@ typedef struct{
     OpcUa_Int32          NoOfArrayDimensions;
     OpcUa_UInt32         ArrayDimensions;
     OpcUa_Boolean        IsAbstract;
-}_VariableTypeKnoten_;
+}_VariableTypeNode_;
 
 typedef struct{
 	_BaseAttribute_		 BaseAttribute;
@@ -144,7 +144,7 @@ typedef struct{
     OpcUa_Byte           UserAccessLevel;
    // OpcUa_Double         MinimumSamplingInterval;
     OpcUa_Boolean        Historizing;
-}_VariableKnoten_;
+}_VariableNode_;
 
 
 

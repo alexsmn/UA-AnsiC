@@ -66,9 +66,9 @@ OpcUa_StatusCode my_Read(
 	extern OpcUa_Double		msec_counter;
 	extern OpcUa_String*	p_user_name;
 
-    OpcUa_InitializeStatus(OpcUa_Module_Server, "OpcUa_ServerApi_Read");
+    OpcUa_InitializeStatus(OpcUa_Module_Server, "my_Read");
 
-    /* validate arguments. */
+    /* Validate arguments. */
     OpcUa_ReturnErrorIfArgumentNull(a_hEndpoint);
     OpcUa_ReturnErrorIfArgumentNull(a_hContext);
     OpcUa_ReturnErrorIfArgumentNull(a_pRequestHeader);
@@ -84,19 +84,19 @@ OpcUa_StatusCode my_Read(
 
 	RESET_SESSION_COUNTER
 
- #ifndef NO_DEBUGING_
-	MY_TRACE("\n\n\nRREADSERVICE==============================================\n");
+ #ifndef NO_DEBUGGING_
+	MY_TRACE("\n\n\nREAD SERVICE==============================================\n");
 	if(p_user_name!=OpcUa_Null)
 		MY_TRACE("\nUser:%s\n",OpcUa_String_GetRawString(p_user_name)); 
-#endif /*_DEBUGING_*/
+#endif /*_DEBUGGING_*/
   
 
 	if(OpcUa_IsBad(session_flag))
 	{
-		//teile client mit , dass Session geschlossen ist
-#ifndef NO_DEBUGING_
-		MY_TRACE("\nSession nicht aktiv\n"); 
-#endif /*_DEBUGING_*/
+		/* Tell client that session is not active. */
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nSession not active\n"); 
+#endif /*_DEBUGGING_*/
 		uStatus=OpcUa_BadSessionNotActivated;
 		OpcUa_GotoError;
 	}
@@ -105,9 +105,9 @@ OpcUa_StatusCode my_Read(
 	uStatus=check_authentication_token(a_pRequestHeader);
 	if(OpcUa_IsBad(uStatus))
 	{
-#ifndef NO_DEBUGING_
-		MY_TRACE("\nAuthentication Token ungültig.\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nInvalid Authentication Token.\n"); 
+#endif /*_DEBUGGING_*/
 		OpcUa_GotoError;
 	}
 
@@ -120,7 +120,7 @@ OpcUa_StatusCode my_Read(
 		OpcUa_DataValue_Initialize((*a_pResults)+n);
 		((*a_pResults)+n)->StatusCode=OpcUa_BadAttributeIdInvalid;
 		p_Node=search_for_node((a_pNodesToRead+n)->NodeId);
-		if(p_Node!= OpcUa_Null)   //pruefe ob Knoten existiert
+		if(p_Node!= OpcUa_Null)   /* Check if the node exists. */
 		{
 			if(((a_pNodesToRead+n)->AttributeId)<=7 && ((a_pNodesToRead+n)->AttributeId)>=1)
 			{
@@ -130,7 +130,7 @@ OpcUa_StatusCode my_Read(
 					if(((*a_pResults)+n)->Value.Value.NodeId !=OpcUa_Null)
 					{
 						OpcUa_NodeId_Initialize(((*a_pResults)+n)->Value.Value.NodeId);
-						*(((*a_pResults)+n)->Value.Value.NodeId)=((_ObjectKnoten_*)p_Node)->BaseAttribute.NodeId; 
+						*(((*a_pResults)+n)->Value.Value.NodeId)=((_ObjectNode_*)p_Node)->BaseAttribute.NodeId; 
 						fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_NodeId, OpcUa_VariantArrayType_Scalar,0);
 						((*a_pResults)+n)->StatusCode=OpcUa_Good;
 					}
@@ -141,7 +141,7 @@ OpcUa_StatusCode my_Read(
 				}
 				if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_NodeClass)
 				{
-					((*a_pResults)+n)->Value.Value.Int32=((_ObjectKnoten_*)p_Node)->BaseAttribute.NodeClass;
+					((*a_pResults)+n)->Value.Value.Int32=((_ObjectNode_*)p_Node)->BaseAttribute.NodeClass;
 					fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Int32, OpcUa_VariantArrayType_Scalar,0);
 					((*a_pResults)+n)->StatusCode=OpcUa_Good;
 				}
@@ -151,8 +151,8 @@ OpcUa_StatusCode my_Read(
 					if(((*a_pResults)+n)->Value.Value.QualifiedName!=OpcUa_Null)
 					{
 						OpcUa_QualifiedName_Initialize(((*a_pResults)+n)->Value.Value.QualifiedName);
-						OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.QualifiedName->Name,((_ObjectKnoten_*)p_Node)->BaseAttribute.BrowseName);
-						((*a_pResults)+n)->Value.Value.QualifiedName->NamespaceIndex=((_ObjectKnoten_*)p_Node)->BaseAttribute.NodeId.NamespaceIndex;     
+						OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.QualifiedName->Name,((_ObjectNode_*)p_Node)->BaseAttribute.BrowseName);
+						((*a_pResults)+n)->Value.Value.QualifiedName->NamespaceIndex=((_ObjectNode_*)p_Node)->BaseAttribute.NodeId.NamespaceIndex;     
 						fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_QualifiedName, OpcUa_VariantArrayType_Scalar,0);
 						((*a_pResults)+n)->StatusCode=OpcUa_Good;
 					}
@@ -167,7 +167,7 @@ OpcUa_StatusCode my_Read(
 					if(((*a_pResults)+n)->Value.Value.LocalizedText!=OpcUa_Null)
 					{
 						OpcUa_LocalizedText_Initialize(((*a_pResults)+n)->Value.Value.LocalizedText);
-						OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Text,((_ObjectKnoten_*)p_Node)->BaseAttribute.DisplayName);
+						OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Text,((_ObjectNode_*)p_Node)->BaseAttribute.DisplayName);
 						OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Locale,"en");
 						fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_LocalizedText, OpcUa_VariantArrayType_Scalar,0);
 						((*a_pResults)+n)->StatusCode=OpcUa_Good;
@@ -185,7 +185,7 @@ OpcUa_StatusCode my_Read(
 			}
 			else
 			{
-				switch((((_ObjectKnoten_*)p_Node)->BaseAttribute.NodeClass))
+				switch((((_ObjectNode_*)p_Node)->BaseAttribute.NodeClass))
 				{
 				case OpcUa_NodeClass_Variable:
 					{
@@ -193,10 +193,10 @@ OpcUa_StatusCode my_Read(
 						{
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_Value)
 							{
-								 ((*a_pResults)+n)->StatusCode=fill_Variant_for_value_attribute((_VariableKnoten_*)p_Node, OpcUa_Null,((*a_pResults)+n));
+								 ((*a_pResults)+n)->StatusCode=fill_Variant_for_value_attribute((_VariableNode_*)p_Node, OpcUa_Null,((*a_pResults)+n));
 								if(a_eTimestampsToReturn!=OpcUa_TimestampsToReturn_Neither)
 								{
-									uStatus=assigne_Timestamp(((*a_pResults)+n),a_eTimestampsToReturn);
+									uStatus=assign_Timestamp(((*a_pResults)+n),a_eTimestampsToReturn);
 									if(OpcUa_IsBad(uStatus))
 									{
 										((*a_pResults)+n)->StatusCode=OpcUa_BadInternalError;
@@ -210,7 +210,7 @@ OpcUa_StatusCode my_Read(
 								if(((*a_pResults)+n)->Value.Value.NodeId!=OpcUa_Null)
 								{
 									OpcUa_NodeId_Initialize(((*a_pResults)+n)->Value.Value.NodeId);
-									*(((*a_pResults+n)->Value.Value.NodeId))=((_VariableKnoten_*)p_Node)->DataType;
+									*(((*a_pResults+n)->Value.Value.NodeId))=((_VariableNode_*)p_Node)->DataType;
 									fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_NodeId, OpcUa_VariantArrayType_Scalar,0);
 									((*a_pResults)+n)->StatusCode=OpcUa_Good;
 								}
@@ -221,27 +221,27 @@ OpcUa_StatusCode my_Read(
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_ValueRank)
 							{
-								((*a_pResults)+n)->Value.Value.Int32=((_VariableKnoten_*)p_Node)->ValueRank;
+								((*a_pResults)+n)->Value.Value.Int32=((_VariableNode_*)p_Node)->ValueRank;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Int32, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_ArrayDimensions)
 							{
 								
-								((*a_pResults)+n)->Value.Value.UInt32=(((_VariableKnoten_*)p_Node)->ArrayDimensions);
+								((*a_pResults)+n)->Value.Value.UInt32=(((_VariableNode_*)p_Node)->ArrayDimensions);
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_UInt32, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_AccessLevel)
 							{
-								((*a_pResults)+n)->Value.Value.Byte=((_VariableKnoten_*)p_Node)->AccessLevel;
+								((*a_pResults)+n)->Value.Value.Byte=((_VariableNode_*)p_Node)->AccessLevel;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Byte, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_UserAccessLevel)
 							{
-								((*a_pResults)+n)->Value.Value.Byte=((_VariableKnoten_*)p_Node)->UserAccessLevel;
+								((*a_pResults)+n)->Value.Value.Byte=((_VariableNode_*)p_Node)->UserAccessLevel;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Byte, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
@@ -253,7 +253,7 @@ OpcUa_StatusCode my_Read(
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_Historizing)
 							{
-								((*a_pResults)+n)->Value.Value.Boolean=((_VariableKnoten_*)p_Node)->Historizing;
+								((*a_pResults)+n)->Value.Value.Boolean=((_VariableNode_*)p_Node)->Historizing;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Boolean, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
@@ -266,10 +266,10 @@ OpcUa_StatusCode my_Read(
 						{
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_Value)
 							{
-								 ((*a_pResults)+n)->StatusCode=fill_Variant_for_value_attribute((_VariableKnoten_*)p_Node, OpcUa_Null,((*a_pResults)+n));
+								 ((*a_pResults)+n)->StatusCode=fill_Variant_for_value_attribute((_VariableNode_*)p_Node, OpcUa_Null,((*a_pResults)+n));
 								if(a_eTimestampsToReturn!=OpcUa_TimestampsToReturn_Neither)
 								{
-									uStatus=assigne_Timestamp(((*a_pResults)+n),a_eTimestampsToReturn);
+									uStatus=assign_Timestamp(((*a_pResults)+n),a_eTimestampsToReturn);
 									if(OpcUa_IsBad(uStatus))
 									{
 										((*a_pResults)+n)->StatusCode=OpcUa_BadInternalError;
@@ -283,7 +283,7 @@ OpcUa_StatusCode my_Read(
 								if(((*a_pResults)+n)->Value.Value.NodeId!=OpcUa_Null)
 								{
 									OpcUa_NodeId_Initialize(((*a_pResults)+n)->Value.Value.NodeId);
-									*((*a_pResults)+n)->Value.Value.NodeId=((_VariableTypeKnoten_*)p_Node)->DataType;
+									*((*a_pResults)+n)->Value.Value.NodeId=((_VariableTypeNode_*)p_Node)->DataType;
 									fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_NodeId, OpcUa_VariantArrayType_Scalar,0);
 									((*a_pResults)+n)->StatusCode=OpcUa_Good;
 								}
@@ -294,13 +294,13 @@ OpcUa_StatusCode my_Read(
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_ArrayDimensions)
 							{
-								((*a_pResults)+n)->Value.Value.UInt32=((_VariableTypeKnoten_*)p_Node)->ArrayDimensions; 
+								((*a_pResults)+n)->Value.Value.UInt32=((_VariableTypeNode_*)p_Node)->ArrayDimensions; 
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_UInt32, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_IsAbstract)
 							{
-								((*a_pResults)+n)->Value.Value.Boolean=((_VariableTypeKnoten_*)p_Node)->IsAbstract;
+								((*a_pResults)+n)->Value.Value.Boolean=((_VariableTypeNode_*)p_Node)->IsAbstract;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Boolean, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
@@ -312,7 +312,7 @@ OpcUa_StatusCode my_Read(
 					{
 						if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_EventNotifier)
 						{
-							((*a_pResults)+n)->Value.Value.Byte=((_ObjectKnoten_*)p_Node)->EventNotifier;
+							((*a_pResults)+n)->Value.Value.Byte=((_ObjectNode_*)p_Node)->EventNotifier;
 							fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Byte, OpcUa_VariantArrayType_Scalar,0);
 							((*a_pResults)+n)->StatusCode=OpcUa_Good;
 						}
@@ -323,7 +323,7 @@ OpcUa_StatusCode my_Read(
 					{
 						if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_IsAbstract)
 						{
-							((*a_pResults)+n)->Value.Value.Boolean=((_ObjectTypeKnoten_*)p_Node)->IsAbstract;
+							((*a_pResults)+n)->Value.Value.Boolean=((_ObjectTypeNode_*)p_Node)->IsAbstract;
 							fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Boolean, OpcUa_VariantArrayType_Scalar,0);
 							((*a_pResults)+n)->StatusCode=OpcUa_Good;
 						}
@@ -335,7 +335,7 @@ OpcUa_StatusCode my_Read(
 
 						if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_IsAbstract)
 						{
-							((*a_pResults)+n)->Value.Value.Boolean=((_DataTypeKnoten_*)p_Node)->IsAbstract;
+							((*a_pResults)+n)->Value.Value.Boolean=((_DataTypeNode_*)p_Node)->IsAbstract;
 							fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Boolean, OpcUa_VariantArrayType_Scalar,0);
 							((*a_pResults)+n)->StatusCode=OpcUa_Good;
 						}
@@ -348,13 +348,13 @@ OpcUa_StatusCode my_Read(
 						{
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_IsAbstract)
 							{
-								((*a_pResults)+n)->Value.Value.Boolean=((_ReferenceTypeKnoten_*)p_Node)->IsAbstract;
+								((*a_pResults)+n)->Value.Value.Boolean=((_ReferenceTypeNode_*)p_Node)->IsAbstract;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Boolean, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
 							if((a_pNodesToRead+n)->AttributeId==OpcUa_Attributes_Symmetric)
 							{
-								((*a_pResults)+n)->Value.Value.Boolean=((_ReferenceTypeKnoten_*)p_Node)->Symmetric;
+								((*a_pResults)+n)->Value.Value.Boolean=((_ReferenceTypeNode_*)p_Node)->Symmetric;
 								fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_Boolean, OpcUa_VariantArrayType_Scalar,0);
 								((*a_pResults)+n)->StatusCode=OpcUa_Good;
 							}
@@ -364,8 +364,8 @@ OpcUa_StatusCode my_Read(
 								if(((*a_pResults)+n)->Value.Value.NodeId!=OpcUa_Null)
 								{
 									OpcUa_LocalizedText_Initialize(((*a_pResults)+n)->Value.Value.LocalizedText);
-									OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Text, ((_ReferenceTypeKnoten_*)p_Node)->InverseName_text);
-									OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Locale, ((_ReferenceTypeKnoten_*)p_Node)->InverseName_locale);
+									OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Text, ((_ReferenceTypeNode_*)p_Node)->InverseName_text);
+									OpcUa_String_AttachCopy(&((*a_pResults)+n)->Value.Value.LocalizedText->Locale, ((_ReferenceTypeNode_*)p_Node)->InverseName_locale);
 									fill_datatype_arraytype_in_my_Variant(((*a_pResults)+n),OpcUaId_LocalizedText, OpcUa_VariantArrayType_Scalar,0);
 									((*a_pResults)+n)->StatusCode=OpcUa_Good;
 								}
@@ -379,43 +379,36 @@ OpcUa_StatusCode my_Read(
 					}
 				default:
 					break;
-					
-				
 				}
 			}
-			
-		
 		}
 		else
 		{
 			((*a_pResults)+n)->StatusCode=OpcUa_BadNodeIdUnknown;
 		}
-		
 	}
-	
-	
 
 	*a_pNoOfResults=a_nNoOfNodesToRead;
 
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nanzahl der nodes :%d\n",a_nNoOfNodesToRead);
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nnumber of nodes :%d\n",a_nNoOfNodesToRead);
 	for(i=0;i<a_nNoOfNodesToRead;i++)
 	{
 		MY_TRACE("\n|%d|, |%d| attributeId:%u\n",(a_pNodesToRead+i)->NodeId.NamespaceIndex,(a_pNodesToRead+i)->NodeId.Identifier.Numeric,(a_pNodesToRead+i)->AttributeId);
 		
 	}
-#endif /*_DEBUGING_*/
+#endif /*_DEBUGGING_*/
 
 
 	
-	uStatus = response_header_ausfuellen(a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nSERVICE===ENDE============================================\n\n\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
+#endif /*_DEBUGGING_*/
 
 	RESET_SESSION_COUNTER
 
@@ -423,21 +416,21 @@ OpcUa_StatusCode my_Read(
     OpcUa_BeginErrorHandling;
 
     
-	uStatus = response_header_ausfuellen(a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nSERVICEENDE (IM SERVICE SIND FEHLER AUFGETRETTEN)===========\n\n\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
+#endif /*_DEBUGGING_*/
 	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;
 }
 
 
 
-OpcUa_StatusCode  fill_Variant_for_value_attribute(_VariableKnoten_*  p_Node, OpcUa_String* p_Index, OpcUa_DataValue* p_Results)
+OpcUa_StatusCode  fill_Variant_for_value_attribute(_VariableNode_*  p_Node, OpcUa_String* p_Index, OpcUa_DataValue* p_Results)
 {
 	OpcUa_Int					i;
 	extern my_Variant			all_ValueAttribute_of_VariableTypeNodes_VariableNodes[];
@@ -557,7 +550,7 @@ OpcUa_StatusCode fill_datatype_arraytype_in_my_Variant(OpcUa_DataValue* p_Result
 	return OpcUa_Good;
 }
 
-OpcUa_StatusCode assigne_Timestamp(OpcUa_DataValue* p_Results,OpcUa_TimestampsToReturn a_eTimestampsToReturn)
+OpcUa_StatusCode assign_Timestamp(OpcUa_DataValue* p_Results,OpcUa_TimestampsToReturn a_eTimestampsToReturn)
 {
 	OpcUa_StatusCode			uStatus     = OpcUa_Bad;
 	OpcUa_ReturnErrorIfArgumentNull(p_Results);

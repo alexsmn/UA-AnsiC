@@ -42,8 +42,7 @@
 #define MAX_NO_OF_RETURNED_REFERENCES			5
 
 #define compare_nodes(_NodeId_1,_NodeId_2) (_NodeId_1.IdentifierType==_NodeId_2.IdentifierType) && (_NodeId_1.NamespaceIndex==_NodeId_2.NamespaceIndex) &&(_NodeId_1.Identifier.Numeric==_NodeId_2.Identifier.Numeric)
-/*compare_nodes: liefert (1) bei Gleichheit */
-
+/* compare_nodes: returns (1) for equality */
 
 extern enum
 {
@@ -77,9 +76,9 @@ OpcUa_StatusCode my_Browse(
 	extern OpcUa_String*	p_user_name;
 	extern OpcUa_UInt32		max_ref_per_node;
 
-#ifndef NO_DEBUGING_
+#ifndef NO_DEBUGGING_
 	extern OpcUa_Int			Continuation_Point_Identifier;
-#endif /*_DEBUGING_*/
+#endif /*_DEBUGGING_*/
 	
 
     OpcUa_InitializeStatus(OpcUa_Module_Server, "OpcUa_ServerApi_Browse");
@@ -100,19 +99,19 @@ OpcUa_StatusCode my_Browse(
 		 
 	RESET_SESSION_COUNTER
 
-#ifndef NO_DEBUGING_
-	MY_TRACE("\n\n\nBROWSESERVICE=============================================\n");
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\n\n\nBROWSE SERVICE=============================================\n");
 	if(p_user_name!=OpcUa_Null)
 		MY_TRACE("\nUser:%s\n",OpcUa_String_GetRawString(p_user_name));  
-#endif /*_DEBUGING_*/
+#endif /*_DEBUGGING_*/
 
 
 	if(OpcUa_IsBad(session_flag))
 	{
-		//teile client mit , dass Session geschlossen ist
-#ifndef NO_DEBUGING_
-		MY_TRACE("\nSession nicht aktiv\n"); 
-#endif /*_DEBUGING_*/
+		/* Tell client that session is not active. */
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nSession not active\n"); 
+#endif /*_DEBUGGING_*/
 		uStatus=OpcUa_BadSessionNotActivated;
 		OpcUa_GotoError;
 	}
@@ -121,9 +120,9 @@ OpcUa_StatusCode my_Browse(
 	uStatus=check_authentication_token(a_pRequestHeader);
 	if(OpcUa_IsBad(uStatus))
 	{
-#ifndef NO_DEBUGING_
+#ifndef NO_DEBUGGING_
 		MY_TRACE("\nAuthentication Token ungültig.\n"); 
-#endif /*_DEBUGING_*/
+#endif /*_DEBUGGING_*/
 		OpcUa_GotoError;
 	}
 
@@ -145,34 +144,34 @@ OpcUa_StatusCode my_Browse(
 	
 	*a_pNoOfResults=a_nNoOfNodesToBrowse;
 
-		for(m=0;m<a_nNoOfNodesToBrowse;m++)/*durchsuche alle  Startknoten*************************************************/
+		for(m=0;m<a_nNoOfNodesToBrowse;m++) /* Check all start nodes */
 		{
 			OpcUa_BrowseResult_Initialize((*a_pResults+m));
 			pointer_to_node= search_for_node((a_pNodesToBrowse+m)->NodeId);
-			#ifndef NO_DEBUGING_
-			MY_TRACE("\nBrowse nach NodeId:|%d|  Namespaceindex: |%d|\n",(a_pNodesToBrowse+m)->NodeId.Identifier.Numeric,(a_pNodesToBrowse+m)->NodeId.NamespaceIndex);
-			#endif /*_DEBUGING_*/
-			if(pointer_to_node!=OpcUa_Null)/*untersuche nur existierende Knoten*/
+			#ifndef NO_DEBUGGING_
+			MY_TRACE("\nBrowse by NodeId:|%d|  NamespaceIndex: |%d|\n",(a_pNodesToBrowse+m)->NodeId.Identifier.Numeric,(a_pNodesToBrowse+m)->NodeId.NamespaceIndex);
+			#endif /*_DEBUGGING_*/
+			if(pointer_to_node!=OpcUa_Null) /* Browse only existing nodes */
 			{
 				(*a_pResults+m)->StatusCode=browse((a_pNodesToBrowse+m),(*a_pResults+m),0);
 				
-			}/*Ende:(untersuche nur existierende Knoten)*/
+			} /* End: (browse only existing nodes) */
 			else
 			{
 				(*a_pResults+m)->StatusCode=OpcUa_BadNodeIdUnknown; 
 			}
 			
-		}/*Ende: (durchsuche alle  Startknoten)*****************************************************************************/
+		} /* End: (check all start nodes) */
 
 	
-	uStatus = response_header_ausfuellen(a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nSERVICE===ENDE============================================\n\n\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
+#endif /*_DEBUGGING_*/
 
 	RESET_SESSION_COUNTER
 
@@ -180,14 +179,14 @@ OpcUa_StatusCode my_Browse(
     OpcUa_BeginErrorHandling;
 
    *a_pNoOfResults=0;
-	uStatus=response_header_ausfuellen(a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus=response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nSERVICEENDE (IM SERVICE SIND FEHLER AUFGETRETTEN)===========\n\n\n"); 
-#endif /*_DEBUGING_*/
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
+#endif /*_DEBUGGING_*/
 	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;
 }
@@ -212,146 +211,146 @@ OpcUa_StatusCode browse(OpcUa_BrowseDescription* a_pNodesToBrowse,OpcUa_BrowseRe
 	Cont_Point_Counter			=Cont_Point_Counter+4;
 	pointer_to_node= (_BaseAttribute_*)search_for_node(a_pNodesToBrowse->NodeId);
 	OpcUa_ReturnErrorIfNull(pointer_to_node, OpcUa_BadNodeIdUnknown);
-#ifndef NO_DEBUGING_
-	MY_TRACE("\nStart Knoten:%s\n",(pointer_to_node)->DisplayName);
-	MY_TRACE("Gesamtanzahl Referenzen an diesem Knoten:%d\n",(pointer_to_node)->NoOfReferences);
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nStart Node:%s\n",(pointer_to_node)->DisplayName);
+	MY_TRACE("Total number of references to this Node:%d\n",(pointer_to_node)->NoOfReferences);
 	if(a_pNodesToBrowse->ReferenceTypeId.Identifier.Numeric!=0 && a_pNodesToBrowse->ReferenceTypeId.IdentifierType==OpcUa_IdentifierType_Numeric)
 	{
 		_BaseAttribute_* pointer_to_reference_type_node = ((_BaseAttribute_*)search_for_node(a_pNodesToBrowse->ReferenceTypeId));
 		OpcUa_ReturnErrorIfNull(pointer_to_reference_type_node, OpcUa_BadNodeIdUnknown);
-		MY_TRACE("Browse nach Referenzen:%s\n",(pointer_to_reference_type_node)->DisplayName);
+		MY_TRACE("Browse by Reference: %s\n",(pointer_to_reference_type_node)->DisplayName);
 	}
 	else
 	{
-		MY_TRACE("Browse nach Referenzen: Filterkriterium nicht gesetzt\n");
+		MY_TRACE("Browse by Reference: Filter criterion not set\n");
 	}
-#endif /*_DEBUGING_*/
-	if((pointer_to_node)->NoOfReferences)/*hat der Startknoten Referenzen ?  Ja->weiter mit for-Schleife ,Nein->nachster Startknoten*/
+#endif /*_DEBUGGING_*/
+	if((pointer_to_node)->NoOfReferences)/*if the start node has references ?  Yes->continue with for-loop ,No->nearest start node*/
 	{
-		for(i=x;i<((pointer_to_node)->NoOfReferences);i++)/*durchsuche alle Referenzen des Startknotens*******/
+		for(i=x;i<((pointer_to_node)->NoOfReferences);i++) /* Check all references to start nodes. *******/
 		{
 			pointer_to_targetnode=(_BaseAttribute_*) search_for_node(((pointer_to_node)->References+i)->Target_NodeId);
 			if(pointer_to_targetnode!=OpcUa_Null)
 			{
-			if(/*pruefe filtermasken: ReferencesTypeId, NodeClassMask*/ ist_unterknoten(a_pNodesToBrowse->ReferenceTypeId,(pointer_to_node->References+i)->ReferenceTypeId,a_pNodesToBrowse->IncludeSubtypes)==OpcUa_True && check_Mask(a_pNodesToBrowse->NodeClassMask, pointer_to_targetnode->NodeClass)==OpcUa_True)
-			{	
-				if(/*pruefe filtermaske browsedir.*/check_dir(a_pNodesToBrowse->BrowseDirection,(pointer_to_node->References+i))==OpcUa_True)
-				{
-								#ifndef NO_DEBUGING_
-									MY_TRACE("TargetNode wird zurueckgeliefert:%s",pointer_to_targetnode->DisplayName);
-								#endif /*_DEBUGING_*/
-								a_pResults->References=OpcUa_Memory_ReAlloc(a_pResults->References,(NoofRef+1)*sizeof(OpcUa_ReferenceDescription));
-								OpcUa_GotoErrorIfAllocFailed((a_pResults->References))
-								OpcUa_ReferenceDescription_Initialize((a_pResults ->References+NoofRef));
-
-								/*NodeId of ReferenceType*/
-								if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_ReferenceTypeId)== OpcUa_True)/*wenn False wird ausmaskiert*/
-								{
-									(a_pResults ->References+NoofRef)->ReferenceTypeId=(pointer_to_node->References+i)->ReferenceTypeId;
-								}
-								/*************************/
-								
-								/*IsForward criteria*/
-								if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_IsForward)== OpcUa_True)/*wenn False wird ausmaskiert*/
-								{
-									if(((pointer_to_node)->References+i)->IsInverse==OpcUa_True)
+				if(/* Check filter masks: ReferencesTypeId, NodeClassMask*/ is_subnode(a_pNodesToBrowse->ReferenceTypeId,(pointer_to_node->References+i)->ReferenceTypeId,a_pNodesToBrowse->IncludeSubtypes)==OpcUa_True && check_Mask(a_pNodesToBrowse->NodeClassMask, pointer_to_targetnode->NodeClass)==OpcUa_True)
+				{	
+					if(/* Check filter mask browsedir.*/check_dir(a_pNodesToBrowse->BrowseDirection,(pointer_to_node->References+i))==OpcUa_True)
+					{
+									#ifndef NO_DEBUGGING_
+										MY_TRACE("TargetNode returned: %s",pointer_to_targetnode->DisplayName);
+									#endif /*_DEBUGGING_*/
+									a_pResults->References=OpcUa_Memory_ReAlloc(a_pResults->References,(NoofRef+1)*sizeof(OpcUa_ReferenceDescription));
+									OpcUa_GotoErrorIfAllocFailed((a_pResults->References))
+									OpcUa_ReferenceDescription_Initialize((a_pResults ->References+NoofRef));
+	
+									/*NodeId of ReferenceType*/
+									if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_ReferenceTypeId)== OpcUa_True)/*if False is masked*/
 									{
-										(a_pResults ->References+NoofRef)->IsForward=OpcUa_False;
+										(a_pResults ->References+NoofRef)->ReferenceTypeId=(pointer_to_node->References+i)->ReferenceTypeId;
 									}
-									else
+									/*************************/
+									
+									/*IsForward criteria*/
+									if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_IsForward)== OpcUa_True)/*if False is masked*/
 									{
-										(a_pResults ->References+NoofRef)->IsForward=OpcUa_True;
-									}
-								}
-								/*************************/
-
-								/*NodeId of target Node*/
-								//OpcUa_String_AttachCopy(&((a_pResults ->References+NoofRef)->NodeId.NamespaceUri),(pointer_to_node->References+i)->Target_NamespaceUri);
-								(a_pResults ->References+NoofRef)->NodeId.NodeId=pointer_to_targetnode->NodeId;
-								(a_pResults ->References+NoofRef)->NodeId.ServerIndex=0;
-								#ifndef NO_DEBUGING_
-									MY_TRACE("|%d| |%d|\n",pointer_to_targetnode->NodeId.NamespaceIndex,pointer_to_targetnode->NodeId.Identifier.Numeric);
-								#endif /*_DEBUGING_*/
-								/**********************/
-
-								/*BrowseName of target Node*/
-								if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_BrowseName)== OpcUa_True)/*wenn False wird ausmaskiert*/
-								{
-									OpcUa_String_AttachCopy(&((a_pResults ->References+NoofRef)->BrowseName.Name),pointer_to_targetnode->BrowseName);
-									(a_pResults ->References+NoofRef)->BrowseName.NamespaceIndex=pointer_to_targetnode->NodeId.NamespaceIndex;
-								}
-								/***************************/
-
-								/*DisplayName of target Node*/
-								if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_DisplayName)== OpcUa_True)/*wenn False wird ausmaskiert*/
-								{
-									OpcUa_String_AttachCopy(&(a_pResults ->References+NoofRef)->DisplayName.Text,pointer_to_targetnode->DisplayName);
-									OpcUa_String_AttachCopy(&(a_pResults ->References+NoofRef)->DisplayName.Locale,"");
-								}
-								/***************************/
-
-								/*NodeClass of target Node*/
-								if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_NodeClass)== OpcUa_True)/*wenn False wird ausmaskiert*/
-								{
-									(a_pResults ->References+NoofRef)->NodeClass=pointer_to_targetnode->NodeClass;
-								}
-								/***************************/
-
-								/*TypeDefitition of target Node*/
-								if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_TypeDefinition)== OpcUa_True)/*wenn False wird ausmaskiert*/
-								{
-									if((pointer_to_targetnode->NodeClass)==OpcUa_NodeClass_Object ||(pointer_to_targetnode->NodeClass)==OpcUa_NodeClass_Variable )
-									{
-										for(n=0;n<(pointer_to_targetnode->NoOfReferences);n++)
+										if(((pointer_to_node)->References+i)->IsInverse==OpcUa_True)
 										{
-											if(((pointer_to_targetnode->References+n)->ReferenceTypeId.Identifier.Numeric)==OpcUaId_HasTypeDefinition)
+											(a_pResults ->References+NoofRef)->IsForward=OpcUa_False;
+										}
+										else
+										{
+											(a_pResults ->References+NoofRef)->IsForward=OpcUa_True;
+										}
+									}
+									/*************************/
+	
+									/*NodeId of target Node*/
+									//OpcUa_String_AttachCopy(&((a_pResults ->References+NoofRef)->NodeId.NamespaceUri),(pointer_to_node->References+i)->Target_NamespaceUri);
+									(a_pResults ->References+NoofRef)->NodeId.NodeId=pointer_to_targetnode->NodeId;
+									(a_pResults ->References+NoofRef)->NodeId.ServerIndex=0;
+									#ifndef NO_DEBUGGING_
+										MY_TRACE("|%d| |%d|\n",pointer_to_targetnode->NodeId.NamespaceIndex,pointer_to_targetnode->NodeId.Identifier.Numeric);
+									#endif /*_DEBUGGING_*/
+									/**********************/
+	
+									/*BrowseName of target Node*/
+									if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_BrowseName)== OpcUa_True)/*if False is masked*/
+									{
+										OpcUa_String_AttachCopy(&((a_pResults ->References+NoofRef)->BrowseName.Name),pointer_to_targetnode->BrowseName);
+										(a_pResults ->References+NoofRef)->BrowseName.NamespaceIndex=pointer_to_targetnode->NodeId.NamespaceIndex;
+									}
+									/***************************/
+	
+									/*DisplayName of target Node*/
+									if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_DisplayName)== OpcUa_True)/*if False is masked*/
+									{
+										OpcUa_String_AttachCopy(&(a_pResults ->References+NoofRef)->DisplayName.Text,pointer_to_targetnode->DisplayName);
+										OpcUa_String_AttachCopy(&(a_pResults ->References+NoofRef)->DisplayName.Locale,"");
+									}
+									/***************************/
+	
+									/*NodeClass of target Node*/
+									if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_NodeClass)== OpcUa_True)/*if False is masked*/
+									{
+										(a_pResults ->References+NoofRef)->NodeClass=pointer_to_targetnode->NodeClass;
+									}
+									/***************************/
+	
+									/*TypeDefinition of target Node*/
+									if(check_Mask(a_pNodesToBrowse->ResultMask,OpcUa_BrowseResultMask_TypeDefinition)== OpcUa_True)/*if False is masked*/
+									{
+										if((pointer_to_targetnode->NodeClass)==OpcUa_NodeClass_Object ||(pointer_to_targetnode->NodeClass)==OpcUa_NodeClass_Variable )
+										{
+											for(n=0;n<(pointer_to_targetnode->NoOfReferences);n++)
 											{
-												//OpcUa_String_AttachCopy(&(a_pResults ->References+NoofRef)->TypeDefinition.NamespaceUri,(pointer_to_targetnode->References+n)->Target_NamespaceUri);
-												(a_pResults ->References+NoofRef)->TypeDefinition.NodeId=(pointer_to_targetnode->References+n)->Target_NodeId;
-												(a_pResults ->References+NoofRef)->TypeDefinition.ServerIndex=0;
+												if(((pointer_to_targetnode->References+n)->ReferenceTypeId.Identifier.Numeric)==OpcUaId_HasTypeDefinition)
+												{
+													//OpcUa_String_AttachCopy(&(a_pResults ->References+NoofRef)->TypeDefinition.NamespaceUri,(pointer_to_targetnode->References+n)->Target_NamespaceUri);
+													(a_pResults ->References+NoofRef)->TypeDefinition.NodeId=(pointer_to_targetnode->References+n)->Target_NodeId;
+													(a_pResults ->References+NoofRef)->TypeDefinition.ServerIndex=0;
+												}
 											}
 										}
 									}
-								}
-								NoofRef++;
-								/*******************************/
-								if(NoofRef >= max_ref_per_node)
-								{
-									if(need_continuationpoint(a_pNodesToBrowse,(i+1))==OpcUa_True )
+									NoofRef++;
+									/*******************************/
+									if(NoofRef >= max_ref_per_node)
 									{
-										a_pResults ->ContinuationPoint.Data=(OpcUa_Byte*)OpcUa_Memory_Alloc(sizeof(_my_continuationpoint_));
-										OpcUa_GotoErrorIfAllocFailed((a_pResults ->ContinuationPoint.Data))
-										a_pResults ->ContinuationPoint.Length=sizeof(_my_continuationpoint_);
-										((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->NodeToBrowse=*a_pNodesToBrowse; //Strukturzuweisung ok.
-										((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->Aktuelle_Ref=(i+1);
-										((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->Cont_Point_Identiefer=Cont_Point_Counter;
-										Continuation_Point_Identifier=Cont_Point_Counter;
-										#ifndef NO_DEBUGING_
+										if(need_continuationpoint(a_pNodesToBrowse,(i+1))==OpcUa_True )
 										{
-											_BaseAttribute_* pointer_to_reference_node = ((_BaseAttribute_*)search_for_node(((pointer_to_node)->References+(i+1))->Target_NodeId));
-											OpcUa_GotoErrorIfNull(pointer_to_reference_node, OpcUa_BadNodeIdUnknown);
-											MY_TRACE("\nContinuationPoint (Identifier:%d) fuer diesen Start Knoten gesetzt.\n",Continuation_Point_Identifier);
-											MY_TRACE("und zeigt auf naechsten TargetNode:%s\n",(pointer_to_reference_node)->DisplayName);
+										    a_pResults ->ContinuationPoint.Data=(OpcUa_Byte*)OpcUa_Memory_Alloc(sizeof(_my_continuationpoint_));
+										    OpcUa_GotoErrorIfAllocFailed((a_pResults ->ContinuationPoint.Data))
+										    a_pResults ->ContinuationPoint.Length=sizeof(_my_continuationpoint_);
+											((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->NodeToBrowse=*a_pNodesToBrowse; //Struct copy ok.
+											((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->Current_Ref=(i+1);
+										    ((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->Cont_Point_Identifier=Cont_Point_Counter;
+											Continuation_Point_Identifier=Cont_Point_Counter;
+											#ifndef NO_DEBUGGING_
+										    {
+											    _BaseAttribute_* pointer_to_reference_node = ((_BaseAttribute_*)search_for_node(((pointer_to_node)->References+(i+1))->Target_NodeId));
+											    OpcUa_GotoErrorIfNull(pointer_to_reference_node, OpcUa_BadNodeIdUnknown);
+												MY_TRACE("\nContinuationPoint (Identifier:%d) set for this Start Node.\n",Continuation_Point_Identifier);
+												MY_TRACE("and points to the next TargetNode:%s\n",(pointer_to_reference_node)->DisplayName);
+										    }
+											#endif /*_DEBUGGING_*/
+											continuation_point=occupied;
+											break;
 										}
-										#endif /*_DEBUGING_*/
-										continuation_point=occupied;
-										break;
 									}
-								}
-				}/*Ende: filtermaske browsedir.*/	
-			}/*Ende: filtermasken ReferencesTypeId, NodeClassMask*/
+					} /* End: filter mask browsedir. */	
+				} /* End: filter masks ReferencesTypeId, NodeClassMask. */
 			}
 			
-		}/*Ende:  (durchsuche alle Referenzen des Startknotens)  *********************************************************/
+		} /* End: (Check all references to start nodes)  *********************************************************/
 		a_pResults ->NoOfReferences=NoofRef;
 	}
 	else
 	{
 		a_pResults ->NoOfReferences=0;
-		a_pResults->References=OpcUa_Null;/*Startknoten hat keine Referenzen. Weiter mit nachsten Startknoten*/
-		#ifndef NO_DEBUGING_
-			MY_TRACE("\nStart Knoten hat keine Referenzen\n");
-		#endif /*_DEBUGING_*/
+		a_pResults->References=OpcUa_Null; /* Start node has no references. Continue with next start node. */
+		#ifndef NO_DEBUGGING_
+			MY_TRACE("\nStart Node has no references\n");
+		#endif /*_DEBUGGING_*/
 	}
 
 	OpcUa_ReturnStatusCode;
@@ -373,13 +372,13 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 	OpcUa_Int i;
 
 
-		//durchsuche alle ObjectTypeNodes--------------------------------------------------------
+		//Check all ObjectTypeNodes--------------------------------------------------------
 		
-			for(i=0;i<ARRAY_SIZE_(alle_ObjectTypeKnoten);i++)
+			for(i=0;i<ARRAY_SIZE_(all_ObjectTypeNodes);i++)
 			{
-				if(Is_my_node(NodeId,alle_ObjectTypeKnoten[i]))
+				if(Is_my_node(NodeId,all_ObjectTypeNodes[i]))
 				{
-					p_Node=(alle_ObjectTypeKnoten+i);
+					p_Node=(all_ObjectTypeNodes+i);
 					break;
 				}
 				
@@ -387,29 +386,29 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 	
 		
 	   
-		//durchsuche alle ObjectNodes--------------------------------------------------------
-		for(i=0;i<ARRAY_SIZE_(alle_ObjectKnoten);i++)
+		//Check all ObjectNodes--------------------------------------------------------
+		for(i=0;i<ARRAY_SIZE_(all_ObjectNodes);i++)
 			{
-				if(Is_my_node(NodeId,alle_ObjectKnoten[i]))
+				if(Is_my_node(NodeId,all_ObjectNodes[i]))
 				{
-					p_Node=(alle_ObjectKnoten+i);
+					p_Node=(all_ObjectNodes+i);
 					break;
 				}
 				
 			}
 
-		//durchsuche alle ReferenceTypeNodes--------------------------------------------------------
-		for(i=0;i<ARRAY_SIZE_(alle_ReferencesTypeKnoten);i++)
+		//Check all ReferenceTypeNodes--------------------------------------------------------
+		for(i=0;i<ARRAY_SIZE_(all_ReferencesTypeNodes);i++)
 			{
-				if(Is_my_node(NodeId,alle_ReferencesTypeKnoten[i]))
+				if(Is_my_node(NodeId,all_ReferencesTypeNodes[i]))
 				{
-					p_Node=(alle_ReferencesTypeKnoten+i);
+					p_Node=(all_ReferencesTypeNodes+i);
 					break;
 				}
 				
 			}
 
-		//durchsuche alle VariableNodes--------------------------------------------------------
+		//Check all VariableNodes--------------------------------------------------------
 			for(i=0;i<ARRAY_SIZE_(all_VariableNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_VariableNodes[i]))
@@ -420,7 +419,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 				
 			}
 
-		//durchsuche alle VariableTypeNodes--------------------------------------------------------
+		//Check all VariableTypeNodes--------------------------------------------------------
 		for(i=0;i<ARRAY_SIZE_(all_VariableTypeNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_VariableTypeNodes[i]))
@@ -431,12 +430,12 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 				
 			}
 
-		//durchsuche alle DataTypeNodes--------------------------------------------------------
-		for(i=0;i<ARRAY_SIZE_(alle_DataTypeKnoten);i++)
+		//Check all DataTypeNodes--------------------------------------------------------
+		for(i=0;i<ARRAY_SIZE_(all_DataTypeNodes);i++)
 			{
-				if(Is_my_node(NodeId,alle_DataTypeKnoten[i]))
+				if(Is_my_node(NodeId,all_DataTypeNodes[i]))
 				{
-					p_Node=(alle_DataTypeKnoten+i);
+					p_Node=(all_DataTypeNodes+i);
 					break;
 				}
 				
@@ -447,7 +446,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 }
 
 
-OpcUa_Boolean  ist_unterknoten( OpcUa_NodeId  start_NodeId, OpcUa_NodeId  gesuchter_knoten,OpcUa_Boolean IncludeSubtypes)
+OpcUa_Boolean  is_subnode( OpcUa_NodeId  start_NodeId, OpcUa_NodeId  desired_node,OpcUa_Boolean IncludeSubtypes)
 {
 	
 		OpcUa_Int z;
@@ -460,14 +459,14 @@ OpcUa_Boolean  ist_unterknoten( OpcUa_NodeId  start_NodeId, OpcUa_NodeId  gesuch
 		}
 		if(IncludeSubtypes==OpcUa_False)
 		{
-			if(compare_nodes(start_NodeId,gesuchter_knoten))
+			if(compare_nodes(start_NodeId,desired_node))
 				return OpcUa_True;
 			else
 				return OpcUa_False;
 		}
 
 	
-		if(compare_nodes(start_NodeId,gesuchter_knoten))
+		if(compare_nodes(start_NodeId,desired_node))
 		{ 
 			return OpcUa_True;
 		}
@@ -477,7 +476,7 @@ OpcUa_Boolean  ist_unterknoten( OpcUa_NodeId  start_NodeId, OpcUa_NodeId  gesuch
 			{
 				for(z=0;z<(p_Node->NoOfReferences);z++)
 				{
-					if(compare_nodes((p_Node->References+z)->Target_NodeId,gesuchter_knoten))
+					if(compare_nodes((p_Node->References+z)->Target_NodeId,desired_node))
 					{
 						return OpcUa_True;
 					}
@@ -486,7 +485,7 @@ OpcUa_Boolean  ist_unterknoten( OpcUa_NodeId  start_NodeId, OpcUa_NodeId  gesuch
 						p_Node_2=(_BaseAttribute_*)search_for_node((p_Node->References+z)->Target_NodeId);
 						if((p_Node_2->NoOfReferences)!=0 )
 						{
-							if(ist_unterknoten((p_Node->References+z)->Target_NodeId,gesuchter_knoten,OpcUa_True)==OpcUa_True)
+							if(is_subnode((p_Node->References+z)->Target_NodeId,desired_node,OpcUa_True)==OpcUa_True)
 								return OpcUa_True;
 						}
 					}
@@ -508,9 +507,6 @@ OpcUa_Boolean check_Mask(OpcUa_UInt32 Mask,OpcUa_UInt32 attribute_of_targetNode_
 	}
 	return OpcUa_True;
 }
-
-
-
 
 OpcUa_Boolean check_dir(OpcUa_BrowseDirection browsedir,_ReferenceNode_* p_ref)
 {
@@ -538,10 +534,10 @@ OpcUa_Boolean need_continuationpoint(OpcUa_BrowseDescription* NodeToBrowse,OpcUa
 
 	pointer_to_node= (_BaseAttribute_*)search_for_node(NodeToBrowse->NodeId);
 
-	for(i=x;i<((pointer_to_node)->NoOfReferences);i++)/*iterate over all references of startnode*******/
+	for(i=x;i<((pointer_to_node)->NoOfReferences);i++)/* Iterate over all references of start node. */
 	{
 		pointer_to_targetnode=(_BaseAttribute_*) search_for_node(((pointer_to_node)->References+i)->Target_NodeId);
-		if( ist_unterknoten(NodeToBrowse->ReferenceTypeId,(pointer_to_node->References+i)->ReferenceTypeId,NodeToBrowse->IncludeSubtypes)==OpcUa_True && check_Mask(NodeToBrowse->NodeClassMask, pointer_to_targetnode->NodeClass))
+		if( is_subnode(NodeToBrowse->ReferenceTypeId,(pointer_to_node->References+i)->ReferenceTypeId,NodeToBrowse->IncludeSubtypes)==OpcUa_True && check_Mask(NodeToBrowse->NodeClassMask, pointer_to_targetnode->NodeClass))
 		{	
 			if(check_dir(NodeToBrowse->BrowseDirection,(pointer_to_node->References+i))==OpcUa_True)
 			{
@@ -550,8 +546,7 @@ OpcUa_Boolean need_continuationpoint(OpcUa_BrowseDescription* NodeToBrowse,OpcUa
 		}
 	}
 	if(counter>0)
-		return OpcUa_True;   //continuationpoint is needed
+		return OpcUa_True;   /* Continuationpoint is needed. */
 	else 
-		return OpcUa_False;  //do not need continuationpoint
+		return OpcUa_False;  /* Do not need continuationpoint. */
 }
-

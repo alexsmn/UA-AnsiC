@@ -49,7 +49,7 @@ OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(O
 	extern my_Variant			all_ValueAttribute_of_VariableTypeNodes_VariableNodes[];
 	OpcUa_InitializeStatus(OpcUa_Module_Server, "initialize_value_attribute_of_variablenodes_variabletypenodes");
 
-/*initializing session relevant variables*/
+/* Initialize relevant session variables. */
 	Continuation_Point_Identifier=0;
 	Cont_Point_Counter=0;
 	session_flag=SESSION_NOT_ACTIVATED;
