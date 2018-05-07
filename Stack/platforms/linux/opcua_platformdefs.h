@@ -59,6 +59,15 @@
 /* used ie. for unlimited timespans */
 #define OPCUA_INFINITE 0xFFFFFFFF
 
+/* Some compilers support applying printf-style warnings. */
+#if defined(__GNUC__)
+#define OPCUA_PRINTF_ARGS(formatIndex) __attribute__((__format__(__printf__, (formatIndex), (formatIndex) + 1)))
+#define OPCUA_PRINTF_VALIST(formatIndex) __attribute__((__format__(__printf__, (formatIndex), 0)))
+#else
+#define OPCUA_PRINTF_ARGS(formatIndex)
+#define OPCUA_PRINTF_VALIST(formatIndex)
+#endif
+
 /*============================================================================
 * Additional basic headers
 *===========================================================================*/
@@ -184,7 +193,7 @@ OPCUA_BEGIN_EXTERN_C
 /* OpcUa_Int sscanf(const OpcUa_CharA *buffer, const OpcUa_CharA *format, ... ); */
 #define OpcUa_SScanfA                                 sscanf
 
-OpcUa_Int32 OpcUa_P_String_snprintf(OpcUa_StringA sTarget, OpcUa_UInt32 nCount, OpcUa_StringA sFormat, ...);
+OpcUa_Int32 OpcUa_P_String_snprintf(OpcUa_StringA sTarget, OpcUa_UInt32 nCount, OpcUa_StringA sFormat, ...) OPCUA_PRINTF_ARGS(3);
 #define OpcUa_SnPrintfA                               OpcUa_P_String_snprintf
 
 /* shortcuts to OpcUa_String functions */

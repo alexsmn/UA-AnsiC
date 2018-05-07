@@ -59,9 +59,9 @@ OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_strnicmp(OpcUa_StringA string1, OpcUa_S
 /*============================================================================
 * Print a list of values into a string.
 *===========================================================================*/
-OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_vsnprintf(OpcUa_StringA sDest, OpcUa_UInt32 uCount, const OpcUa_StringA sFormat, varg_list argptr);
+OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_vsnprintf(OpcUa_StringA sDest, OpcUa_UInt32 uCount, const OpcUa_StringA sFormat, varg_list argptr) OPCUA_PRINTF_VALIST(3);
 
 /*============================================================================
 * Print a list of values into a string with a max length.
 *===========================================================================*/
-OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_snprintf(OpcUa_StringA sTarget, OpcUa_UInt32  nCount, OpcUa_StringA sFormat, ...);
+OpcUa_Int32 OPCUA_DLLCALL OpcUa_P_String_snprintf(OpcUa_StringA sTarget, OpcUa_UInt32  nCount, OpcUa_StringA sFormat, ...) OPCUA_PRINTF_ARGS(3);

@@ -120,14 +120,14 @@ OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_OpenSSLSeedPRNG(      OpcUa_By
 OPCUA_EXPORT OpcUa_Int32      OPCUA_DLLCALL OpcUa_StringA_vsnprintf(    OpcUa_StringA               sDest,
                                                                         OpcUa_UInt32                uCount,
                                                                         const OpcUa_StringA         sFormat,
-                                                                        varg_list                   argptr);
-
+                                                                        varg_list                   argptr)
+                                                                        OPCUA_PRINTF_VALIST(3);
 
 OPCUA_EXPORT OpcUa_Int32      OPCUA_DLLCALL OpcUa_StringA_snprintf(     OpcUa_StringA               sDest,
                                                                         OpcUa_UInt32                uCount,
                                                                         const OpcUa_StringA         sFormat,
-                                                                        ...);
-
+                                                                        ...)
+                                                                        OPCUA_PRINTF_ARGS(3);
 
 OPCUA_END_EXTERN_C
 

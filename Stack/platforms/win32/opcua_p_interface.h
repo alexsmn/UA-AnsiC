@@ -411,7 +411,8 @@ struct S_OpcUa_Port_CallTable
     OpcUa_Int32         (OPCUA_DLLCALL* StrVsnPrintf)             ( OpcUa_StringA               sDest,
                                                                     OpcUa_UInt32                uCount,
                                                                     const OpcUa_StringA         sFormat,
-                                                                    varg_list                   argptr);
+                                                                    varg_list                   argptr)
+                                                                    OPCUA_PRINTF_VALIST(3);
 
     /**@} String Functions */
     /**@name Utility Functions */

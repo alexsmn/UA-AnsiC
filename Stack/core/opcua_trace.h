@@ -113,7 +113,13 @@ OPCUA_EXPORT OpcUa_Boolean OPCUA_DLLCALL OpcUa_Trace_Imp(
     OpcUa_UInt32 sLine,
 #endif /* OPCUA_TRACE_FILE_LINE_INFO */
     OpcUa_CharA* sFormat,
-    ...);
+    ...)
+#if OPCUA_TRACE_FILE_LINE_INFO
+    OPCUA_PRINTF_ARGS(4)
+#else
+    OPCUA_PRINTF_ARGS(2)
+#endif
+    ;
 
 OPCUA_EXPORT OpcUa_Boolean OPCUA_DLLCALL OpcUa_Trace_Nop(
     OpcUa_UInt32 uTraceLevel,
@@ -122,7 +128,13 @@ OPCUA_EXPORT OpcUa_Boolean OPCUA_DLLCALL OpcUa_Trace_Nop(
     OpcUa_UInt32 sLine,
 #endif /* OPCUA_TRACE_FILE_LINE_INFO */
     OpcUa_CharA* sFormat,
-    ...);
+    ...)
+#if OPCUA_TRACE_FILE_LINE_INFO
+    OPCUA_PRINTF_ARGS(4)
+#else
+    OPCUA_PRINTF_ARGS(2)
+#endif
+    ;
 
 OPCUA_END_EXTERN_C
 

@@ -90,6 +90,10 @@ OPCUA_BEGIN_EXTERN_C
 /* used ie. for unlimited timespans */
 #define OPCUA_INFINITE 0xFFFFFFFF
 
+/* Some compilers support applying printf-style warnings. */
+#define OPCUA_PRINTF_ARGS(formatIndex)
+#define OPCUA_PRINTF_VALIST(formatIndex)
+
 /*============================================================================
 * Additional basic headers
 *===========================================================================*/
