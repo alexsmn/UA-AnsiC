@@ -211,12 +211,15 @@ OpcUa_StatusCode browse(OpcUa_BrowseDescription* a_pNodesToBrowse,OpcUa_BrowseRe
 	NoofRef						=0;
 	Cont_Point_Counter			=Cont_Point_Counter+4;
 	pointer_to_node= (_BaseAttribute_*)search_for_node(a_pNodesToBrowse->NodeId);
+	OpcUa_ReturnErrorIfNull(pointer_to_node, OpcUa_BadNodeIdUnknown);
 #ifndef NO_DEBUGING_
-	MY_TRACE("\nStart Knoten:%s\n",((_BaseAttribute_*)search_for_node(a_pNodesToBrowse->NodeId))->DisplayName);
+	MY_TRACE("\nStart Knoten:%s\n",(pointer_to_node)->DisplayName);
 	MY_TRACE("Gesamtanzahl Referenzen an diesem Knoten:%d\n",(pointer_to_node)->NoOfReferences);
 	if(a_pNodesToBrowse->ReferenceTypeId.Identifier.Numeric!=0 && a_pNodesToBrowse->ReferenceTypeId.IdentifierType==OpcUa_IdentifierType_Numeric)
 	{
-		MY_TRACE("Browse nach Referenzen:%s\n",((_BaseAttribute_*)search_for_node(a_pNodesToBrowse->ReferenceTypeId))->DisplayName);
+		_BaseAttribute_* pointer_to_reference_type_node = ((_BaseAttribute_*)search_for_node(a_pNodesToBrowse->ReferenceTypeId));
+		OpcUa_ReturnErrorIfNull(pointer_to_reference_type_node, OpcUa_BadNodeIdUnknown);
+		MY_TRACE("Browse nach Referenzen:%s\n",(pointer_to_reference_type_node)->DisplayName);
 	}
 	else
 	{
@@ -324,8 +327,12 @@ OpcUa_StatusCode browse(OpcUa_BrowseDescription* a_pNodesToBrowse,OpcUa_BrowseRe
 										((_my_continuationpoint_*)a_pResults->ContinuationPoint.Data)->Cont_Point_Identiefer=Cont_Point_Counter;
 										Continuation_Point_Identifier=Cont_Point_Counter;
 										#ifndef NO_DEBUGING_
+										{
+											_BaseAttribute_* pointer_to_reference_node = ((_BaseAttribute_*)search_for_node(((pointer_to_node)->References+(i+1))->Target_NodeId));
+											OpcUa_GotoErrorIfNull(pointer_to_reference_node, OpcUa_BadNodeIdUnknown);
 											MY_TRACE("\nContinuationPoint (Identifier:%d) fuer diesen Start Knoten gesetzt.\n",Continuation_Point_Identifier);
-											MY_TRACE("und zeigt auf naechsten TargetNode:%s\n",((_BaseAttribute_*) search_for_node(((pointer_to_node)->References+(i+1))->Target_NodeId))->DisplayName);
+											MY_TRACE("und zeigt auf naechsten TargetNode:%s\n",(pointer_to_reference_node)->DisplayName);
+										}
 										#endif /*_DEBUGING_*/
 										continuation_point=occupied;
 										break;
