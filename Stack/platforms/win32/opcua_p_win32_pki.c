@@ -88,7 +88,7 @@ static OpcUa_Char* OpcUa_P_Win32_MultiByteToWideChar(OpcUa_StringA a_sSrc)
     OpcUa_CharA* pData = OpcUa_Null;
     OpcUa_Char* pUnicode = OpcUa_Null;
 
-    if (a_sSrc == OpcUa_Null)
+    if(a_sSrc == OpcUa_Null)
     {
         return OpcUa_Null;
     }
@@ -104,12 +104,17 @@ static OpcUa_Char* OpcUa_P_Win32_MultiByteToWideChar(OpcUa_StringA a_sSrc)
         0,
         0);
 
-    if (iLength == 0)
+    if(iLength == 0)
     {
         return OpcUa_Null;
     }
 
     pUnicode = (OpcUa_Char*)OpcUa_P_Memory_Alloc((iLength+1)*sizeof(OpcUa_Char));
+    if(pUnicode == OpcUa_Null)
+    {
+        return OpcUa_Null;
+    }
+
     OpcUa_MemSet(pUnicode, 0, (iLength+1)*sizeof(OpcUa_Char));
 
     iResult = MultiByteToWideChar(
@@ -120,7 +125,7 @@ static OpcUa_Char* OpcUa_P_Win32_MultiByteToWideChar(OpcUa_StringA a_sSrc)
         pUnicode,
         iLength);
 
-    if (iResult == 0)
+    if(iResult == 0)
     {
         OpcUa_P_Memory_Free(pUnicode);
         return OpcUa_Null;
@@ -168,7 +173,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_Win32, "PKI_OpenCertificateStore");
        uStatus = OpcUa_Bad;
     }
 
-    if (pStoreName != OpcUa_Null)
+    if(pStoreName != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(pStoreName);
     }
@@ -195,7 +200,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_Win32, "PKI_CloseCertificateStore");
         if(*a_ppCertificateStore)
         {
             /*** CLOSE CERTIFICATE STORE ***/
-            if (!CertCloseStore(*a_ppCertificateStore, CERT_CLOSE_STORE_FORCE_FLAG))
+            if(!CertCloseStore(*a_ppCertificateStore, CERT_CLOSE_STORE_FORCE_FLAG))
             {
                 uStatus = OpcUa_Bad;
             }
@@ -356,7 +361,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_Win32, "PKI_ValidateCertificate");
     } /* end switch */
 
     /* Check if any certificate of the chain is in the store if trusted certificates */
-    if (pCertificateStoreCfg->Flags & OPCUA_P_PKI_WIN32_REQUIRE_CHAIN_CERTIFICATE_IN_TRUST_LIST)
+    if(pCertificateStoreCfg->Flags & OPCUA_P_PKI_WIN32_REQUIRE_CHAIN_CERTIFICATE_IN_TRUST_LIST)
     {
         DWORD           chaindepth       = pChainContext->cChain == 1 ? pChainContext->rgpChain[0]->cElement : 0;
         PCCERT_CONTEXT  pSearchCert      = OpcUa_Null;
@@ -367,9 +372,9 @@ OpcUa_InitializeStatus(OpcUa_Module_P_Win32, "PKI_ValidateCertificate");
             for (nElement = 0; nElement < chaindepth; nElement++)
             {
                 PCCERT_CONTEXT pElement = pChainContext->rgpChain[0]->rgpElement[nElement]->pCertContext;
-                if ( pElement->cbCertEncoded == pSearchCert->cbCertEncoded )
+                if(pElement->cbCertEncoded == pSearchCert->cbCertEncoded)
                 {
-                    if ( OpcUa_MemCmp(pElement->pbCertEncoded, pSearchCert->pbCertEncoded, pTargetCert->cbCertEncoded) == 0 )
+                    if(OpcUa_MemCmp(pElement->pbCertEncoded, pSearchCert->pbCertEncoded, pTargetCert->cbCertEncoded) == 0)
                     {
                         goto break_loop;
                     }
@@ -378,7 +383,7 @@ OpcUa_InitializeStatus(OpcUa_Module_P_Win32, "PKI_ValidateCertificate");
         }
 
 break_loop:
-        if (pSearchCert)
+        if(pSearchCert)
         {
             CertFreeCertificateContext(pSearchCert);
         }
@@ -390,31 +395,27 @@ break_loop:
 
     /*** FREE RESOURCES ***/
 
-    if (pTargetCert)
+    if(pTargetCert)
     {
         CertFreeCertificateContext(pTargetCert);
-        pTargetCert = OpcUa_Null;
     }
 
     if(pChainContext)
     {
         CertFreeCertificateChain(pChainContext);
-        pChainContext = OpcUa_Null;
     }
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
-    if (pTargetCert)
+    if(pTargetCert)
     {
         CertFreeCertificateContext(pTargetCert);
-        pTargetCert = OpcUa_Null;
     }
 
     if(pChainContext)
     {
         CertFreeCertificateChain(pChainContext);
-        pChainContext = OpcUa_Null;
     }
 
 OpcUa_FinishErrorHandling;
@@ -508,6 +509,7 @@ OpcUa_StatusCode OpcUa_P_Win32_PKI_LoadCertificate(
         /* certificate found */
         a_pCertificate->Length = pTargetCert->cbCertEncoded;
         a_pCertificate->Data = (OpcUa_Byte*)OpcUa_P_Memory_Alloc(a_pCertificate->Length*sizeof(OpcUa_Byte));
+        OpcUa_GotoErrorIfAllocFailed(a_pCertificate->Data);
 
         uStatus = OpcUa_P_Memory_MemCpy(a_pCertificate->Data, a_pCertificate->Length, pTargetCert->pbCertEncoded, a_pCertificate->Length);
         OpcUa_GotoErrorIfBad(uStatus);
@@ -520,13 +522,12 @@ OpcUa_StatusCode OpcUa_P_Win32_PKI_LoadCertificate(
 
 
     /*** FREE RESOURCES ***/
-    if (pTargetCert)
+    if(pTargetCert)
     {
         CertFreeCertificateContext(pTargetCert);
-        pTargetCert = OpcUa_Null;
     }
 
-    if (pSubjectName != OpcUa_Null)
+    if(pSubjectName != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(pSubjectName);
     }
@@ -535,10 +536,9 @@ OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
     /*** FREE RESOURCES ***/
-    if (pTargetCert)
+    if(pTargetCert)
     {
         CertFreeCertificateContext(pTargetCert);
-        pTargetCert = OpcUa_Null;
     }
 
     if(a_pCertificate)
@@ -546,7 +546,7 @@ OpcUa_BeginErrorHandling;
         OpcUa_P_ByteString_Clear(a_pCertificate);
     }
 
-    if (pSubjectName != OpcUa_Null)
+    if(pSubjectName != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(pSubjectName);
     }
@@ -760,7 +760,7 @@ OpcUa_StatusCode OpcUa_P_Win32_LoadPrivateKeyFromKeyStore(
         }
     }
 
-    if (pSubjectName != OpcUa_Null)
+    if(pSubjectName != OpcUa_Null)
     {
         OpcUa_P_Memory_Free(pSubjectName);
     }
