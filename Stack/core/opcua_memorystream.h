@@ -73,7 +73,9 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_MemoryStream_GetBuffer(
   @param Type       [in] Type name w/o "OpcUa_"
 */
 #define OPCUA_DECLARE_GENERIC_COPY(Type) \
-OpcUa_StatusCode OpcUa_##Type##_CopyTo(OpcUa_##Type *, OpcUa_##Type *);
+OPCUA_BEGIN_EXTERN_C \
+OpcUa_StatusCode OpcUa_##Type##_CopyTo(OpcUa_##Type *, OpcUa_##Type *); \
+OPCUA_END_EXTERN_C
 
 /**
   @brief Implement OpcUa_##Type##_CopyTo function for scalar type.
@@ -82,6 +84,7 @@ OpcUa_StatusCode OpcUa_##Type##_CopyTo(OpcUa_##Type *, OpcUa_##Type *);
   @param SizeHint   [in] Allocation size hint
 */
 #define OPCUA_IMPLEMENT_SCALAR_COPY(Type, SizeHint) \
+OPCUA_BEGIN_EXTERN_C \
 OpcUa_StatusCode OpcUa_##Type##_CopyTo(OpcUa_##Type *pInput, OpcUa_##Type *pOutput) \
 { \
    extern OpcUa_EncodeableTypeTable OpcUa_ProxyStub_g_EncodeableTypes; \
@@ -133,7 +136,8 @@ err1: \
 err0: \
    OpcUa_MessageContext_Clear(&cContext); \
    return uStatus; \
-}
+} \
+OPCUA_END_EXTERN_C
 
 /**
   @brief Implement OpcUa_##Type##_CopyTo function for encodeable type.
@@ -142,6 +146,7 @@ err0: \
   @param SizeHint   [in] Allocation size hint
 */
 #define OPCUA_IMPLEMENT_ENCODEABLE_COPY(Type, SizeHint) \
+OPCUA_BEGIN_EXTERN_C \
 OpcUa_StatusCode OpcUa_##Type##_CopyTo(OpcUa_##Type *pInput, OpcUa_##Type *pOutput) \
 { \
    extern OpcUa_EncodeableTypeTable OpcUa_ProxyStub_g_EncodeableTypes; \
@@ -193,7 +198,151 @@ err1: \
 err0: \
    OpcUa_MessageContext_Clear(&cContext); \
    return uStatus; \
-}
+} \
+OPCUA_END_EXTERN_C
+
+/**
+  @brief Declare OpcUa_##Type##_Compare function for whatever type you want.
+
+  Declare the generic OpcUa_##Type##_Compare function.
+  The first two params are the inputs, the third param is the compare result.
+
+  @param Type       [in] Type name w/o "OpcUa_"
+*/
+#define OPCUA_DECLARE_GENERIC_COMPARE(Type) \
+OPCUA_BEGIN_EXTERN_C \
+OpcUa_StatusCode OpcUa_##Type##_Compare(OpcUa_##Type *, OpcUa_##Type *, OpcUa_Int32 *); \
+OPCUA_END_EXTERN_C
+
+/**
+  @brief Implement OpcUa_##Type##_Compare function for scalar type.
+
+  @param Type       [in] Type name w/o "OpcUa_"
+  @param SizeHint   [in] Allocation size hint
+*/
+#define OPCUA_IMPLEMENT_SCALAR_COMPARE(Type, SizeHint) \
+OPCUA_BEGIN_EXTERN_C \
+OpcUa_StatusCode OpcUa_##Type##_Compare(OpcUa_##Type *pInput1, OpcUa_##Type *pInput2, OpcUa_Int32 *pResult) \
+{ \
+   extern OpcUa_EncodeableTypeTable OpcUa_ProxyStub_g_EncodeableTypes; \
+   extern OpcUa_StringTable OpcUa_ProxyStub_g_NamespaceUris; \
+   OpcUa_StatusCode uStatus; \
+   OpcUa_MessageContext cContext; \
+   OpcUa_Encoder* pEncoder; \
+   OpcUa_Handle hEncoderContext; \
+   OpcUa_OutputStream* pOutputStream1; \
+   OpcUa_OutputStream* pOutputStream2; \
+   OpcUa_Byte* pBuffer1; \
+   OpcUa_UInt32 uBufferSize1; \
+   OpcUa_Byte* pBuffer2; \
+   OpcUa_UInt32 uBufferSize2; \
+   OpcUa_MessageContext_Initialize(&cContext); \
+   cContext.KnownTypes = &OpcUa_ProxyStub_g_EncodeableTypes; \
+   cContext.NamespaceUris = &OpcUa_ProxyStub_g_NamespaceUris; \
+   cContext.AlwaysCheckLengths = OpcUa_False; \
+   uStatus = OpcUa_MemoryStream_CreateWriteable(SizeHint, 0, &pOutputStream1); \
+   if (OpcUa_IsBad(uStatus)) goto err0; \
+   uStatus = OpcUa_MemoryStream_CreateWriteable(SizeHint, 0, &pOutputStream2); \
+   if (OpcUa_IsBad(uStatus)) goto err1; \
+   uStatus = OpcUa_BinaryEncoder_Create(&pEncoder); \
+   if (OpcUa_IsBad(uStatus)) goto err2; \
+   uStatus = pEncoder->Open(pEncoder, pOutputStream1, &cContext, &hEncoderContext); \
+   if (OpcUa_IsBad(uStatus)) goto err3; \
+   uStatus = pEncoder->Write##Type((OpcUa_Encoder*)hEncoderContext, OpcUa_Null, pInput1, OpcUa_Null); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   OpcUa_Encoder_Close(pEncoder, &hEncoderContext); \
+   uStatus = pEncoder->Open(pEncoder, pOutputStream2, &cContext, &hEncoderContext); \
+   if (OpcUa_IsBad(uStatus)) goto err3; \
+   uStatus = pEncoder->Write##Type((OpcUa_Encoder*)hEncoderContext, OpcUa_Null, pInput2, OpcUa_Null); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   pOutputStream1->Close((OpcUa_Stream*)pOutputStream1); \
+   uStatus = OpcUa_MemoryStream_GetBuffer(pOutputStream1, &pBuffer1, &uBufferSize1); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   pOutputStream2->Close((OpcUa_Stream*)pOutputStream2); \
+   uStatus = OpcUa_MemoryStream_GetBuffer(pOutputStream2, &pBuffer2, &uBufferSize2); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   if (uBufferSize1 == uBufferSize2) \
+       *pResult = OpcUa_MemCmp(pBuffer1, pBuffer2, uBufferSize1); \
+   else \
+       *pResult = (OpcUa_Int32)(uBufferSize1-uBufferSize2); \
+err4: \
+   OpcUa_Encoder_Close(pEncoder, &hEncoderContext); \
+err3: \
+   OpcUa_Encoder_Delete(&pEncoder); \
+err2: \
+   pOutputStream2->Delete((OpcUa_Stream**)&pOutputStream2); \
+err1: \
+   pOutputStream1->Delete((OpcUa_Stream**)&pOutputStream1); \
+err0: \
+   OpcUa_MessageContext_Clear(&cContext); \
+   return uStatus; \
+} \
+OPCUA_END_EXTERN_C
+
+/**
+  @brief Implement OpcUa_##Type##_Compare function for encodeable type.
+
+  @param Type       [in] Type name w/o "OpcUa_"
+  @param SizeHint   [in] Allocation size hint
+*/
+#define OPCUA_IMPLEMENT_ENCODEABLE_COMPARE(Type, SizeHint) \
+OPCUA_BEGIN_EXTERN_C \
+OpcUa_StatusCode OpcUa_##Type##_Compare(OpcUa_##Type *pInput1, OpcUa_##Type *pInput2, OpcUa_Int32 *pResult) \
+{ \
+   extern OpcUa_EncodeableTypeTable OpcUa_ProxyStub_g_EncodeableTypes; \
+   extern OpcUa_StringTable OpcUa_ProxyStub_g_NamespaceUris; \
+   OpcUa_StatusCode uStatus; \
+   OpcUa_MessageContext cContext; \
+   OpcUa_Encoder* pEncoder; \
+   OpcUa_Handle hEncoderContext; \
+   OpcUa_OutputStream* pOutputStream1; \
+   OpcUa_OutputStream* pOutputStream2; \
+   OpcUa_Byte* pBuffer1; \
+   OpcUa_UInt32 uBufferSize1; \
+   OpcUa_Byte* pBuffer2; \
+   OpcUa_UInt32 uBufferSize2; \
+   OpcUa_MessageContext_Initialize(&cContext); \
+   cContext.KnownTypes = &OpcUa_ProxyStub_g_EncodeableTypes; \
+   cContext.NamespaceUris = &OpcUa_ProxyStub_g_NamespaceUris; \
+   cContext.AlwaysCheckLengths = OpcUa_False; \
+   uStatus = OpcUa_MemoryStream_CreateWriteable(SizeHint, 0, &pOutputStream1); \
+   if (OpcUa_IsBad(uStatus)) goto err0; \
+   uStatus = OpcUa_MemoryStream_CreateWriteable(SizeHint, 0, &pOutputStream2); \
+   if (OpcUa_IsBad(uStatus)) goto err1; \
+   uStatus = OpcUa_BinaryEncoder_Create(&pEncoder); \
+   if (OpcUa_IsBad(uStatus)) goto err2; \
+   uStatus = pEncoder->Open(pEncoder, pOutputStream1, &cContext, &hEncoderContext); \
+   if (OpcUa_IsBad(uStatus)) goto err3; \
+   uStatus = OpcUa_##Type##_Encode(pInput1, (OpcUa_Encoder*)hEncoderContext); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   OpcUa_Encoder_Close(pEncoder, &hEncoderContext); \
+   uStatus = pEncoder->Open(pEncoder, pOutputStream2, &cContext, &hEncoderContext); \
+   if (OpcUa_IsBad(uStatus)) goto err3; \
+   uStatus = OpcUa_##Type##_Encode(pInput2, (OpcUa_Encoder*)hEncoderContext); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   pOutputStream1->Close((OpcUa_Stream*)pOutputStream1); \
+   uStatus = OpcUa_MemoryStream_GetBuffer(pOutputStream1, &pBuffer1, &uBufferSize1); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   pOutputStream2->Close((OpcUa_Stream*)pOutputStream2); \
+   uStatus = OpcUa_MemoryStream_GetBuffer(pOutputStream2, &pBuffer2, &uBufferSize2); \
+   if (OpcUa_IsBad(uStatus)) goto err4; \
+   if (uBufferSize1 == uBufferSize2) \
+       *pResult = OpcUa_MemCmp(pBuffer1, pBuffer2, uBufferSize1); \
+   else \
+       *pResult = (OpcUa_Int32)(uBufferSize1-uBufferSize2); \
+err4: \
+   OpcUa_Encoder_Close(pEncoder, &hEncoderContext); \
+err3: \
+   OpcUa_Encoder_Delete(&pEncoder); \
+err2: \
+   pOutputStream2->Delete((OpcUa_Stream**)&pOutputStream2); \
+err1: \
+   pOutputStream1->Delete((OpcUa_Stream**)&pOutputStream1); \
+err0: \
+   OpcUa_MessageContext_Clear(&cContext); \
+   return uStatus; \
+} \
+OPCUA_END_EXTERN_C
 
 OPCUA_END_EXTERN_C
 
