@@ -130,7 +130,7 @@ OpcUa_StatusCode my_BrowseNext(
 		for(m=0;m<a_nNoOfContinuationPoints;m++)
 		{
 			OpcUa_BrowseResult_Initialize((*a_pResults+m));
-			if((a_pContinuationPoints+m)->Data!=OpcUa_Null)
+			if((a_pContinuationPoints+m)->Data!=OpcUa_Null && (a_pContinuationPoints+m)->Length>=sizeof(_my_continuationpoint_))
 			{
 				if((((_my_continuationpoint_*)(a_pContinuationPoints+m)->Data)->Cont_Point_Identiefer)==Continuation_Point_Identifier)
 				{
