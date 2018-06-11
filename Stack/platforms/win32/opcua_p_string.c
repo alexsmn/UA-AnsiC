@@ -49,11 +49,6 @@
 #include <opcua_string.h>
 #include <opcua_p_string.h>
 
-#ifndef _INC_STDIO
-/* int vsnprintf(char* DstBuf, size_t MaxCount, const char* Format, va_list ArgList); */
-int _vsnprintf(char* DstBuf, size_t MaxCount, const char* Format, va_list ArgList);
-#endif /* _INC_STDIO */
-
 /*============================================================================
  * Copy uintCount Characters from a OpcUa_StringA to another OpcUa_StringA
  *===========================================================================*/
