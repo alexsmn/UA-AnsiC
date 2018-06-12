@@ -153,7 +153,7 @@ OpcUa_Void          OpcUa_Socket_Clear(         OpcUa_Socket pSocket);
 /*============================================================================
  * Allocate SocketManager Type
  *===========================================================================*/
-OpcUa_SocketManager OpcUa_SocketManager_Alloc(OpcUa_Void);
+OpcUa_SocketManager OpcUa_SocketManager_Alloc(void);
 
 /*============================================================================
  * Initialize SocketManager Type

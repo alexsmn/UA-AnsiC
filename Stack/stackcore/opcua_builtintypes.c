@@ -288,7 +288,7 @@ OpcUa_Void OpcUa_DiagnosticInfo_Clear(OpcUa_DiagnosticInfo* a_pValue)
 /*============================================================================
  * OpcUa_LocalizedText_Initialize
  *===========================================================================*/
-void OpcUa_LocalizedText_Initialize(OpcUa_LocalizedText* a_pValue)
+OpcUa_Void OpcUa_LocalizedText_Initialize(OpcUa_LocalizedText* a_pValue)
 {
     if (a_pValue != OpcUa_Null)
     {
@@ -300,7 +300,7 @@ void OpcUa_LocalizedText_Initialize(OpcUa_LocalizedText* a_pValue)
 /*============================================================================
  * OpcUa_LocalizedText_Clear
  *===========================================================================*/
-void OpcUa_LocalizedText_Clear(OpcUa_LocalizedText* a_pValue)
+OpcUa_Void OpcUa_LocalizedText_Clear(OpcUa_LocalizedText* a_pValue)
 {
     if (a_pValue != OpcUa_Null)
     {
@@ -312,7 +312,7 @@ void OpcUa_LocalizedText_Clear(OpcUa_LocalizedText* a_pValue)
 /*============================================================================
  * OpcUa_QualifiedName_Initialize
  *===========================================================================*/
-void OpcUa_QualifiedName_Initialize(OpcUa_QualifiedName* a_pValue)
+OpcUa_Void OpcUa_QualifiedName_Initialize(OpcUa_QualifiedName* a_pValue)
 {
     if (a_pValue != OpcUa_Null)
     {
@@ -324,7 +324,7 @@ void OpcUa_QualifiedName_Initialize(OpcUa_QualifiedName* a_pValue)
 /*============================================================================
  * OpcUa_QualifiedName_Clear
  *===========================================================================*/
-void OpcUa_QualifiedName_Clear(OpcUa_QualifiedName* a_pValue)
+OpcUa_Void OpcUa_QualifiedName_Clear(OpcUa_QualifiedName* a_pValue)
 {
     if (a_pValue != OpcUa_Null)
     {

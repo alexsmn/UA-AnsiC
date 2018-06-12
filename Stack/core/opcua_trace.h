@@ -49,7 +49,7 @@ OPCUA_BEGIN_EXTERN_C
 /**
 * Initialize all resources needed for tracing.
 */
-OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_Trace_Initialize();
+OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_Trace_Initialize(void);
 
 /*============================================================================
  * Trace Initialize
@@ -57,7 +57,7 @@ OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_Trace_Initialize();
 /**
 * Clear all resources needed for tracing.
 */
-OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_Trace_Clear();
+OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_Trace_Clear(void);
 
 /*============================================================================
  * Change Trace Level
@@ -95,7 +95,7 @@ OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_Trace_Toggle(OpcUa_Boolean a_bActive
 #else /* OPCUA_TRACE_ENABLE */
 #ifdef _MSC_VER
  #if _MSC_VER >= 1400
-  #define OpcUa_Trace(x,y,...) ((void)0)
+  #define OpcUa_Trace(x,y,...) ((OpcUa_Void)0)
  #else
   #define OpcUa_Trace OpcUa_Trace_Nop
  #endif

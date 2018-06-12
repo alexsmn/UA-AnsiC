@@ -73,7 +73,7 @@ OpcUa_Void* OPCUA_DLLCALL OpcUa_P_BSearch(  OpcUa_Void*       pKey,
 /*============================================================================
  * Access to errno
  *===========================================================================*/
-OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetLastError()
+OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetLastError(OpcUa_Void)
 {
     return errno;
 }
@@ -81,7 +81,7 @@ OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetLastError()
 /*============================================================================
  * OpcUa_GetTickCount
  *===========================================================================*/
-OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetTickCount()
+OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetTickCount(OpcUa_Void)
 {
     struct timeval now;
     OpcUa_UInt32 ticks = 0;

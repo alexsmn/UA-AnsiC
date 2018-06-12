@@ -112,7 +112,7 @@ OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_ProxyStub_ReInitialize( OpcUa_
  * OpcUa_ProxyStub_Clear
  *===========================================================================*/
 /** Clean up proxy stub library. */
-OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_ProxyStub_Clear();
+OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_ProxyStub_Clear(void);
 
 /*============================================================================
  * OpcUa_ProxyStub_AddTypes
@@ -136,7 +136,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ProxyStub_SetNamespaceUris(OpcUa_StringA* a_
 /** Request the version string of the proxy stub.
   * @return Pointer to a static buffer containing the version information in string format. Must not be freed!
   */
-OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion();
+OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion(void);
 
 /*============================================================================
  * OpcUa_ProxyStub_GetConfigString
@@ -144,7 +144,7 @@ OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion();
 /** Request the string encoded configuration table.
   * @return Pointer to a buffer containing the configuration string. Must not be freed!
   */
-OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString();
+OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString(void);
 
 /*============================================================================
  * OpcUa_ProxyStub_GetStaticConfigString
@@ -152,7 +152,7 @@ OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString();
 /** Request the string encoded built configuration of the stack.
   * @return Pointer to a static string containing the options set by compiler switches. Must not be freed!
   */
-OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetStaticConfigString();
+OPCUA_EXPORT OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetStaticConfigString(void);
 
 /*============================================================================
  ** @brief Global table of known types.

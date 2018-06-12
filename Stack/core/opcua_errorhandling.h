@@ -23,7 +23,7 @@ OPCUA_BEGIN_EXTERN_C
  * OpcUa_ReferenceParameter
  *===========================================================================*/
  /** @brief use this to eliminate "unused parameter" warnings */
-#define OpcUa_ReferenceParameter(xParameter) (void)(xParameter)
+#define OpcUa_ReferenceParameter(xParameter) (OpcUa_Void)(xParameter)
 
 
 /*============================================================================

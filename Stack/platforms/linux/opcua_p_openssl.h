@@ -35,17 +35,17 @@ OPCUA_BEGIN_EXTERN_C
 /**
   @brief Initializes the OpenSSL library.
 */
-OpcUa_StatusCode OpcUa_P_OpenSSL_Initialize();
+OpcUa_StatusCode OpcUa_P_OpenSSL_Initialize(void);
 
 /**
   @brief cleans up the OpenSSL library.
 */
-void OpcUa_P_OpenSSL_Cleanup();
+OpcUa_Void OpcUa_P_OpenSSL_Cleanup(void);
 
 /**
   @brief cleans up the OpenSSL library.
 */
-void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup();
+OpcUa_Void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup(void);
 
 /**
   @brief seeds pseudo-random-number-generator of openssl.
@@ -56,8 +56,8 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_OpenSSL_SeedPRNG( OpcUa_Byte* seed,
 /**
   @brief destroys secret data values in a cyptographically safe way.
 */
-void OPCUA_DLLCALL OpcUa_P_OpenSSL_DestroySecretData(    OpcUa_Void*  data,
-                                                         OpcUa_UInt32 bytes);
+OpcUa_Void OPCUA_DLLCALL OpcUa_P_OpenSSL_DestroySecretData(OpcUa_Void*  data,
+                                                           OpcUa_UInt32 bytes);
 
 /**
   @brief Encrypts data using Advanced Encryption Standard (AES) with the Cipher Block Chaining (CBC) mode.

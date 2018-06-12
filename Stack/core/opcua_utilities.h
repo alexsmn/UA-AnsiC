@@ -68,13 +68,13 @@ OpcUa_Void* OpcUa_BSearch(  OpcUa_Void*       pKey,
  * @brief Returns the CRT errno constant.
  */
 OPCUA_EXPORT
-OpcUa_UInt32 OpcUa_GetLastError();
+OpcUa_UInt32 OpcUa_GetLastError(void);
 
 /**
  * @brief Returns the number of milliseconds since the system or process was started.
  */
 OPCUA_EXPORT
-OpcUa_UInt32 OpcUa_GetTickCount();
+OpcUa_UInt32 OpcUa_GetTickCount(void);
 
 /**
  * @brief Convert string to integer.

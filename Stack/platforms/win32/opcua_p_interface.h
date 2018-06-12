@@ -199,7 +199,7 @@ struct S_OpcUa_Port_CallTable
     /** @brief Returns the current time in the OpcUa_DateTime format.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_DateTime      (OPCUA_DLLCALL* UtcNow)                   ();
+    OpcUa_DateTime      (OPCUA_DLLCALL* UtcNow)                   ( void);
 
     /** @brief Returns the current time in the OpcUa_TimeVal format.
      *  @ingroup opcua_platformlayer_interface
@@ -343,7 +343,7 @@ struct S_OpcUa_Port_CallTable
     /** @brief Get an unique id for the calling system thread.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_UInt32        (OPCUA_DLLCALL* ThreadGetCurrentId)       ();
+    OpcUa_UInt32        (OPCUA_DLLCALL* ThreadGetCurrentId)       ( void);
 
     /** @brief Output the given zero terminated string to the systems tracing device.
      *  @ingroup opcua_platformlayer_interface
@@ -359,12 +359,12 @@ struct S_OpcUa_Port_CallTable
     /** @brief Initialize tracing functionality during stack initialization before any call to Trace is made.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_StatusCode    (OPCUA_DLLCALL* TraceInitialize)          ();
+    OpcUa_StatusCode    (OPCUA_DLLCALL* TraceInitialize)          ( void);
 
     /** @brief Clean up the tracing functionality after stack clean up after the last call to Trace was made.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_Void          (OPCUA_DLLCALL* TraceClear)               ();
+    OpcUa_Void          (OPCUA_DLLCALL* TraceClear)               ( void);
 
     /**@} Trace Functions */
     /**@name String Functions */
@@ -439,12 +439,12 @@ struct S_OpcUa_Port_CallTable
     /** @brief Get last error (aka errno);
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_UInt32        (OPCUA_DLLCALL* UtilGetLastError)         ();
+    OpcUa_UInt32        (OPCUA_DLLCALL* UtilGetLastError)         ( void);
 
     /** @brief Get the current millisecond tick count of the system.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_UInt32        (OPCUA_DLLCALL* UtilGetTickCount)         ();
+    OpcUa_UInt32        (OPCUA_DLLCALL* UtilGetTickCount)         ( void);
 
     /** @brief Convert the given string containing a number into OpcUa_Int32.
      *  @ingroup opcua_platformlayer_interface
@@ -611,12 +611,12 @@ struct S_OpcUa_Port_CallTable
     /** @brief Initialize all network resources required by the platform layer. Called during proxystub initialization.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_StatusCode    (OPCUA_DLLCALL* NetworkInitialize)        ();
+    OpcUa_StatusCode    (OPCUA_DLLCALL* NetworkInitialize)        ( void);
 
     /** @brief Clean up and free all network resources. Called during proxystub cleanup procedure.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_StatusCode    (OPCUA_DLLCALL* NetworkCleanup)           ();
+    OpcUa_StatusCode    (OPCUA_DLLCALL* NetworkCleanup)           ( void);
 
     /**@} Network Functions */
     /**@name Crypto and PKI Functions */
@@ -666,14 +666,14 @@ struct S_OpcUa_Port_CallTable
     /** @brief Called before cleanup to stop all active timers and invoke timer delete callbacks.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_Void          (OPCUA_DLLCALL* TimersCleanup)            ();
+    OpcUa_Void          (OPCUA_DLLCALL* TimersCleanup)            ( void);
 
     /**@} Timer Functions */
 
     /** @brief Called to clean up OpenSSL state information in client threads.
      *  @ingroup opcua_platformlayer_interface
      */
-    OpcUa_Void          (OPCUA_DLLCALL* ThreadCleanupOpenSSL)     ();
+    OpcUa_Void          (OPCUA_DLLCALL* ThreadCleanupOpenSSL)     ( void);
 
     /** @brief seeds pseudo-random-number-generator of openssl.
      *  @ingroup opcua_platformlayer_interface

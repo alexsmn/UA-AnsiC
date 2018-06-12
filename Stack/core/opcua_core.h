@@ -37,8 +37,8 @@ OPCUA_EXPORT OpcUa_Void       OPCUA_DLLCALL OpcUa_Mutex_Lock     (      OpcUa_Mu
 OPCUA_EXPORT OpcUa_Void       OPCUA_DLLCALL OpcUa_Mutex_Unlock   (      OpcUa_Mutex  hMutex);
 
 /* utils */
-OPCUA_EXPORT OpcUa_DateTime   OPCUA_DLLCALL OpcUa_DateTime_UtcNow();
-OPCUA_EXPORT OpcUa_UInt32     OPCUA_DLLCALL OpcUa_Utility_GetTickCount();
+OPCUA_EXPORT OpcUa_DateTime   OPCUA_DLLCALL OpcUa_DateTime_UtcNow(      void);
+OPCUA_EXPORT OpcUa_UInt32     OPCUA_DLLCALL OpcUa_Utility_GetTickCount( void);
 
 /* Semaphore */
 OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_Semaphore_Create   (  OpcUa_Semaphore*    phNewSemaphore,
@@ -110,7 +110,7 @@ OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_CryptoProvider_Create(OpcUa_St
 OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_CryptoProvider_Delete(OpcUa_CryptoProvider*   pProvider);
 
 /** @brief Called to clean up OpenSSL state information in client threads.  */
-OPCUA_EXPORT OpcUa_Void       OPCUA_DLLCALL OpcUa_ThreadCleanupOpenSSL();
+OPCUA_EXPORT OpcUa_Void       OPCUA_DLLCALL OpcUa_ThreadCleanupOpenSSL( void);
 
 /** @brief add new entropy to the pseudo-random-number-generator of openssl.  */
 OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_OpenSSLSeedPRNG(      OpcUa_Byte*  pEntropy,

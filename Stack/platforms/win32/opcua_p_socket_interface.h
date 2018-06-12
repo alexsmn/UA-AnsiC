@@ -132,12 +132,12 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_GetPeerInfo(          OpcUa_Socket
 /*============================================================================
  * Initialize the platform network interface
  *===========================================================================*/
-OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_InitializeNetwork(    OpcUa_Void);
+OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_InitializeNetwork(    void);
 
 /*============================================================================
  * Clean the platform network interface up.
  *===========================================================================*/
-OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_CleanupNetwork(       OpcUa_Void);
+OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_CleanupNetwork(       void);
 
 /*============================================================================
  * Convert a text encoded internet address to its binary representation.

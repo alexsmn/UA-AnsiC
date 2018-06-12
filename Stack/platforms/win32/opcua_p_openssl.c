@@ -100,7 +100,7 @@ static void OpcUa_P_OpenSSL_Lock(int mode, int type, const char *file, int line)
 /*============================================================================
  * OpcUa_P_OpenSSL_Initialize
  *===========================================================================*/
-OpcUa_StatusCode OpcUa_P_OpenSSL_Initialize()
+OpcUa_StatusCode OpcUa_P_OpenSSL_Initialize(OpcUa_Void)
 {
 #if OPCUA_USE_SYNCHRONISATION
     OpcUa_StatusCode uStatus = OpcUa_P_Mutex_Create(&OpenSSL_Mutex);
@@ -121,7 +121,7 @@ OpcUa_StatusCode OpcUa_P_OpenSSL_Initialize()
 /*============================================================================
  * OpcUa_P_OpenSSL_Cleanup
  *===========================================================================*/
-void OpcUa_P_OpenSSL_Cleanup()
+OpcUa_Void OpcUa_P_OpenSSL_Cleanup(OpcUa_Void)
 {
 #if OPCUA_P_SOCKETMANAGER_SUPPORT_SSL
 #if OPENSSL_VERSION_NUMBER >= 0x1000200fL && !defined(OPENSSL_NO_COMP)
@@ -141,7 +141,7 @@ void OpcUa_P_OpenSSL_Cleanup()
 /*============================================================================
  * OpcUa_P_OpenSSL_Thread_Cleanup()
  *===========================================================================*/
-void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup()
+OpcUa_Void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup(OpcUa_Void)
 {
     ERR_remove_state(0);
 #if OPENSSL_VERSION_NUMBER >= 0x1010000fL
@@ -152,8 +152,8 @@ void OPCUA_DLLCALL OpcUa_P_OpenSSL_Thread_Cleanup()
 /*============================================================================
  * OpcUa_P_OpenSSL_DestroySecretData()
  *===========================================================================*/
-void OPCUA_DLLCALL OpcUa_P_OpenSSL_DestroySecretData(OpcUa_Void*  data,
-                                                     OpcUa_UInt32 bytes)
+OpcUa_Void OPCUA_DLLCALL OpcUa_P_OpenSSL_DestroySecretData(OpcUa_Void*  data,
+                                                           OpcUa_UInt32 bytes)
 {
     OPENSSL_cleanse(data, bytes);
 }

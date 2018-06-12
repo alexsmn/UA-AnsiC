@@ -66,7 +66,7 @@ OpcUa_Void OpcUa_P_DateTime_GetTimeOfDay(OpcUa_TimeVal* a_pTimeVal)
 /*============================================================================
 * The OpcUa_UtcNow function (returns the time in OpcUa_DateTime format)
 *===========================================================================*/
-OpcUa_DateTime OpcUa_P_DateTime_UtcNow()
+OpcUa_DateTime OpcUa_P_DateTime_UtcNow(OpcUa_Void)
 {
     struct timeval now;
     OpcUa_Int64 unixtime = 0;

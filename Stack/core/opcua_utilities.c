@@ -79,7 +79,7 @@ OpcUa_Void* OpcUa_BSearch(  OpcUa_Void*       a_pKey,
 /*============================================================================
  * Access to errno
  *===========================================================================*/
-OpcUa_UInt32 OpcUa_GetLastError()
+OpcUa_UInt32 OpcUa_GetLastError(OpcUa_Void)
 {
     return OPCUA_P_GETLASTERROR();
 }
@@ -87,7 +87,7 @@ OpcUa_UInt32 OpcUa_GetLastError()
 /*============================================================================
  * OpcUa_GetTickCount
  *===========================================================================*/
-OpcUa_UInt32 OpcUa_GetTickCount()
+OpcUa_UInt32 OpcUa_GetTickCount(OpcUa_Void)
 {
     return OPCUA_P_GETTICKCOUNT();
 }

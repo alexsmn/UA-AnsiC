@@ -61,7 +61,7 @@ static OpcUa_StringA            OpcUa_ProxyStub_StandardNamespaceUris[] =
 /*============================================================================
  * OpcUa_ProxyStub_UpdateConfigString
  *===========================================================================*/
-static OpcUa_StatusCode OpcUa_ProxyStub_UpdateConfigString()
+static OpcUa_StatusCode OpcUa_ProxyStub_UpdateConfigString(OpcUa_Void)
 {
     OpcUa_Int  iRes  = 0;
     OpcUa_Int  iPos  = 0;
@@ -497,7 +497,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_ProxyStub_GetVersion
  *===========================================================================*/
-OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion()
+OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion(OpcUa_Void)
 {
     return OpcUa_ProxyStub_g_VersionString;
 }
@@ -505,7 +505,7 @@ OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetVersion()
 /*============================================================================
  * OpcUa_ProxyStub_GetConfigString
  *===========================================================================*/
-OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString()
+OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString(OpcUa_Void)
 {
 #if OPCUA_USE_SYNCHRONISATION
     if(OpcUa_ProxyStub_g_hGlobalsMutex == OpcUa_Null)
@@ -529,7 +529,7 @@ OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetConfigString()
 /*============================================================================
  * OpcUa_ProxyStub_GetStaticConfigString
  *===========================================================================*/
-OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetStaticConfigString()
+OpcUa_StringA OPCUA_DLLCALL OpcUa_ProxyStub_GetStaticConfigString(OpcUa_Void)
 {
     return OpcUa_ProxyStub_g_StaticConfigString;
 }

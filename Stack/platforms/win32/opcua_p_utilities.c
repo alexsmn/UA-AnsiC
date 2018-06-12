@@ -152,7 +152,7 @@ OpcUa_Void* OPCUA_DLLCALL OpcUa_P_BSearch(  OpcUa_Void*       pKey,
 /*============================================================================
  * Access to errno
  *===========================================================================*/
-OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetLastError()
+OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetLastError(OpcUa_Void)
 {
 #ifdef _WIN32_WCE
     return GetLastError();
@@ -164,7 +164,7 @@ OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetLastError()
 /*============================================================================
  * OpcUa_GetTickCount
  *===========================================================================*/
-OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetTickCount()
+OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_GetTickCount(OpcUa_Void)
 {
     return GetTickCount();
 }

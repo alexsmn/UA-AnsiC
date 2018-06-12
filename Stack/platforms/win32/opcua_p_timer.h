@@ -88,7 +88,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_InitializeTimers(void);
 /*============================================================================
  * Cleanup the Timer System
  *===========================================================================*/
-OpcUa_Void OPCUA_DLLCALL OpcUa_P_Timer_CleanupTimers(void);
+OpcUa_Void OPCUA_DLLCALL OpcUa_P_Timer_CleanupTimers(   void);
 
 #if !OPCUA_MULTITHREADED
 /*============================================================================

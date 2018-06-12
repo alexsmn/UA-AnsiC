@@ -75,7 +75,7 @@ OpcUa_Void OPCUA_DLLCALL OpcUa_P_DateTime_GetTimeOfDay(OpcUa_TimeVal* a_pTimeVal
 /*============================================================================
  * The OpcUa_UtcNow function (returns the time in OpcUa_DateTime format)
  *===========================================================================*/
-OpcUa_DateTime OPCUA_DLLCALL OpcUa_P_DateTime_UtcNow()
+OpcUa_DateTime OPCUA_DLLCALL OpcUa_P_DateTime_UtcNow(OpcUa_Void)
 {
     FILETIME ftTime;
 #ifdef _WIN32_WCE

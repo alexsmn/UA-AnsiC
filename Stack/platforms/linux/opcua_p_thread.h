@@ -53,4 +53,4 @@ OpcUa_Void          OpcUa_P_Thread_Sleep(   OpcUa_UInt32                msecTime
  * Get Current Thread Id
  *===========================================================================*/
 /* the return type "unsigned long" is necessary to hold a "pthread_t" value */
-unsigned long       OpcUa_P_Thread_GetCurrentThreadId(  OpcUa_Void);
+unsigned long       OpcUa_P_Thread_GetCurrentThreadId(  void);

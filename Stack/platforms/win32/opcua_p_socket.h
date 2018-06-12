@@ -97,7 +97,7 @@ typedef struct _OpcUa_P_Socket_Array
  *
  * @return Good if initialization went fine. A bad status code in any other case.
  */
-OpcUa_StatusCode OpcUa_P_RawSocket_InitializeNetwork(OpcUa_Void);
+OpcUa_StatusCode OpcUa_P_RawSocket_InitializeNetwork(void);
 
 
 /*!
@@ -108,7 +108,7 @@ OpcUa_StatusCode OpcUa_P_RawSocket_InitializeNetwork(OpcUa_Void);
  *
  * @return Good if initialization went fine. A bad status code in any other case.
  */
-OpcUa_StatusCode OpcUa_P_RawSocket_CleanupNetwork(OpcUa_Void);
+OpcUa_StatusCode OpcUa_P_RawSocket_CleanupNetwork(void);
 
 
 /*!

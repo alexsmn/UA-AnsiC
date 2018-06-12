@@ -215,7 +215,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_CryptoProvider_Delete(OpcUa_CryptoProvider*
 }
 /*********************************************************************************/
 
-OpcUa_Void OPCUA_DLLCALL OpcUa_ThreadCleanupOpenSSL()
+OpcUa_Void OPCUA_DLLCALL OpcUa_ThreadCleanupOpenSSL(    OpcUa_Void)
 {
     if(OpcUa_ProxyStub_g_PlatformLayerCalltable->ThreadCleanupOpenSSL != OpcUa_Null)
     {
