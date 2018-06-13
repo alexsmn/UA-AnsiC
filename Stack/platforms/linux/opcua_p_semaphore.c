@@ -31,9 +31,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <errno.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -49,22 +47,6 @@
 /* own headers */
 #include <opcua_semaphore.h>
 #include <opcua_p_semaphore.h>
-
-static int report_error(int code, const char *where, const char *what)
-{
-    if (code != 0)
-    {
-        char szMsg[256];
-        /* strerror_r is the thread safe version of strerror */
-        strerror_r(code, szMsg, 256);
-
-        fprintf(stderr, "%s: %s failure: %s\n",
-                where,
-                what,
-                szMsg);
-    }
-    return code;
-}
 
 /** Creates a new semaphore.
  * @param a_Semaphore Pointer to semaphore handle. This returns the newly created semaphore.
@@ -110,7 +92,7 @@ OpcUa_Void OpcUa_P_Semaphore_Delete(OpcUa_Semaphore* pRawSemaphore)
 
     pInternalSemaphore = (sem_t*) *pRawSemaphore;
 
-    report_error(sem_destroy(pInternalSemaphore), "OpcUa_P_Semaphore_Delete", "sem_destroy");
+    sem_destroy(pInternalSemaphore);
     free(pInternalSemaphore);
     *pRawSemaphore = OpcUa_Null;
 }
@@ -138,7 +120,6 @@ OpcUa_StatusCode OpcUa_P_Semaphore_Wait(OpcUa_Semaphore RawSemaphore)
 
     if(err != 0)
     {
-        report_error(errno, "OpcUa_P_Semaphore_Wait", "sem_wait failed");
         return OpcUa_BadInternalError;
     }
 
@@ -170,7 +151,6 @@ OpcUa_StatusCode OpcUa_P_Semaphore_TimedWait(OpcUa_Semaphore RawSemaphore, OpcUa
 
         if (err != 0)
         {
-            report_error(errno, "OpcUa_P_Semaphore_TimedWait", "sem_wait failed");
             return OpcUa_BadInternalError;
         }
     }
@@ -181,7 +161,6 @@ OpcUa_StatusCode OpcUa_P_Semaphore_TimedWait(OpcUa_Semaphore RawSemaphore, OpcUa
 
         if (clock_gettime(CLOCK_REALTIME, &Timeout) == -1)
         {
-            report_error(errno, "OpcUa_P_Semaphore_TimedWait", "clock_gettime failed");
             return OpcUa_BadInternalError;
         }
 
@@ -208,7 +187,6 @@ OpcUa_StatusCode OpcUa_P_Semaphore_TimedWait(OpcUa_Semaphore RawSemaphore, OpcUa
             }
             else
             {
-                report_error(errno, "OpcUa_P_Semaphore_TimedWait", "sem_timedwait failed");
                 return OpcUa_BadInternalError;
             }
         }

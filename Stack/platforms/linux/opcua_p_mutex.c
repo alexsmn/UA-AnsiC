@@ -33,9 +33,7 @@
 #include <opcua_mutex.h>
 #include <opcua_p_mutex.h>
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 /* see opcua_platformdefs.h */
 #include <pthread.h>
