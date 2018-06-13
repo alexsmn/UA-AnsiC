@@ -254,8 +254,8 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddUnknownTypeMapping(
     OpcUa_StringA              a_pNamespaceUri,
     OpcUa_EncodeableType*      a_pTemplate)
 {
-    OpcUa_Int32 nLength = OpcUa_Null;
-    OpcUa_Int32 nIndexCount = OpcUa_Null;
+    OpcUa_Int32 nLength = 0;
+    OpcUa_Int32 nIndexCount = 0;
     OpcUa_EncodeableTypeTableEntry* pIndex = OpcUa_Null;
     OpcUa_EncodeableTypeTableEntry* pIndexEntry = OpcUa_Null;
 
