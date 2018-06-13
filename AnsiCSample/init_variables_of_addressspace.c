@@ -44,9 +44,6 @@ OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(O
 {
 	extern _my_continuationpoint_		Continuation_Point_Data;
 	extern OpcUa_Int			Cont_Point_Counter;
-	extern OpcUa_UInt32			session_flag;
-	extern OpcUa_String*		p_user_name;
-	extern OpcUa_Double			session_timeout;
 	extern my_Variant			all_ValueAttribute_of_VariableTypeNodes_VariableNodes[];
 	OpcUa_InitializeStatus(OpcUa_Module_Server, "initialize_value_attribute_of_variablenodes_variabletypenodes");
 
@@ -54,9 +51,6 @@ OpcUa_StatusCode initialize_value_attribute_of_variablenodes_variabletypenodes(O
 	Continuation_Point_Data.Cont_Point_Identifier=0; /* None. */
 	OpcUa_BrowseDescription_Initialize(&Continuation_Point_Data.NodeToBrowse);
 	Cont_Point_Counter=0;
-	session_flag=SESSION_NOT_ACTIVATED;
-	p_user_name=OpcUa_Null;
-	session_timeout=REVISED_SESSIONTIMEOUT;
 /********************************/
 
 

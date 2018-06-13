@@ -36,8 +36,6 @@ OPCUA_DECLARE_GENERIC_COMPARE(NodeId)
 OPCUA_DECLARE_GENERIC_COPY(NodeId)
 OPCUA_DECLARE_GENERIC_COPY(BrowseDescription)
 
-#define RESET_SESSION_COUNTER	msec_counter=0;
-
 typedef struct
 {
 	OpcUa_Int			Cont_Point_Identifier; /* Non-zero ID if in use, or 0 if free to use */
@@ -90,11 +88,5 @@ OpcUa_Boolean			check_Mask					(OpcUa_UInt32 ,OpcUa_UInt32 );
 OpcUa_Boolean			check_dir					(OpcUa_BrowseDirection ,_ReferenceNode_* );
 
 OpcUa_Boolean			need_continuationpoint		(OpcUa_BrowseDescription* ,OpcUa_Int);
-
-OpcUa_StatusCode		check_authentication_token	(const OpcUa_RequestHeader* );
-
-OpcUa_StatusCode		response_header_fill	    (OpcUa_ResponseHeader*  ,const OpcUa_RequestHeader*, OpcUa_StatusCode);
-
-
 
 #endif /*_browseservice_*/
