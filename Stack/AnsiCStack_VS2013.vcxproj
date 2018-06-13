@@ -149,7 +149,6 @@
     <ClInclude Include="core\opcua_statuscodes.h" />
     <ClInclude Include="core\opcua_string.h" />
     <ClInclude Include="core\opcua_thread.h" />
-    <ClInclude Include="core\opcua_threadpool.h" />
     <ClInclude Include="core\opcua_timer.h" />
     <ClInclude Include="core\opcua_trace.h" />
     <ClInclude Include="core\opcua_utilities.h" />
@@ -284,12 +283,6 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="core\opcua_thread.c">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="core\opcua_threadpool.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -99,9 +99,6 @@
     <ClInclude Include="core\opcua_thread.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="core\opcua_threadpool.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="core\opcua_timer.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -363,9 +360,6 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\opcua_thread.c">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="core\opcua_threadpool.c">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="core\opcua_timer.c">

@@ -81,9 +81,6 @@ typedef struct _OpcUa_StatusCodeString
 #define OpcUa_Module_Semaphore          0x0000020AL
 #define OpcUa_Module_String             0x0000020BL
 #define OpcUa_Module_Trace              0x0000020CL
-#define OpcUa_Module_ThreadPool         0x0000020DL
-#define OpcUa_Module_XmlReader          0x0000020EL
-#define OpcUa_Module_XmlWriter          0x0000020FL
 
 /* proxy stub modules */
 #define OpcUa_Module_Session            0x00000301L

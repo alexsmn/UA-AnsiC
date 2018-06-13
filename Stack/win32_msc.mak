@@ -37,7 +37,6 @@ OBJECTS = \
 	$(ODIR)\opcua_proxystub.obj \
 	$(ODIR)\opcua_string.obj \
 	$(ODIR)\opcua_thread.obj \
-	$(ODIR)\opcua_threadpool.obj \
 	$(ODIR)\opcua_timer.obj \
 	$(ODIR)\opcua_trace.obj \
 	$(ODIR)\opcua_utilities.obj \

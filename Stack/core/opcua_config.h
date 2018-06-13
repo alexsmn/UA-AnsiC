@@ -42,8 +42,6 @@
 #define OPCUA_HAVE_CLIENTAPI                        1
 /** @brief Define or undefine to enable or disable server functionality */
 #define OPCUA_HAVE_SERVERAPI                        1
-/** @brief Define or undefine to enable or disable threadpool support. Required if secure listener shall use it. */
-#define OPCUA_HAVE_THREADPOOL                       1
 /** @brief define or undefine to enable or disable the memory stream module. */
 #define OPCUA_HAVE_MEMORYSTREAM                     1
 /** @brief define or undefine to enable or disable the soap and http support. */
@@ -142,15 +140,6 @@
  *===========================================================================*/
 /** @brief OpcUa_True or OpcUa_False; switches checks on or off; dont use with chunking enabled. */
 #define OPCUA_SERIALIZER_CHECKLENGTHS               OpcUa_False
-
-/*============================================================================
- * thread pool
- *===========================================================================*/
-/** @brief Allow to dynamically create threads to prevent delay in queue if no static thread is free. Not recommended! */
-#define OPCUA_THREADPOOL_EXPANSION                  OPCUA_CONFIG_NO
-
-/** @brief Time in milliseconds after which a worker thread looks for further orders. Affects shutdown time. */
-#define OPCUA_THREADPOOL_RELOOPTIME                 500
 
 /*============================================================================
  * tracer

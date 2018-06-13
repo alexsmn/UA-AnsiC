@@ -25,7 +25,6 @@
 #include <opcua_datetime.h>
 #include <opcua_list.h>
 #include <opcua_thread.h>
-#include <opcua_threadpool.h>
 
 /* stackcore */
 #include <opcua_identifiers.h>

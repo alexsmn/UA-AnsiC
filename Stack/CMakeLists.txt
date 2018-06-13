@@ -33,7 +33,6 @@ endif()
         core/opcua_proxystub.c
         core/opcua_string.c
         core/opcua_thread.c
-        core/opcua_threadpool.c
         core/opcua_timer.c
         core/opcua_trace.c
         core/opcua_utilities.c

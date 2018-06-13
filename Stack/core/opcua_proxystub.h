@@ -64,18 +64,17 @@ typedef struct _OpcUa_ProxyStubConfiguration
     /** The maximum encodable object recursion depth. */
     OpcUa_Int32     iSerializer_MaxRecursionDepth;
 
-    /** Be careful! Enabling the threadpool has severe implications on the behavior of your server! */
-    /** Controls wether the secure listener uses a thread pool to dispatch received requests. */
+    /** This value is ignored. */
     OpcUa_Boolean   bSecureListener_ThreadPool_Enabled;
-    /** The minimum number of threads in the thread pool. */
+    /** This value is ignored. */
     OpcUa_Int32     iSecureListener_ThreadPool_MinThreads;
-    /** The maximum number of threads in the thread pool */
+    /** This value is ignored. */
     OpcUa_Int32     iSecureListener_ThreadPool_MaxThreads;
-    /** The length of the queue with jobs waiting for a free thread. */
+    /** This value is ignored. */
     OpcUa_Int32     iSecureListener_ThreadPool_MaxJobs;
-    /** If MaxJobs is reached the add operation can block or return an error. */
+    /** This value is ignored. */
     OpcUa_Boolean   bSecureListener_ThreadPool_BlockOnAdd;
-    /** If the add operation blocks on a full job queue, this value sets the max waiting time. */
+    /** This value is ignored. */
     OpcUa_UInt32    uSecureListener_ThreadPool_Timeout;
 
     /** If true, the TcpListener request a thread per client from the underlying socketmanager. Must not work with all platform layers. */
@@ -91,7 +90,7 @@ typedef struct _OpcUa_ProxyStubConfiguration
     /** The default and maximum number of message chunks per message in the server. Affects memory usage. */
     OpcUa_Int32     iTcpTransport_MaxChunkCount;
 
-    /** The network stream should block if not all could be send in one go. Be careful and use this only with client threads. Must not work with all platform layers. */
+    /** This value is ignored. */
     OpcUa_Boolean   bTcpStream_ExpectWriteToBlock;
 } OpcUa_ProxyStubConfiguration;
 
