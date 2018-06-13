@@ -43,42 +43,42 @@ static OpcUa_Int OPCUA_CDECL OpcUa_EncodeableType_Compare(const OpcUa_Void* a_pE
     OpcUa_EncodeableTypeTableEntry* pEntry1 = (OpcUa_EncodeableTypeTableEntry*)a_pElement1;
     OpcUa_EncodeableTypeTableEntry* pEntry2 = (OpcUa_EncodeableTypeTableEntry*)a_pElement2;
 
-    if (pEntry1 == OpcUa_Null && pEntry2 != OpcUa_Null)
+    if(pEntry1 == OpcUa_Null && pEntry2 != OpcUa_Null)
     {
         return -1;
     }
 
-    if (pEntry1 == OpcUa_Null)
+    if(pEntry1 == OpcUa_Null)
     {
         return +1;
     }
 
     /* it is more efficient to sort by type first since there are many different types with the same namespace uri */
-    if (pEntry1->TypeId < pEntry2->TypeId)
+    if(pEntry1->TypeId < pEntry2->TypeId)
     {
         return -1;
     }
 
-    if (pEntry1->TypeId > pEntry2->TypeId)
+    if(pEntry1->TypeId > pEntry2->TypeId)
     {
         return +1;
     }
 
     /* check if namespaces are different - pointer compare is very efficient since namespace uri strings should be static data */
-    if (pEntry1->NamespaceUri == pEntry2->NamespaceUri)
+    if(pEntry1->NamespaceUri == pEntry2->NamespaceUri)
     {
         return 0;
     }
 
     /* compare namespace uris the hard way */
-    if (pEntry1->NamespaceUri != OpcUa_Null && pEntry2->NamespaceUri != OpcUa_Null)
+    if(pEntry1->NamespaceUri != OpcUa_Null && pEntry2->NamespaceUri != OpcUa_Null)
     {
         return OpcUa_P_String_StrnCmp(pEntry1->NamespaceUri, pEntry2->NamespaceUri,
                                       OpcUa_P_String_StrLen(pEntry1->NamespaceUri) + 1);
     }
 
     /* ensure types with a NULL namespace uri appear first */
-    if (pEntry1->NamespaceUri == OpcUa_Null)
+    if(pEntry1->NamespaceUri == OpcUa_Null)
     {
         return -1;
     }
@@ -114,18 +114,18 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_Create(OpcUa_EncodeableTypeTable* a_p
  *===========================================================================*/
 OpcUa_Void OpcUa_EncodeableTypeTable_Delete(OpcUa_EncodeableTypeTable* a_pTable)
 {
-    if (a_pTable != OpcUa_Null)
+    if(a_pTable != OpcUa_Null)
     {
         OPCUA_P_MUTEX_DELETE(&(a_pTable->Mutex));
         a_pTable->Mutex = OpcUa_Null;
 
-        if (a_pTable->Index != OpcUa_Null)
+        if(a_pTable->Index != OpcUa_Null)
         {
             OpcUa_Int32 ii = 0;
 
-            for (ii = 0; ii < a_pTable->IndexCount; ii++)
+            for(ii = 0; ii < a_pTable->IndexCount; ii++)
             {
-                if (a_pTable->Index[ii].FreeUri)
+                if(a_pTable->Index[ii].FreeUri)
                 {
                     OpcUa_Free(a_pTable->Index[ii].NamespaceUri);
                 }
@@ -162,25 +162,25 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddTypes(
     nIndexCount = a_pTable->IndexCount;
 
     /* count the number new definitions */
-    for (ii = 0; a_pTypes[ii] != OpcUa_Null; ii++)
+    for(ii = 0; a_pTypes[ii] != OpcUa_Null; ii++)
     {
-        if (a_pTypes[ii]->TypeId != 0)
+        if(a_pTypes[ii]->TypeId != 0)
         {
             nIndexCount++;
         }
 
-        if (a_pTypes[ii]->BinaryEncodingTypeId != 0)
+        if(a_pTypes[ii]->BinaryEncodingTypeId != 0)
         {
             nIndexCount++;
         }
 
-        if (a_pTypes[ii]->XmlEncodingTypeId != 0)
+        if(a_pTypes[ii]->XmlEncodingTypeId != 0)
         {
             nIndexCount++;
         }
     }
 
-    if (nIndexCount > 0)
+    if(nIndexCount > 0)
     {
         nCurrentIndex = a_pTable->IndexCount;
 
@@ -190,12 +190,12 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddTypes(
         a_pTable->Index = pIndex;
 
         /* copy new definitions */
-        for (ii = 0; a_pTypes[ii] != OpcUa_Null; ii++)
+        for(ii = 0; a_pTypes[ii] != OpcUa_Null; ii++)
         {
             OpcUa_EncodeableType* pType = a_pTypes[ii];
 
             /* index type id */
-            if (pType->TypeId != 0)
+            if(pType->TypeId != 0)
             {
                 OpcUa_EncodeableTypeTableEntry* pIndexEntry = &(pIndex[nCurrentIndex++]);
 
@@ -206,7 +206,7 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddTypes(
             }
 
             /* index binary encoding type id */
-            if (pType->BinaryEncodingTypeId != 0)
+            if(pType->BinaryEncodingTypeId != 0)
             {
                 OpcUa_EncodeableTypeTableEntry* pIndexEntry = &(pIndex[nCurrentIndex++]);
 
@@ -217,7 +217,7 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddTypes(
             }
 
             /* index xml encoding type id */
-            if (pType->XmlEncodingTypeId != 0)
+            if(pType->XmlEncodingTypeId != 0)
             {
                 OpcUa_EncodeableTypeTableEntry* pIndexEntry = &(pIndex[nCurrentIndex++]);
 
@@ -254,8 +254,8 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddUnknownTypeMapping(
     OpcUa_StringA              a_pNamespaceUri,
     OpcUa_EncodeableType*      a_pTemplate)
 {
-    OpcUa_Int32 nLength = 0;
-    OpcUa_Int32 nIndexCount = 0;
+    OpcUa_Int32 nLength = OpcUa_Null;
+    OpcUa_Int32 nIndexCount = OpcUa_Null;
     OpcUa_EncodeableTypeTableEntry* pIndex = OpcUa_Null;
     OpcUa_EncodeableTypeTableEntry* pIndexEntry = OpcUa_Null;
 
@@ -282,7 +282,7 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_AddUnknownTypeMapping(
     pIndexEntry->FreeUri = OpcUa_False;
     pIndexEntry->Type = a_pTemplate;
 
-    if (a_pNamespaceUri != OpcUa_Null)
+    if(a_pNamespaceUri != OpcUa_Null)
     {
         nLength = OpcUa_P_String_StrLen(a_pNamespaceUri)+1;
         pIndexEntry->NamespaceUri = (OpcUa_StringA)OpcUa_Alloc(nLength*sizeof(OpcUa_CharA));
@@ -329,7 +329,7 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_Find(
 
     *a_pType = OpcUa_Null;
 
-    if (a_pTable->Index != OpcUa_Null)
+    if(a_pTable->Index != OpcUa_Null)
     {
         OpcUa_MemSet(&cKey, 0, sizeof(OpcUa_EncodeableTypeTableEntry));
 
@@ -346,7 +346,7 @@ OpcUa_StatusCode OpcUa_EncodeableTypeTable_Find(
             OpcUa_EncodeableType_Compare,
             OpcUa_Null);
 
-        if (pResult == OpcUa_Null)
+        if(pResult == OpcUa_Null)
         {
             uStatus = OpcUa_GoodNoData;
         }
@@ -404,9 +404,9 @@ OpcUa_Void OpcUa_EncodeableObject_Delete(
     OpcUa_EncodeableType* pType,
     OpcUa_Void**          ppEncodeable)
 {
-    if (ppEncodeable != OpcUa_Null)
+    if(ppEncodeable != OpcUa_Null)
     {
-        if (pType != OpcUa_Null)
+        if(pType != OpcUa_Null)
         {
             pType->Clear(*ppEncodeable);
         }
@@ -461,8 +461,8 @@ OpcUa_StatusCode OpcUa_EncodeableObject_ParseExtension(
     OpcUa_EncodeableType*  a_pType,
     OpcUa_Void**           a_ppObject)
 {
-    OpcUa_Decoder* pDecoder = 0;
-    OpcUa_InputStream* pIstrm = 0;
+    OpcUa_Decoder* pDecoder = OpcUa_Null;
+    OpcUa_InputStream* pIstrm = OpcUa_Null;
     OpcUa_Handle hDecodeContext = OpcUa_Null;
 
     OpcUa_InitializeStatus(OpcUa_Module_Channel, "OpcUa_EncodeableObject_ParseExtension");
@@ -475,7 +475,7 @@ OpcUa_StatusCode OpcUa_EncodeableObject_ParseExtension(
     *a_ppObject = OpcUa_Null;
 
     /* only binary encoding supported at this time */
-    if (a_pExtension->Encoding != OpcUa_ExtensionObjectEncoding_Binary)
+    if(a_pExtension->Encoding != OpcUa_ExtensionObjectEncoding_Binary)
     {
         OpcUa_GotoErrorWithStatus(OpcUa_BadNotSupported);
     }
@@ -511,13 +511,13 @@ OpcUa_StatusCode OpcUa_EncodeableObject_ParseExtension(
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
 
-    if (pDecoder != 0)
+    if(pDecoder != OpcUa_Null)
     {
         OpcUa_Decoder_Close(pDecoder, &hDecodeContext);
         OpcUa_Decoder_Delete(&pDecoder);
     }
 
-    if (pIstrm != 0)
+    if(pIstrm != OpcUa_Null)
     {
         OpcUa_Stream_Close((OpcUa_Stream*)pIstrm);
         OpcUa_Stream_Delete((OpcUa_Stream**)&pIstrm);
