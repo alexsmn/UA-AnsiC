@@ -237,6 +237,7 @@ OpcUa_StatusCode OpcUa_P_Socket_HandleExternalEvent(OpcUa_SocketManager SocketMa
 /*!
  * @brief Create and initialize a listening OpcUa_Socket.
  *
+ * @param IpAddress [in]    The IP address to listen on.
  * @param Port      [in]    The port to listen on.
  * @param Status    [out]   How the operation went.
  *

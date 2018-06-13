@@ -252,7 +252,7 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpStream, "Write");
         {
             /* The secure channel should never trigger automatic flushing. */
             /* At this point something went wrong. */
-            OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "ERROR: automatic flush in secure channel message should not happen!");
+            OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR, "ERROR: automatic flush in secure channel message should not happen!\n");
             OpcUa_GotoErrorWithStatus(OpcUa_BadEndOfStream);
         }
 

@@ -330,7 +330,7 @@ OpcUa_StatusCode OpcUa_Double_P_NativeToWire(OpcUa_Double_Wire* wire, OpcUa_Doub
 }
 
 /*============================================================================
- * OpcUa_String_P_WireToWire
+ * OpcUa_String_P_WireToNative
  *===========================================================================*/
 OpcUa_StatusCode OpcUa_Double_P_WireToNative(OpcUa_Double* native, OpcUa_Double_Wire* wire)
 {

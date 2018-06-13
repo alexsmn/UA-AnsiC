@@ -603,7 +603,7 @@ OpcUa_FinishErrorHandling;
 /**
  * @brief Called by the socket callback when an except event occurred on the socket.
  *
- * This may happen ie. if a connect fails because the server is not reachable.
+ * This may happen if a connect fails because the server is not reachable.
  * The event needs to be messaged to the upper layers.
  */
 static

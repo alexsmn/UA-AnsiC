@@ -230,7 +230,7 @@ OpcUa_Int32 OpcUa_String_StrnCmp(/* in */ const OpcUa_String* pString1,
                                  /* in */ OpcUa_UInt32        uLength,
                                  /* in */ OpcUa_Boolean       bIgnoreCase);
 
-/** The following functions are convencience functions for easy use only and call the above API only. **/
+/** The following functions are convenience functions for easy use only and call the above API only. **/
 
 /**
  * @brief Attaches a readonly reference for a string constant to a string object.
