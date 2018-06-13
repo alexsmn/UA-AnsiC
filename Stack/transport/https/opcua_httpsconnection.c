@@ -1012,7 +1012,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "GetUsedServerCertificate");
     OpcUa_ReturnErrorIfArgumentNull(a_pConnection);
     OpcUa_ReturnErrorIfArgumentNull(a_pConnection->Handle);
     OpcUa_ReturnErrorIfArgumentNull(a_ppUsedServerCertificate);
-    OpcUa_ReturnErrorIfArgumentNull(a_ppUsedServerCertificate);
+    OpcUa_ReturnErrorIfArgumentNull(a_pValidationResult);
 
     pHttpsConnection = (OpcUa_HttpsConnection*)a_pConnection->Handle;
 
