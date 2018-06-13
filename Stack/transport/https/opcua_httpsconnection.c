@@ -844,8 +844,8 @@ OpcUa_StatusCode OpcUa_HttpsConnection_WriteEventHandler(
 {
 OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "WriteEventHandler");
 
-    OpcUa_GotoErrorIfArgumentNull(a_pRequest);
-    OpcUa_GotoErrorIfArgumentNull(a_pSocket);
+    OpcUa_ReturnErrorIfArgumentNull(a_pRequest);
+    OpcUa_ReturnErrorIfArgumentNull(a_pSocket);
 
     OPCUA_HTTPSCONNECTION_REQUEST_LOCK(a_pRequest);
 
