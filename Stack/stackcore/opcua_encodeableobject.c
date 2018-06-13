@@ -469,7 +469,7 @@ OpcUa_StatusCode OpcUa_EncodeableObject_ParseExtension(
 
     OpcUa_ReturnErrorIfArgumentNull(a_pExtension);
     OpcUa_ReturnErrorIfArgumentNull(a_pContext);
-    OpcUa_ReturnErrorIfArgumentNull(a_pExtension);
+    OpcUa_ReturnErrorIfArgumentNull(a_pType);
     OpcUa_ReturnErrorIfArgumentNull(a_ppObject);
 
     *a_ppObject = OpcUa_Null;
