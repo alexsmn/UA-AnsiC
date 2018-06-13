@@ -1335,11 +1335,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "AbortResponseAndClose");
         }
 
         /* delete request */
-        if(pSecureRequest != OpcUa_Null)
-        {
-            OpcUa_SecureRequest_Delete(&pSecureRequest);
-            pSecureRequest = OpcUa_Null;
-        }
+        OpcUa_SecureRequest_Delete(&pSecureRequest);
     }
 
     if(pSecureIstrm != OpcUa_Null)
