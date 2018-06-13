@@ -1582,7 +1582,6 @@ static OpcUa_StatusCode OpcUa_SecureListener_WriteResponse( OpcUa_SecureListener
 
 OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "WriteResponse");
 
-    OpcUa_ReturnErrorIfArgumentNull(a_pResponse);
     OpcUa_ReturnErrorIfArgumentNull(a_ppOstrm);
     OpcUa_ReturnErrorIfArgumentNull(*a_ppOstrm);
     OpcUa_ReturnErrorIfArgumentNull(a_pResponse);
