@@ -41,7 +41,7 @@ OPCUA_BEGIN_EXTERN_C
 #define OpcUa_Crypto_KeyType_Rsa_Private_Handle     OpcUa_Crypto_KeyType_Rsa_Private + OpcUa_Crypto_KeyType_Handle_Offset
 #define OpcUa_Crypto_KeyType_Rsa_Public_Handle      OpcUa_Crypto_KeyType_Rsa_Public  + OpcUa_Crypto_KeyType_Handle_Offset
 
-/* @brief decide wether a keytype is a handle or not */
+/* @brief decide whether a keytype is a handle or not */
 #define OPCUA_CRYPTO_KEY_ISHANDLE(xKey)             (xKey->Type > (OpcUa_UInt)OpcUa_Crypto_KeyType_Handle_Offset)
 #define OPCUA_CRYPTO_KEY_ISNOHANDLE(xKey)           (xKey->Type < (OpcUa_UInt)OpcUa_Crypto_KeyType_Handle_Offset)
 

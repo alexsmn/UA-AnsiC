@@ -63,7 +63,7 @@
 /**********************************************************************************/
 /*/  Evaluate Security Config.                                                   /*/
 /**********************************************************************************/
-/* determine wether OpenSSL is required and set the compiler switch appropriately */
+/* determine whether OpenSSL is required and set the compiler switch appropriately */
 /* DON'T CHANGE THIS MANUALLY, just add new supported policies! */
 
 #if OPCUA_SUPPORT_SECURITYPOLICY_BASIC128RSA15 && !defined(OPCUA_REQUIRE_OPENSSL)

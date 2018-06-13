@@ -67,7 +67,7 @@ struct _OpcUa_TcpListener_Connection
     OpcUa_Boolean       bCloseWhenDone;
     /** @brief Should this connection block the receiver until the send completes. */
     OpcUa_Boolean       bNoRcvUntilDone;
-    /** @brief Tells wether data has been delayed because of bNoRcvUntilDone. */
+    /** @brief Tells whether data has been delayed because of bNoRcvUntilDone. */
     OpcUa_Boolean       bRcvDataPending;
 };
 

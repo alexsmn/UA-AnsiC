@@ -54,7 +54,7 @@ OpcUa_Buffer;
   @param dataSize   [in]  The size of the memory block.
   @param blockSize  [in]  The size of block allocate when more space is required.
   @param maxSize    [in]  The maximum size of the buffer (zero means no limit).
-  @param freeBuffer [in]  Wether the memory block should be freed when the buffer is freed.
+  @param freeBuffer [in]  Whether the memory block should be freed when the buffer is freed.
   @param ppBuffer  [out] The new buffer.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Buffer_Create(
@@ -73,7 +73,7 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Buffer_Create(
   @param uDataSize   [in]  The size of the memory block.
   @param uBlockSize  [in]  The size of block allocate when more space is required.
   @param uMaxSize    [in]  The maximum size of the buffer (zero means no limit).
-  @param bFreeBuffer [in]  Wether the memory block should be freed when the buffer is freed.
+  @param bFreeBuffer [in]  Whether the memory block should be freed when the buffer is freed.
 */
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Buffer_Initialize(
     OpcUa_Buffer* pBuffer,

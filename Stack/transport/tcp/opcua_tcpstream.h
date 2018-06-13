@@ -128,7 +128,7 @@ struct _OpcUa_TcpInputStream
     OpcUa_UInt32                        MessageLength;
     /** @brief The communication handle with which the message was received from. */
     OpcUa_Socket                        Socket;
-    /** @brief Tells wether the stream is closed for reading. */
+    /** @brief Tells whether the stream is closed for reading. */
     OpcUa_Boolean                       Closed;
     /** @brief The current state of the stream. @see OpcUa_TcpStream_State */
     OpcUa_TcpStream_State               State;
@@ -161,7 +161,7 @@ struct _OpcUa_TcpOutputStream
     OpcUa_TcpStream_MessageType         MessageType;
     /** @brief The communication handle with which the message is sent. */
     OpcUa_Socket                        Socket;
-    /** @brief Tells wether the stream is closed for reading. */
+    /** @brief Tells whether the stream is closed for reading. */
     OpcUa_Boolean                       Closed;
     /** @brief Handle of the underlying connection. */
     OpcUa_Void*                         hConnection;

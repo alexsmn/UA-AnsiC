@@ -39,7 +39,7 @@
 
 /**
 * The internally used socket handle. Contains a raw socket in its system
-* representation and a flag, indicating wether the socket is usable or not.
+* representation and a flag, indicating whether the socket is usable or not.
 */
 typedef OpcUa_Void* OpcUa_RawSocket; /* pointer to a socket of the platform type */
 
