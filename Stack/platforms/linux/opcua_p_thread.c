@@ -36,6 +36,7 @@
 
 #include <opcua_p_internal.h>
 #include <opcua_p_thread.h>
+#include <opcua_p_memory.h>
 #include <opcua_p_openssl.h>
 
 
@@ -98,7 +99,7 @@ OpcUa_Void OpcUa_P_Thread_Initialize(OpcUa_RawThread RawThread)
 OpcUa_StatusCode OpcUa_P_Thread_Create(OpcUa_RawThread* pRawThread)
 {
     OpcUa_StatusCode uStatus = OpcUa_Good;
-    *pRawThread = (OpcUa_RawThread)malloc(sizeof(OpcUa_P_ThreadArg));
+    *pRawThread = (OpcUa_RawThread)OpcUa_P_Memory_Alloc(sizeof(OpcUa_P_ThreadArg));
     OpcUa_ReturnErrorIfAllocFailed(*pRawThread);
 
     OpcUa_P_Thread_Initialize(*pRawThread);
@@ -121,7 +122,7 @@ OpcUa_Void OpcUa_P_Thread_Clear(OpcUa_RawThread RawThread)
 OpcUa_Void OpcUa_P_Thread_Delete(OpcUa_RawThread* pRawThread)
 {
     pthread_join(*(pthread_t*)*pRawThread, NULL);
-    free(*pRawThread);
+    OpcUa_P_Memory_Free(*pRawThread);
     *pRawThread = OpcUa_Null;
     return;
 }

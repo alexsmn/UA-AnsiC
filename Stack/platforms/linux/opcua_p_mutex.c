@@ -32,6 +32,7 @@
 
 #include <opcua_mutex.h>
 #include <opcua_p_mutex.h>
+#include <opcua_p_memory.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -95,14 +96,14 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Mutex_Create(OpcUa_Mutex* a_phMutex)
         return OpcUa_BadInvalidArgument;
     }
 
-    hMutex = (OpcUa_Mutex)malloc(sizeof(pthread_mutex_t));
+    hMutex = (OpcUa_Mutex)OpcUa_P_Memory_Alloc(sizeof(pthread_mutex_t));
     OpcUa_ReturnErrorIfAllocFailed(hMutex);
 
     uStatus = OpcUa_P_Mutex_Initialize(hMutex);
 
     if(OpcUa_IsBad(uStatus))
     {
-        free(hMutex);
+        OpcUa_P_Memory_Free(hMutex);
     }
     else
     {
@@ -137,7 +138,7 @@ OpcUa_Void OPCUA_DLLCALL OpcUa_P_Mutex_Delete(OpcUa_Mutex* a_phMutex)
     else
     {
         OpcUa_P_Mutex_Clear(*a_phMutex);
-        free(*a_phMutex);
+        OpcUa_P_Memory_Free(*a_phMutex);
         *a_phMutex = OpcUa_Null;
     }
 }

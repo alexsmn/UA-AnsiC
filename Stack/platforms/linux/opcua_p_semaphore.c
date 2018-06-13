@@ -65,7 +65,7 @@ OpcUa_StatusCode    OpcUa_P_Semaphore_Create(OpcUa_Semaphore* a_Semaphore,
 
     *a_Semaphore = OpcUa_Null;
 
-    pInternalSemaphore = (sem_t *)malloc(sizeof(sem_t));
+    pInternalSemaphore = (sem_t *)OpcUa_P_Memory_Alloc(sizeof(sem_t));
 
     if(pInternalSemaphore == OpcUa_Null)
     {
@@ -74,7 +74,7 @@ OpcUa_StatusCode    OpcUa_P_Semaphore_Create(OpcUa_Semaphore* a_Semaphore,
 
     if(sem_init(pInternalSemaphore, 0, (unsigned int)a_uInitalValue) != 0) /* 0 = process local semaphore */
     {
-        free(pInternalSemaphore);
+        OpcUa_P_Memory_Free(pInternalSemaphore);
         return OpcUa_BadInternalError;
     }
 
@@ -93,7 +93,7 @@ OpcUa_Void OpcUa_P_Semaphore_Delete(OpcUa_Semaphore* pRawSemaphore)
     pInternalSemaphore = (sem_t*) *pRawSemaphore;
 
     sem_destroy(pInternalSemaphore);
-    free(pInternalSemaphore);
+    OpcUa_P_Memory_Free(pInternalSemaphore);
     *pRawSemaphore = OpcUa_Null;
 }
 
