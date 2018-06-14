@@ -1525,22 +1525,19 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpConnection, "ParseURL");
     {
         sTemp1 = sTemp2;
 
-        if(sTemp2 != OpcUa_Null)
-        {
-            iLen = uLen - (OpcUa_Int)(sTemp2 - sUrl);
+        iLen = uLen - (OpcUa_Int)(sTemp2 - sUrl);
 
-            /* set resource path - raw string is zero terminated */
-            uStatus =   OpcUa_String_AttachToString(    sTemp1,
-                                                        iLen,
-                                                        0,
-                                                        OpcUa_True,
-                                                        OpcUa_True,
-                                                        a_psResourcePath);
-            OpcUa_GotoErrorIfBad(uStatus);
-        }
+        /* set resource path - raw string is zero terminated */
+        uStatus =   OpcUa_String_AttachToString(    sTemp1,
+                                                    iLen,
+                                                    0,
+                                                    OpcUa_True,
+                                                    OpcUa_True,
+                                                    a_psResourcePath);
+        OpcUa_GotoErrorIfBad(uStatus);
     }
 
-    if(sTemp2 == OpcUa_Null)
+    else
     {
         /* no resource path - set root */
         uStatus =   OpcUa_String_AttachToString(    "/",
