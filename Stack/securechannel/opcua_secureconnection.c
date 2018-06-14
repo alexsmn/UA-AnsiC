@@ -1867,7 +1867,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "BeginSendRequest");
     }
 
     /* check whether SecureChannel is in a correct state */
-    if((pSecureChannel == OpcUa_Null)|| (pSecureChannel->State != OpcUa_SecureChannelState_Opened))
+    if(pSecureChannel->State != OpcUa_SecureChannelState_Opened)
     {
         OpcUa_Trace(OPCUA_TRACE_LEVEL_WARNING, "OpcUa_SecureConnection_BeginSendRequest: SecureChannel is not connected!\n");
         OpcUa_GotoErrorWithStatus(OpcUa_BadInvalidState);
