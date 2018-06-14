@@ -989,8 +989,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "BeginSendResponse");
 
     /* check whether SecureChannel is in a correct state */
     OPCUA_SECURECHANNEL_LOCK(pSecureChannel);
-    if(     (pSecureChannel         == OpcUa_Null)
-        ||  (pSecureChannel->State  != OpcUa_SecureChannelState_Opened))
+    if(pSecureChannel->State  != OpcUa_SecureChannelState_Opened)
     {
         uStatus = OpcUa_BadInvalidState;
         OPCUA_SECURECHANNEL_UNLOCK(pSecureChannel);
