@@ -1479,15 +1479,9 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "AbortResponse");
     }
 
     /* delete request */
-    if(pSecureRequest != OpcUa_Null)
-    {
-        OpcUa_SecureRequest_Delete(&pSecureRequest);
-    }
+    OpcUa_SecureRequest_Delete(&pSecureRequest);
 
-    if(pSecureIstrm != OpcUa_Null)
-    {
-        pSecureIstrm->Delete((OpcUa_Stream**)&pSecureIstrm);
-    }
+    pSecureIstrm->Delete((OpcUa_Stream**)&pSecureIstrm);
 
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
