@@ -304,28 +304,6 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_SecureStream_EncryptOutput( OpcUa_OutputStre
                                                                 OpcUa_Key*              pInitialVector);
 
 /**
-  @brief Calculates the total outputlength that is needed for encrypting a specific amount of data.
-
-  @param uBufferLength          [in]  The length of the target buffer.
-  @param pCryptoProvider        [in]  The cryptoprovider used for cryptographic operations on the stream.
-                                      If this pointer is NULL then an error will be returned.
-  @param pCryptoKey             [in]  Asymmetric public key or symmetric key.
-                                      If this pointer is NULL then an error will be returned.
-  @param bUseSymmetricAlgorithm [in]  Indicates whether to use symmetric or asymmetric
-                                      cryptographic algorithms to encrypt the outputstream.
-  @param pInitialVector         [in]  The initial vector that should be used in case of symmetric
-                                      encryption.
-  @param pOutputLength          [out] The resulting total outputlength that is needed for the encrypted data.
-                                      If bUseSymmetricAlgorithm is OpcUa_True then this pointer must not be NULL or an error will be returned.
-*/
-OpcUa_StatusCode OpcUa_SecureStream_CalculateEncryptionOutputLength(    OpcUa_UInt32            uBufferLength,
-                                                                        OpcUa_CryptoProvider*   pCryptoProvider,
-                                                                        OpcUa_Key*              pCryptoKey,
-                                                                        OpcUa_Boolean           bUseSymmetricAlgorithm,
-                                                                        OpcUa_Key*              pInitialVector,
-                                                                        OpcUa_UInt32*           pOutputLength);
-
-/**
   @brief signs a given outputstream.
 
   @param pOstrm                 [bi]  The outputstream and after the function has been processed the signed outputstream.
