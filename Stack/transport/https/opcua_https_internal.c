@@ -907,7 +907,7 @@ OpcUa_InitializeStatus(OpcUa_Module_HttpStream, "OpcUa_HttpsHeaderCollection_Par
         uStatus = OpcUa_HttpsHeaderCollection_AddHeader(*a_ppHeaderCollection, pHttpHeader);
         OpcUa_GotoErrorIfBad(uStatus);
 
-        pInitialChar = (pTerminalChar != OpcUa_Null)? pTerminalChar + 2: pTerminalChar;
+        pInitialChar = pTerminalChar + 2;
     }
 
     OpcUa_String_Clear(&sSubstring);
