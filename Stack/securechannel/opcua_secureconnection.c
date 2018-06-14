@@ -3523,11 +3523,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "ProcessSessionCallRespons
         }
 
         /* delete request */
-        if(pSecureRequest != OpcUa_Null)
-        {
-            OpcUa_SecureRequest_Delete(&pSecureRequest);
-            pSecureRequest = OpcUa_Null;
-        }
+        OpcUa_SecureRequest_Delete(&pSecureRequest);
 
         if(pSecureIstrm != OpcUa_Null)
         {
@@ -3542,7 +3538,6 @@ OpcUa_BeginErrorHandling;
     if(pSecureRequest != OpcUa_Null)
     {
         OpcUa_SecureRequest_Delete(&pSecureRequest);
-        pSecureRequest = OpcUa_Null;
     }
 
     /* null input stream handle */
