@@ -2096,12 +2096,8 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureConnection, "Disconnect");
                                                             OpcUa_BadDisconnect);
             }
 
-            if(pCloseSecureChannelRequest != OpcUa_Null)
-            {
-                OpcUa_CloseSecureChannelRequest_Clear(pCloseSecureChannelRequest);
-                OpcUa_Free(pCloseSecureChannelRequest);
-                pCloseSecureChannelRequest = OpcUa_Null;
-            }
+            OpcUa_CloseSecureChannelRequest_Clear(pCloseSecureChannelRequest);
+            OpcUa_Free(pCloseSecureChannelRequest);
 
             break;
         }
