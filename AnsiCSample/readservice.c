@@ -386,7 +386,7 @@ OpcUa_StatusCode my_Read(
 	MY_TRACE("\nnumber of nodes :%d\n",a_nNoOfNodesToRead);
 	for(i=0;i<a_nNoOfNodesToRead;i++)
 	{
-		MY_TRACE("\n|%d|, |%d| attributeId:%u\n",(a_pNodesToRead+i)->NodeId.NamespaceIndex,(a_pNodesToRead+i)->NodeId.Identifier.Numeric,(a_pNodesToRead+i)->AttributeId);
+		MY_TRACE("\n%s attributeId:%u\n",getNodeIdString(&(a_pNodesToRead+i)->NodeId),(a_pNodesToRead+i)->AttributeId);
 		
 	}
 #endif /*_DEBUGGING_*/

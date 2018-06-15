@@ -130,7 +130,7 @@ OpcUa_StatusCode my_Browse(
 			OpcUa_BrowseResult_Initialize((*a_pResults+m));
 			pointer_to_node= search_for_node((a_pNodesToBrowse+m)->NodeId);
 			#ifndef NO_DEBUGGING_
-			MY_TRACE("\nBrowse by NodeId:|%d|  NamespaceIndex: |%d|\n",(a_pNodesToBrowse+m)->NodeId.Identifier.Numeric,(a_pNodesToBrowse+m)->NodeId.NamespaceIndex);
+			MY_TRACE("\nBrowse by NodeId: %s\n",getNodeIdString(&(a_pNodesToBrowse+m)->NodeId));
 			#endif /*_DEBUGGING_*/
 			if(pointer_to_node!=OpcUa_Null) /* Browse only existing nodes */
 			{
@@ -240,7 +240,7 @@ OpcUa_StatusCode browse(OpcUa_BrowseDescription* a_pNodesToBrowse,OpcUa_BrowseRe
 									OpcUa_GotoErrorIfBad(uStatus);
 									(a_pResults ->References+NoofRef)->NodeId.ServerIndex=0;
 									#ifndef NO_DEBUGGING_
-										MY_TRACE("|%d| |%d|\n",pointer_to_targetnode->NodeId.NamespaceIndex,pointer_to_targetnode->NodeId.Identifier.Numeric);
+										MY_TRACE("%s\n",getNodeIdString(&pointer_to_targetnode->NodeId));
 									#endif /*_DEBUGGING_*/
 									/**********************/
 	

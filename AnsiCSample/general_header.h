@@ -69,6 +69,7 @@ OpcUa_StatusCode		my_GetDateTimeDiffInSeconds32								    (OpcUa_DateTime  ,Opc
 OpcUa_StatusCode		getEndpoints													(OpcUa_Int32*  ,OpcUa_EndpointDescription** );
 OpcUa_StatusCode		initialize_value_attribute_of_variablenodes_variabletypenodes	(OpcUa_Void);
 OpcUa_StatusCode		fill_server_variable											(OpcUa_ApplicationDescription* );
+const OpcUa_CharA*		getNodeIdString							(const OpcUa_NodeId* a_NodeId);
 
  
 

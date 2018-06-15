@@ -1491,6 +1491,26 @@ OpcUa_StatusCode fill_server_variable(OpcUa_ApplicationDescription* p_Server)
 	OpcUa_FinishErrorHandling;
 }
 
+const OpcUa_CharA*
+getNodeIdString(const OpcUa_NodeId* a_NodeId)
+{
+    static char buffer[256];
+
+    switch (a_NodeId->IdentifierType)
+    {
+    case OpcUa_IdentifierType_Numeric:
+        snprintf(buffer, sizeof(buffer), "NS%d|Numeric|%d", a_NodeId->NamespaceIndex, a_NodeId->Identifier.Numeric);
+        break;
+    case OpcUa_IdentifierType_String:
+        snprintf(buffer, sizeof(buffer), "NS%d|String|%s", a_NodeId->NamespaceIndex, OpcUa_String_GetRawString(&a_NodeId->Identifier.String));
+        break;
+    default:
+        snprintf(buffer, sizeof(buffer), "NS%d|Other", a_NodeId->NamespaceIndex);
+        break;
+    }
+
+    return buffer;
+}
 
 /*********************************************************************************************/
 /***********************        Application Main Entry Point          ************************/
