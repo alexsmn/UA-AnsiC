@@ -118,20 +118,6 @@ OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_GenerateAsymmetricKeyPair(
 }
 
 /*============================================================================
- * OpcUa_P_OpenSSL_NoSecurity_GetAsymmetricKeyLength
- *===========================================================================*/
-OpcUa_StatusCode OpcUa_P_OpenSSL_NoSecurity_GetAsymmetricKeyLength(
-    OpcUa_CryptoProvider*   a_pProvider,
-    OpcUa_Key               a_publicKey,
-    OpcUa_UInt32*           a_pBits)
-{
-    OpcUa_ReferenceParameter(a_pProvider);
-    OpcUa_ReferenceParameter(a_publicKey);
-    OpcUa_ReferenceParameter(a_pBits);
-
-    return OpcUa_BadNotSupported;
-}
-/*============================================================================
  * OpcUa_P_Crypto_NoSecurity_DeriveChannelKeysets
  *===========================================================================*/
 OpcUa_StatusCode OpcUa_P_Crypto_NoSecurity_DeriveChannelKeysets(

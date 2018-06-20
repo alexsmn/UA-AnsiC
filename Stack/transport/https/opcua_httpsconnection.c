@@ -204,6 +204,7 @@ OpcUa_StatusCode OpcUa_HttpsConnection_Disconnect(
 /*============================================================================
  * OpcUa_HttpsConnection_WatchdogTimerCallback
  *===========================================================================*/
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_HttpsConnection_WatchdogTimerCallback( OpcUa_Void*     a_pvCallbackData,
                                                                             OpcUa_Timer     a_hTimer,
                                                                             OpcUa_UInt32    a_msecElapsed)
@@ -306,6 +307,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_HttpsConnection_WatchdogTimerCallback( OpcU
 /*============================================================================
  * OpcUa_HttpsConnection_WatchdogTimerKillCallback
  *===========================================================================*/
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_HttpsConnection_WatchdogTimerKillCallback( OpcUa_Void*     a_pvCallbackData,
                                                                                 OpcUa_Timer     a_hTimer,
                                                                                 OpcUa_UInt32    a_msecElapsed)
@@ -353,6 +355,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_HttpsConnection_WatchdogTimerKillCallback( 
 /*============================================================================
  * OpcUa_HttpsConnection_GetRequestByStream
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_GetRequestByStream(  OpcUa_HttpsConnection*          a_pHttpConnection,
                                                             OpcUa_OutputStream*             a_pOutputStream,
                                                             OpcUa_HttpsConnection_Request** a_ppRequest)
@@ -396,6 +399,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_GetRequestInState
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_GetRequestInState(   OpcUa_HttpsConnection*            a_pHttpConnection,
                                                             OpcUa_HttpsConnectionState        a_eState,
                                                             OpcUa_HttpsConnection_Request**   a_ppRequest)
@@ -730,6 +734,7 @@ OpcUa_FinishErrorHandling;
  * This may happen ie. if a connect fails because the server is not reachable.
  * The event needs to be messaged to the upper layers.
  */
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_ExceptEventHandler(
     OpcUa_HttpsConnection_Request*  a_pRequest,
     OpcUa_Socket                    a_hSocket)
@@ -838,6 +843,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called if data can be written to the socket.
 */
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_WriteEventHandler(
     OpcUa_HttpsConnection_Request*  a_pRequest,
     OpcUa_Socket                    a_pSocket)
@@ -1029,6 +1035,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_SslEventHandler
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_SslEventHandler( OpcUa_Socket        a_hSocket,
                                                         OpcUa_Void*         a_pUserData,
                                                         OpcUa_ByteString*   a_pCertificate,
@@ -1098,6 +1105,7 @@ OpcUa_FinishErrorHandling;
 /**
  * @brief Called by the socket callback when a connect event occurred.
  */
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_ConnectEventHandler(
     OpcUa_HttpsConnection_Request*  a_pRequest,
     OpcUa_Socket                    a_hSocket)
@@ -1183,6 +1191,7 @@ OpcUa_FinishErrorHandling;
 /**
  * @brief Gets called if data is available on the socket. The connection instance must be locked here!
  */
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_ReadEventHandler(
     OpcUa_HttpsConnection_Request*  a_pRequest,
     OpcUa_Socket                    a_hSocket)
@@ -1446,6 +1455,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_ParseURL
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_ParseURL(    OpcUa_String*   a_psUrl,
                                                     OpcUa_String*   a_psHost,
                                                     OpcUa_String*   a_psResourcePath)
@@ -1564,6 +1574,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_Connect
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_Connect(
     struct _OpcUa_Connection*       a_pConnection,
     OpcUa_String*                   a_sUrl,
@@ -1794,7 +1805,8 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_BeginSendRequest
  *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_HttpsConnection_BeginSendRequest(
+static
+OpcUa_StatusCode OpcUa_HttpsConnection_BeginSendRequest(
     OpcUa_Connection*    a_pConnection,
     OpcUa_OutputStream** a_ppOutputStream)
 {
@@ -1913,6 +1925,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_EndSendRequest
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_EndSendRequest(
     OpcUa_Connection*               a_pConnection,
     OpcUa_OutputStream**            a_ppOutputStream,
@@ -2078,6 +2091,7 @@ OpcUa_FinishErrorHandling;
          takes care about the stream itself. Only if non null the http transport
          generates an abort message. this is not handled by the ua stack because
          abort messages are always secured. */
+static
 OpcUa_StatusCode OpcUa_HttpsConnection_AbortSendRequest(
     OpcUa_Connection*       a_pConnection,
     OpcUa_StatusCode        a_uStatus,
@@ -2143,6 +2157,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsConnection_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_HttpsConnection_Delete(OpcUa_Connection** a_ppConnection)
 {
     OpcUa_HttpsConnection*          pHttpConnection = OpcUa_Null;

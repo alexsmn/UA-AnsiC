@@ -32,6 +32,7 @@
 #include <errno.h>      /* for errornumbers when using save functions */
 
 #include <opcua_p_internal.h>
+#include <opcua_p_memory.h>
 
 
 /*============================================================================

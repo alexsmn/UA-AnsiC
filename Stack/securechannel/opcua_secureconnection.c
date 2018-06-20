@@ -424,6 +424,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_WatchdogTimerCallback
  *===========================================================================*/
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_WatchdogTimerCallback(    OpcUa_Void*     a_pvCallbackData,
                                                                                 OpcUa_Timer     a_hTimer,
                                                                                 OpcUa_UInt32    a_msecElapsed)
@@ -492,6 +493,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_WatchdogTimerCallback(    
  * OpcUa_SecureConnection_WatchdogTimerKillCallback
  *===========================================================================*/
 /* informational and debug only */
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_WatchdogTimerKillCallback(    OpcUa_Void*     a_pvCallbackData,
                                                                                     OpcUa_Timer     a_hTimer,
                                                                                     OpcUa_UInt32    a_msecElapsed)
@@ -540,6 +542,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_WatchdogTimerKillCallback(
  * OpcUa_SecureConnection_RenewTimerKillCallback
  *===========================================================================*/
 /* informational and debug only */
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_RenewTimerKillCallback(   OpcUa_Void*     a_pvCallbackData,
                                                                                 OpcUa_Timer     a_hTimer,
                                                                                 OpcUa_UInt32    a_msecElapsed)
@@ -554,6 +557,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_RenewTimerKillCallback(   
 /*============================================================================
  * OpcUa_SecureConnection_RenewTimerCallback
  *===========================================================================*/
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureConnection_RenewTimerCallback(   OpcUa_Void*     a_pvCallbackData,
                                                                             OpcUa_Timer     a_hTimer,
                                                                             OpcUa_UInt32    a_msecElapsed)
@@ -644,6 +648,7 @@ static OpcUa_Void OpcUa_SecureRequest_Delete(OpcUa_SecureRequest** a_ppRequest)
 /*============================================================================
  * OpcUa_SecureConnection_RemoveSecureRequestByType
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_RemoveSecureRequestByType(  OpcUa_Connection*       a_pConnection,
                                                                     OpcUa_SecureRequestType a_eRequestType,
                                                                     OpcUa_SecureRequest**   a_ppSecureRequest)
@@ -688,6 +693,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_RemoveSecureRequestById
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_RemoveSecureRequestById(    OpcUa_Connection*       a_pConnection,
                                                                     OpcUa_UInt32            a_uRequestId,
                                                                     OpcUa_SecureRequest**   a_ppSecureRequest)
@@ -797,6 +803,7 @@ OpcUa_FinishErrorHandling;
  * OpcUa_SecureConnection_OnOpenSecureChannelResponse
  *===========================================================================*/
 /* only called in case of error */
+static
 OpcUa_StatusCode OpcUa_SecureConnection_OnOpenSecureChannelResponse(
     OpcUa_Connection*         a_pConnection,
     OpcUa_Void*               a_pCallbackData,
@@ -1080,6 +1087,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_Connect
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_Connect(
     OpcUa_Connection*               a_pConnection,
     OpcUa_String*                   a_sUrl,
@@ -1836,6 +1844,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_BeginSendRequest
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_BeginSendRequest(
     OpcUa_Connection*       a_pConnection,
     OpcUa_OutputStream**    a_ppSecureOstrm)
@@ -1905,6 +1914,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_BeginSendCloseSecureChannelRequest
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_BeginSendCloseSecureChannelRequest(
     OpcUa_Connection*       a_pConnection,
     OpcUa_OutputStream**    a_ppSecureOstrm)
@@ -1957,6 +1967,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_Disconnect
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_Disconnect( OpcUa_Connection* a_pSecureConnection,
                                                     OpcUa_Boolean     a_bNotifyOnComplete)
 {
@@ -2489,6 +2500,7 @@ OpcUa_FinishErrorHandling;
     (header) and preencoding the abort message header plus the additional
     fields error (status code) and reason (string); afterwards, security
     is applied and the stream is closed. */
+static
 OpcUa_StatusCode OpcUa_SecureConnection_AbortSendRequest(
     OpcUa_Connection*    a_pConnection,
     OpcUa_StatusCode     a_uStatus,
@@ -2560,6 +2572,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_SecureConnection_Delete(OpcUa_Connection** a_ppConnection)
 {
     OpcUa_SecureConnection* pSecureConnection   = OpcUa_Null;
@@ -2791,6 +2804,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureConnection_ReadResponse
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureConnection_ReadResponse(
     OpcUa_SecureConnection*         a_pSecureConnection,
     OpcUa_InputStream*              a_pIstrm,

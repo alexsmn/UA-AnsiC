@@ -22,7 +22,7 @@ TARGET = $(ROOT)/lib/$(BIN_PATH)/$(CC)/$(BUILD_TARGET)/libuastack.a
 DIRS = core stackcore securechannel transport/tcp transport/https \
        proxystub/clientproxy proxystub/serverstub platforms/linux
 
-CFLAGS = -Wall -Wextra -Wshadow -Wundef -pthread \
+CFLAGS = -Wall -Wextra -Wshadow -Wundef -Wmissing-prototypes -Wstrict-prototypes -pthread \
          $(patsubst %,-I%,$(DIRS)) $(EXTRA_CFLAGS)
 
 SOURCES = $(wildcard $(patsubst %,%/*.c,$(DIRS)))

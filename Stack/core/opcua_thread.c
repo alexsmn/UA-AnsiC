@@ -55,6 +55,7 @@ struct _OpcUa_ThreadInternal
 /*============================================================================
  * The internal main entry function.
  *===========================================================================*/
+static
 OpcUa_Void InternalThreadMain(OpcUa_Void* a_Thread)
 {
     OpcUa_ThreadInternal* Thread = (OpcUa_ThreadInternal*)a_Thread;

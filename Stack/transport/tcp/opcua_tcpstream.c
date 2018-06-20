@@ -88,6 +88,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpStream_AttachBuffer
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpStream_AttachBuffer(  OpcUa_Stream*   a_pStream,
                                                 OpcUa_Buffer*   a_pBuffer)
 {
@@ -145,6 +146,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpStream_GetChunkLength
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpStream_GetChunkLength(    OpcUa_Stream* a_pStream,
                                                     OpcUa_UInt32* a_puLength)
 {

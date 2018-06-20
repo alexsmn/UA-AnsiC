@@ -598,28 +598,6 @@ OpcUa_FinishErrorHandling;
 } /* OpcUa_TcpConnection_ProcessResponse */
 
 /*============================================================================
- * OpcUa_TcpListener_DisconnectEventHandler
- *===========================================================================*/
-/**
-* @brief Gets called if the connection with the server gets broke (not the UATD -> ProcessDisconnectMessage).
-*/
-OpcUa_StatusCode OpcUa_TcpConnection_DisconnectEventHandler(OpcUa_Connection*   a_pConnection,
-                                                            OpcUa_Socket        a_pSocket)
-{
-OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "DisconnectEventHandler");
-
-    OpcUa_ReferenceParameter(a_pSocket);
-
-    /* Call the internal handler */
-    uStatus = OpcUa_TcpConnection_HandleDisconnect(a_pConnection);
-    OpcUa_GotoErrorIfBad(uStatus);
-
-OpcUa_ReturnStatusCode;
-OpcUa_BeginErrorHandling;
-OpcUa_FinishErrorHandling;
-} /* OpcUa_TcpConnection_DisconnectEventHandler */
-
-/*============================================================================
  * OpcUa_TcpConnection_ExceptEventHandler
  *===========================================================================*/
 /**
@@ -628,6 +606,7 @@ OpcUa_FinishErrorHandling;
  * This may happen ie. if a connect fails because the server is not reachable.
  * The event needs to be messaged to the upper layers.
  */
+static
 OpcUa_StatusCode OpcUa_TcpConnection_ExceptEventHandler(    OpcUa_Connection*   a_pConnection,
                                                             OpcUa_Socket        a_pSocket)
 {
@@ -674,6 +653,7 @@ OpcUa_FinishErrorHandling;
 /**
  * @brief Called by the socket callback when a connect event occurred.
  */
+static
 OpcUa_StatusCode OpcUa_TcpConnection_ConnectEventHandler(       OpcUa_Connection*   a_pConnection,
                                                                 OpcUa_Socket        a_pSocket)
 {
@@ -706,6 +686,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called if data is available on the socket. The connection instance must be locked here!
 */
+static
 OpcUa_StatusCode OpcUa_TcpConnection_ReadEventHandler(
     OpcUa_Connection*   a_pConnection,
     OpcUa_Socket        a_pSocket)
@@ -841,6 +822,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called if data can be written to the socket.
 */
+static
 OpcUa_StatusCode OpcUa_TcpConnection_WriteEventHandler(
     OpcUa_Connection*   a_pConnection,
     OpcUa_Socket        a_pSocket)
@@ -1085,6 +1067,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpConnection_Connect
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpConnection_Connect(
     struct _OpcUa_Connection*       a_pConnection,
     OpcUa_String*                   a_sUrl,
@@ -1237,7 +1220,8 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpConnection_BeginSendMessage
  *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_TcpConnection_BeginSendRequest(
+static
+OpcUa_StatusCode OpcUa_TcpConnection_BeginSendRequest(
     OpcUa_Connection*    a_pConnection,
     OpcUa_OutputStream** a_ppOutputStream)
 {
@@ -1285,6 +1269,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpConnection_EndSendMessage
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpConnection_EndSendRequest(OpcUa_Connection*               a_pConnection,
                                                     OpcUa_OutputStream**            a_ppOutputStream,
                                                     OpcUa_UInt32                    a_uTimeout,
@@ -1348,6 +1333,7 @@ OpcUa_FinishErrorHandling;
          takes care about the stream itself. Only if non null the tcp transport
          generates an abort message. this is not handled by the ua stack because
          abort messages are always secured. */
+static
 OpcUa_StatusCode OpcUa_TcpConnection_AbortSendRequest(  OpcUa_Connection*    a_pConnection,
                                                         OpcUa_StatusCode     a_uStatus,
                                                         OpcUa_String*        a_psReason,
@@ -1463,6 +1449,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpConnection_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_TcpConnection_Delete(OpcUa_Connection** a_ppConnection)
 {
     OpcUa_TcpConnection*    tcpConnection       = OpcUa_Null;

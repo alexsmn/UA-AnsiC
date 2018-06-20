@@ -52,6 +52,7 @@
 /*============================================================================
  * OpcUa_P_ByteString_Clear
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_P_ByteString_Clear(OpcUa_ByteString* a_pValue)
 {
     if(a_pValue == OpcUa_Null)
@@ -71,6 +72,7 @@ OpcUa_Void OpcUa_P_ByteString_Clear(OpcUa_ByteString* a_pValue)
 /*============================================================================
  * OpcUa_Key_Clear
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_P_Key_Clear(OpcUa_Key* a_pKey)
 {
     OpcUa_P_ByteString_Clear(&a_pKey->Key);
@@ -933,6 +935,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_P_OpenSSL_DeriveChannelKeyset
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_P_OpenSSL_DeriveChannelKeyset(
     OpcUa_CryptoProvider*   a_pCryptoProvider,
     OpcUa_ByteString        a_remoteNonce,

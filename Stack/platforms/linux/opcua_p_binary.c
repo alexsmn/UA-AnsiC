@@ -28,10 +28,11 @@
  * ======================================================================*/
 
 #include <memory.h>
-#include "opcua_platformdefs.h"
-#include "opcua_statuscodes.h"
-#include "opcua_errorhandling.h"
-#include "opcua_trace.h"
+#include <opcua_platformdefs.h>
+#include <opcua_statuscodes.h>
+#include <opcua_errorhandling.h>
+#include <opcua_trace.h>
+#include <opcua_p_binary.h>
 
 /*============================================================================
  * OpcUa_Boolean_P_NativeToWire

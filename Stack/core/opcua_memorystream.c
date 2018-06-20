@@ -64,6 +64,7 @@ if (((OpcUa_MemoryStream*)xStrm->Handle)->SanityCheck != OpcUa_MemoryStream_Sani
 /*============================================================================
  * OpcUa_MemoryStream_Read
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_Read(
     OpcUa_InputStream*             istrm,
     OpcUa_Byte*                    buffer,
@@ -91,6 +92,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_Read(
 /*============================================================================
  * OpcUa_MemoryStream_Write
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_Write(
     OpcUa_OutputStream* ostrm,
     OpcUa_Byte*         buffer,
@@ -118,6 +120,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_Write(
 /*============================================================================
  * OpcUa_MemoryStream_Flush
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_Flush(
     OpcUa_OutputStream* ostrm,
     OpcUa_Boolean       lastCall)
@@ -159,6 +162,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_MemoryStream_Close
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_Close(
     OpcUa_Stream*       strm)
 {
@@ -192,6 +196,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_Close(
 /*============================================================================
  * OpcUa_MemoryStream_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_MemoryStream_Delete(
     OpcUa_Stream**      strm)
 {
@@ -213,6 +218,7 @@ OpcUa_Void OpcUa_MemoryStream_Delete(
 /*============================================================================
  * OpcUa_MemoryStream_GetPosition
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_GetPosition(
     OpcUa_Stream*       strm,
     OpcUa_UInt32*       position)
@@ -233,6 +239,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_GetPosition(
 /*============================================================================
  * OpcUa_Stream_SetPosition
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_SetPosition(
     OpcUa_Stream*         strm,
     OpcUa_UInt32          position)
@@ -256,6 +263,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_SetPosition(
 /*============================================================================
  * OpcUa_MemoryStream_AttachBuffer
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_AttachBuffer(   OpcUa_Stream*   a_pStrm,
                                                     OpcUa_Buffer*   a_pBuffer)
 {
@@ -277,6 +285,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_AttachBuffer(   OpcUa_Stream*   a_pStrm,
 /*============================================================================
  * OpcUa_MemoryStream_DetachBuffer
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_DetachBuffer(   OpcUa_Stream*   a_pStrm,
                                                     OpcUa_Buffer*   a_pBuffer)
 {
@@ -296,6 +305,7 @@ OpcUa_StatusCode OpcUa_MemoryStream_DetachBuffer(   OpcUa_Stream*   a_pStrm,
 /*============================================================================
  * OpcUa_MemoryStream_GetChunkLength
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_MemoryStream_GetChunkLength( OpcUa_Stream*   a_pStrm,
                                                     OpcUa_UInt32*   a_puLength)
 {

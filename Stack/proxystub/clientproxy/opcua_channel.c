@@ -116,7 +116,8 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_Channel_Clear
  *===========================================================================*/
-OPCUA_EXPORT OpcUa_Void OpcUa_Channel_Clear(OpcUa_Channel a_hChannel)
+static
+OpcUa_Void OpcUa_Channel_Clear(OpcUa_Channel a_hChannel)
 {
     if(a_hChannel != OpcUa_Null)
     {

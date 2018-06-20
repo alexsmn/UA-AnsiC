@@ -50,6 +50,7 @@ OpcUa_Void OpcUa_StringTable_Clear(OpcUa_StringTable* a_pTable)
 /*============================================================================
  * OpcUa_StringTable_EnsureCapacity
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_StringTable_EnsureCapacity(
     OpcUa_StringTable* a_pTable,
     OpcUa_UInt32       a_nCapacity)

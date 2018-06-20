@@ -45,6 +45,7 @@
 
 /* add errorchecking */
 
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Mutex_Initialize(OpcUa_Mutex hMutex)
 {
     OpcUa_StatusCode    uStatus     = OpcUa_Good;
@@ -116,6 +117,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Mutex_Create(OpcUa_Mutex* a_phMutex)
 /*============================================================================
  * Clear the mutex.
  *===========================================================================*/
+static
 OpcUa_Void OPCUA_DLLCALL OpcUa_P_Mutex_Clear(OpcUa_Mutex hMutex)
 {
     if(hMutex != OpcUa_Null)

@@ -889,6 +889,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureListener_Close
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureListener_Close(OpcUa_Listener* a_pListener)
 {
     OpcUa_SecureListener* pSecureListener = OpcUa_Null;
@@ -930,31 +931,9 @@ OpcUa_FinishErrorHandling;
 }
 
 /*============================================================================
- * OpcUa_SecureListener_GetSecureChannelId
- *===========================================================================*/
-OpcUa_StatusCode OpcUa_SecureListener_GetSecureChannelId(
-    OpcUa_InputStream*  a_pSecureIstrm,
-    OpcUa_UInt32*       a_pSecureChannelId)
-{
-    OpcUa_SecureStream* pSecureStream = OpcUa_Null;
-
-OpcUa_InitializeStatus(OpcUa_Module_SecureListener, "GetSecureChannelId");
-
-    OpcUa_ReturnErrorIfArgumentNull(a_pSecureIstrm);
-    OpcUa_ReturnErrorIfArgumentNull(a_pSecureChannelId);
-
-    pSecureStream = (OpcUa_SecureStream*)a_pSecureIstrm->Handle;
-
-    *a_pSecureChannelId = pSecureStream->SecureChannelId;
-
-OpcUa_ReturnStatusCode;
-OpcUa_BeginErrorHandling;
-OpcUa_FinishErrorHandling;
-}
-
-/*============================================================================
  * OpcUa_SecureListener_BeginSendResponse
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureListener_BeginSendResponse(OpcUa_Listener*      a_pListener,
                                                         OpcUa_Handle         a_hSecureConnection,
                                                         OpcUa_InputStream**  a_ppSecureIstrm,
@@ -1039,6 +1018,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureListener_EndSendResponse
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureListener_EndSendResponse(
     OpcUa_Listener*         a_pListener,
     OpcUa_StatusCode        a_uStatus,
@@ -1104,6 +1084,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureListener_AbortSendResponse
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureListener_AbortSendResponse(
     OpcUa_Listener*         a_pListener,
     OpcUa_StatusCode        a_uStatus,
@@ -1282,6 +1263,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureListener_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_SecureListener_Delete(OpcUa_Listener** a_ppListener)
 {
     OpcUa_SecureListener*   pSecureListener = OpcUa_Null;
@@ -1328,6 +1310,7 @@ OpcUa_Void OpcUa_SecureListener_Delete(OpcUa_Listener** a_ppListener)
 /*============================================================================
  * OpcUa_SecureListener_ChannelRemovedCallback
  *===========================================================================*/
+static
 OpcUa_Void OPCUA_DLLCALL OpcUa_SecureListener_ChannelRemovedCallback(   OpcUa_SecureChannel*    a_pSecureChannel,
                                                                         OpcUa_Void*             a_pvCallbackData)
 {
@@ -1509,6 +1492,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureListener_ReadRequest
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_SecureListener_ReadRequest(  OpcUa_SecureListener*   a_pSecureListener,
                                                     OpcUa_InputStream*      a_pIstrm,
                                                     OpcUa_UInt32            a_expectedTypeId,
@@ -2670,6 +2654,7 @@ OpcUa_FinishErrorHandling;
  * OpcUa_SecureListener_ValidateDiscoveryChannel
  *===========================================================================*/
 #if OPCUA_SECURELISTENER_DISCOVERY_MAXCHUNKS == 1
+static
 OpcUa_StatusCode OpcUa_SecureListener_ValidateDiscoveryChannel(OpcUa_SecureListener* a_pSecureListener,
                                                                OpcUa_InputStream*    a_pSecureIstrm)
 {

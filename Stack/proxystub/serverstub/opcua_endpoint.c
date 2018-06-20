@@ -273,6 +273,7 @@ OpcUa_Void OpcUa_Endpoint_Delete(OpcUa_Endpoint* a_phEndpoint)
 /*============================================================================
  * OpcUa_Endpoint_OnNotify
  *==========================================================================*/
+static
 OpcUa_StatusCode OpcUa_Endpoint_OnNotify(   OpcUa_Listener*     a_pListener,
                                             OpcUa_Void*         a_pCallbackData,
                                             OpcUa_ListenerEvent a_eEvent,
@@ -341,6 +342,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_Endpoint_OnNotify
  *==========================================================================*/
+static
 OpcUa_StatusCode OpcUa_Endpoint_OnSecureChannelEvent(   OpcUa_UInt32                            a_uSecureChannelId,
                                                         OpcUa_SecureListener_SecureChannelEvent a_eSecureChannelEvent,
                                                         OpcUa_StatusCode                        a_uStatus,

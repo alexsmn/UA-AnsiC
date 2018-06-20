@@ -153,6 +153,7 @@ struct _OpcUa_TcpListener
 /*============================================================================
  * OpcUa_TcpListener_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_TcpListener_Delete(OpcUa_Listener** a_ppListener)
 {
     OpcUa_TcpListener* pTcpListener = OpcUa_Null;
@@ -698,6 +699,7 @@ OpcUa_FinishErrorHandling;
  * OpcUa_TcpListener_LookForPendingMessage
  *===========================================================================*/
 /* should be handled by the connection manager, since no interleaving is possible by design! */
+static
 OpcUa_StatusCode OpcUa_TcpListener_LookForPendingMessage(   OpcUa_TcpListener*  a_pTcpListener,
                                                             OpcUa_Socket        a_pSocket,
                                                             OpcUa_InputStream** a_pInputStream)
@@ -748,6 +750,7 @@ OpcUa_StatusCode OpcUa_TcpListener_LookForPendingMessage(   OpcUa_TcpListener*  
 /**
 * @brief Handles a UATM (Request), UATC (Request Chunk) message.
 */
+static
 OpcUa_StatusCode OpcUa_TcpListener_ProcessRequest(
     OpcUa_Listener*                 a_pListener,
     OpcUa_TcpListener_Connection*   a_pTcpConnection,
@@ -854,6 +857,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Handles the response to a hello message.
 */
+static
 OpcUa_StatusCode OpcUa_TcpListener_SendAcknowledgeMessage(
     OpcUa_Listener*                 a_pListener,
     OpcUa_TcpListener_Connection*   a_pTcpConnection)
@@ -957,6 +961,7 @@ OpcUa_FinishErrorHandling;
  * @param pListener      The listener that hosts the socket from which the message is being received.
  * @param istrm          The stream containing the UAMH.
  */
+static
 OpcUa_StatusCode OpcUa_TcpListener_ProcessHelloMessage(
     OpcUa_Listener*                 a_pListener,
     OpcUa_InputStream*              a_istrm)
@@ -1199,6 +1204,7 @@ typedef OpcUa_StatusCode (*OpcUa_TcpListener_EventHandler)(OpcUa_Listener*  a_pL
 /**
 * @brief Gets called if data is available on the socket.
 */
+static
 OpcUa_StatusCode OpcUa_TcpListener_ReadEventHandler(
     OpcUa_Listener* a_pListener,
     OpcUa_Socket    a_pSocket)
@@ -1441,6 +1447,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called in case of a timeout on the socket.
 */
+static
 OpcUa_StatusCode OpcUa_TcpListener_TimeoutEventHandler(
     OpcUa_Listener* a_pListener,
     OpcUa_Socket    a_pSocket)
@@ -1519,6 +1526,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called if data can be written to the socket.
 */
+static
 OpcUa_StatusCode OpcUa_TcpListener_WriteEventHandler(
     OpcUa_Listener* a_pListener,
     OpcUa_Socket    a_pSocket)
@@ -1616,6 +1624,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpListener_EventCallback
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpListener_EventCallback(
     OpcUa_Socket    a_pSocket,
     OpcUa_UInt32    a_uSocketEvent,
@@ -1784,6 +1793,7 @@ OpcUa_FinishErrorHandling;
   *  @param Listener The listener the tcp connection belongs to.
   *  @param TcpConnection The tcp connection that is being deleted.
   */
+static
 OpcUa_Void OpcUa_TcpListener_ConnectionDeleteCallback(  OpcUa_Listener*                 a_pListener,
                                                         OpcUa_TcpListener_Connection*   a_pTcpConnection)
 {

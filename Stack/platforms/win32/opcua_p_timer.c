@@ -67,6 +67,7 @@ OpcUa_Void OpcUa_P_Timer_Thread(OpcUa_Void* pArguments);
 /*============================================================================
  * Fire and recalculate timers.
  *===========================================================================*/
+static
 OpcUa_UInt32 OpcUa_P_Timer_ProcessTimers(OpcUa_Void)
 {
     OpcUa_UInt16            uIndex;

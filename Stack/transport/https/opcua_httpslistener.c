@@ -142,6 +142,7 @@ struct _OpcUa_HttpsListener
 /*============================================================================
  * OpcUa_HttpsListener_Delete
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_HttpsListener_Delete(OpcUa_Listener** a_ppListener)
 {
     OpcUa_HttpsListener* pHttpsListener = OpcUa_Null;
@@ -1050,6 +1051,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called in case of a timeout on the socket.
 */
+static
 OpcUa_StatusCode OpcUa_HttpsListener_TimeoutEventHandler(
     OpcUa_Listener* a_pListener,
     OpcUa_Socket    a_hSocket)
@@ -1117,6 +1119,7 @@ OpcUa_FinishErrorHandling;
 /**
 * @brief Gets called if data can be written to the socket.
 */
+static
 OpcUa_StatusCode OpcUa_HttpsListener_WriteEventHandler(
     OpcUa_Listener* a_pListener,
     OpcUa_Socket    a_hSocket)
@@ -1431,6 +1434,7 @@ OpcUa_FinishErrorHandling;
 /**
  * @brief Gets called if remote node has connected to this socket.
  */
+static
 OpcUa_StatusCode OpcUa_HttpsListener_AcceptEventHandler(
     OpcUa_Listener* a_pListener,
     OpcUa_Socket    a_hSocket)
@@ -1538,6 +1542,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsListener_EventCallback
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsListener_EventCallback(
     OpcUa_Socket    a_hSocket,
     OpcUa_UInt32    a_uSocketEvent,
@@ -1747,6 +1752,7 @@ OpcUa_StatusCode OpcUa_HttpsListener_Close(OpcUa_Listener* a_pListener)
 /*============================================================================
  * OpcUa_HttpsListener_SslEventHandler
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsListener_SslEventHandler( OpcUa_Socket        a_hSocket,
                                                       OpcUa_Void*         a_pUserData,
                                                       OpcUa_ByteString*   a_pCertificate,

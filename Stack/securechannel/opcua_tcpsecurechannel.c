@@ -31,6 +31,7 @@
 /*============================================================================
  * OpcUa_TcpSecureChannel_GetSecuritySet
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_GetSecuritySet( OpcUa_SecureChannel*    a_pSecureChannel,
                                                         OpcUa_UInt32            a_uTokenId,
                                                         OpcUa_SecurityKeyset**  a_ppReceivingKeyset,
@@ -97,6 +98,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_GetCurrentSecuritySet
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_GetCurrentSecuritySet(  OpcUa_SecureChannel*    a_pSecureChannel,
                                                                 OpcUa_UInt32*           a_puTokenId,
                                                                 OpcUa_SecurityKeyset**  a_ppReceivingKeyset,
@@ -166,6 +168,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_ReleaseSecuritySet
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_ReleaseSecuritySet( OpcUa_SecureChannel*    a_pSecureChannel,
                                                             OpcUa_UInt32            a_uTokenId)
 {
@@ -207,6 +210,7 @@ static OpcUa_Void OpcUa_TcpSecureChannel_ReviseLifetime(OpcUa_UInt32  a_uRequest
 /*============================================================================
  * OpcUa_TcpSecureChannel_GenerateSecurityToken
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_GenerateSecurityToken(  OpcUa_SecureChannel*         a_pSecureChannel,
                                                                 OpcUa_UInt32                 a_tokenLifeTime,
                                                                 OpcUa_ChannelSecurityToken** a_ppSecurityToken)
@@ -262,6 +266,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_RenewSecurityToken
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_RenewSecurityToken( OpcUa_SecureChannel*         a_pSecureChannel,
                                                             OpcUa_ChannelSecurityToken*  a_pSecurityToken,
                                                             OpcUa_UInt32                 a_tokenLifeTime,
@@ -319,6 +324,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_GetSequenceNumber
  *===========================================================================*/
+static
 OpcUa_UInt32 OpcUa_TcpSecureChannel_GetSequenceNumber(OpcUa_SecureChannel* a_pSecureChannel)
 {
     OpcUa_UInt32 uSequenceNumber = 0;
@@ -340,6 +346,7 @@ OpcUa_UInt32 OpcUa_TcpSecureChannel_GetSequenceNumber(OpcUa_SecureChannel* a_pSe
 /*============================================================================
  * OpcUa_TcpSecureChannel_CheckSequenceNumber
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_CheckSequenceNumber(OpcUa_SecureChannel* a_pSecureChannel,
                                                             OpcUa_UInt32         a_uSequenceNumber)
 {
@@ -375,6 +382,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_LockWriteMutex
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_LockWriteMutex(OpcUa_SecureChannel* a_pSecureChannel)
 {
 OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "LockWriteMutex");
@@ -392,6 +400,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_UnlockWriteMutex
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_UnlockWriteMutex(OpcUa_SecureChannel* a_pSecureChannel)
 {
 OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "UnlockWriteMutex");
@@ -409,6 +418,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureChannel_Open
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_Open(   OpcUa_SecureChannel*            a_pSecureChannel,
                                                 OpcUa_Handle                    a_hTransportConnection,
                                                 OpcUa_ChannelSecurityToken      a_channelSecurityToken,
@@ -501,6 +511,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_SecureChannel_Renew
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_Renew(  OpcUa_SecureChannel*            a_pSecureChannel,
                                                 OpcUa_Handle                    a_hTransportConnection,
                                                 OpcUa_ChannelSecurityToken      a_ChannelSecurityToken,
@@ -631,6 +642,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_Close
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_Close(OpcUa_SecureChannel*   a_pSecureChannel)
 {
     OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "Close");
@@ -722,6 +734,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_TcpSecureChannel_Clear
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_TcpSecureChannel_Clear(OpcUa_SecureChannel* a_pSecureChannel)
 {
 OpcUa_InitializeStatus(OpcUa_Module_SecureChannel, "Clear");

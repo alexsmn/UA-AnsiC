@@ -232,6 +232,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_DetachBuffer
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_DetachBuffer(
     OpcUa_Stream*   a_pStream,
     OpcUa_Buffer*   a_pBuffer)
@@ -315,6 +316,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_AttachBuffer
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_AttachBuffer(
     OpcUa_Stream*   a_pStream,
     OpcUa_Buffer*   a_pBuffer)
@@ -372,6 +374,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_GetChunkLength
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_GetChunkLength(
     OpcUa_Stream* a_pStream,
     OpcUa_UInt32* a_puLength)
@@ -393,6 +396,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_Read
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_Read(
     OpcUa_InputStream*             a_pInputStream,  /* Stream with HttpStream handle */
     OpcUa_Byte*                    a_pTargetBuffer, /* The destination buffer. */
@@ -545,6 +549,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_Write
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_Write(
     OpcUa_OutputStream* a_pOutputStream,    /* the stream to write the value into */
     OpcUa_Byte*         a_pBuffer,          /* the value to write */
@@ -647,6 +652,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_SendChunk
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_SendChunk(   OpcUa_HttpsOutputStream*    a_pHttpOutputStream,
                                                 OpcUa_Buffer*               a_pChunkBuffer)
 {
@@ -707,6 +713,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_SerializeHeaders
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_SerializeHeaders(OpcUa_HttpsOutputStream*    a_pHttpOutputStream,
                                                     OpcUa_Buffer*               a_pChunkBuffer)
 {
@@ -752,6 +759,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_SerializeChunkHeader
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_SerializeChunkHeader(OpcUa_Buffer*   a_pChunkBuffer,
                                                         OpcUa_UInt32    a_uChunkLength,
                                                         OpcUa_Boolean   a_bPrepend)
@@ -807,6 +815,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_PrepareChunk
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_PrepareChunk(OpcUa_HttpsOutputStream*    a_pHttpOutputStream,
                                                 OpcUa_Buffer*               a_pChunkBuffer,
                                                 OpcUa_Boolean               a_bChunkedEncoding,
@@ -1294,6 +1303,7 @@ OpcUa_Void OpcUa_HttpsStream_Delete(OpcUa_Stream** a_ppStream)
 /*============================================================================
  * OpcUa_HttpsStream_GetPosition
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_GetPosition(
     OpcUa_Stream* a_pStream,
     OpcUa_UInt32* a_pPosition)
@@ -1340,6 +1350,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_SetPosition
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_SetPosition(
     OpcUa_Stream* a_pStream,
     OpcUa_UInt32  a_uPosition)
@@ -2473,6 +2484,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_HttpsStream_CheckRequestLine
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_HttpsStream_CheckRequestLine(OpcUa_HttpsInputStream* a_pHttpInputStream)
 {
     OpcUa_HttpsStream_Method eMethod = OpcUa_HttpsStream_Method_Invalid;

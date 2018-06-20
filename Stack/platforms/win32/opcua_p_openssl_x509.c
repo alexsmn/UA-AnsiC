@@ -55,13 +55,10 @@
 
   @param pNameEntry    [in]   The passed Name Entry Object.
 */
-OpcUa_StatusCode OpcUa_P_OpenSSL_X509_Name_AddEntry(
-    X509_NAME               **ppX509Name,
-    OpcUa_Crypto_NameEntry *pNameEntry);
-
 /*============================================================================
  * OpcUa_P_OpenSSL_X509_Name_AddEntry
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_P_OpenSSL_X509_Name_AddEntry(
     X509_NAME**               a_ppX509Name,
     OpcUa_Crypto_NameEntry*   a_pNameEntry)
@@ -105,6 +102,7 @@ OpcUa_FinishErrorHandling;
 /*============================================================================
  * OpcUa_P_OpenSSL_X509_AddCustomExtension
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_P_OpenSSL_X509_AddCustomExtension(
     X509**                   a_ppCertificate,
     OpcUa_Crypto_Extension*  a_pExtension,

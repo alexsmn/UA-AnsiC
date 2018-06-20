@@ -567,6 +567,7 @@ OpcUa_StatusCode OpcUa_SocketManager_InternalCreateServer(
 /*============================================================================
 *
 *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_Socket_HandleAcceptEvent(    OpcUa_Socket a_pListenSocket,
                                                     OpcUa_Socket a_pAcceptedSocket) /* this is allowed to be null */
 {
@@ -683,6 +684,7 @@ static OpcUa_Void OpcUa_SocketManager_ReleaseSocketManagerSlot(OpcUa_InternalSoc
 /*============================================================================
 * Takes appropriate action based on an event on a certain socket.
 *===========================================================================*/
+static
 OpcUa_Void OpcUa_SocketManager_AcceptHandlerThread(OpcUa_Void* a_pArgument)
 {
 

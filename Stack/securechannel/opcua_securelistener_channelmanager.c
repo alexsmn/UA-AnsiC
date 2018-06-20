@@ -56,6 +56,7 @@ struct _OpcUa_SecureListener_ChannelManager
 /*==============================================================================*/
 /* OpcUa_SecureListener_ChannelManager_TimerCallback                            */
 /*==============================================================================*/
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureListener_ChannelManager_TimerCallback(   OpcUa_Void*     a_pvCallbackData,
                                                                                     OpcUa_Timer     a_hTimer,
                                                                                     OpcUa_UInt32    a_msecElapsed)
@@ -187,6 +188,7 @@ OpcUa_FinishErrorHandling;
 /*==============================================================================*/
 /* OpcUa_SecureListener_ChannelManager_TimerKillCallback                        */
 /*==============================================================================*/
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_SecureListener_ChannelManager_TimerKillCallback(   OpcUa_Void*     a_pvCallbackData,
                                                                                         OpcUa_Timer     a_hTimer,
                                                                                         OpcUa_UInt32    a_msecElapsed)

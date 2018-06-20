@@ -68,6 +68,7 @@ typedef struct _OpcUa_P_ThreadArg
 * is calling the InternalThreadMain from OpcUa_Thread.c and your internal stuff.
 */
 
+static
 void* win32thread_start(void* args)
 {
     OpcUa_P_ThreadArg*  pThreadArgs         = OpcUa_Null;

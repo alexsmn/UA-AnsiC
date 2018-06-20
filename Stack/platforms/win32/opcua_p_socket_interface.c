@@ -59,7 +59,8 @@
  * This function serves a single socket manager in multithreading configuration.
  *===========================================================================*/
 /* HINT: That is a thread entry point and wrapper for the real serverloop. */
- OpcUa_Void OpcUa_P_SocketManager_ServerLoopThread(OpcUa_Void* a_pArgument)
+static
+OpcUa_Void OpcUa_P_SocketManager_ServerLoopThread(OpcUa_Void* a_pArgument)
 {
     OpcUa_StatusCode                uStatus                 = OpcUa_Good;                   /* only needed for internal reasons */
     OpcUa_InternalSocketManager*    pInternalSocketManager  = (OpcUa_InternalSocketManager*)a_pArgument;
@@ -701,29 +702,6 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_Socket_Close(OpcUa_Socket a_pSocket)
     OpcUa_ReturnErrorIfArgumentNull(a_pSocket);
 
     return (*ppSocketServiceTable)->SocketClose(a_pSocket);
-}
-
-/*============================================================================
- * Network Byte Order Conversion Helper Functions
- *===========================================================================*/
-OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_Socket_NToHL(OpcUa_UInt32 a_netLong)
-{
-    return OpcUa_P_RawSocket_NToHL(a_netLong);
-}
-
-OpcUa_UInt16 OPCUA_DLLCALL OpcUa_P_Socket_NToHS(OpcUa_UInt16 a_netShort)
-{
-    return OpcUa_P_RawSocket_NToHS(a_netShort);
-}
-
-OpcUa_UInt32 OPCUA_DLLCALL OpcUa_P_Socket_HToNL(OpcUa_UInt32 a_hstLong)
-{
-    return OpcUa_P_RawSocket_HToNL(a_hstLong);
-}
-
-OpcUa_UInt16 OPCUA_DLLCALL OpcUa_P_Socket_HToNS(OpcUa_UInt16 a_hstShort)
-{
-    return OpcUa_P_RawSocket_HToNS(a_hstShort);
 }
 
 /*============================================================================

@@ -58,6 +58,7 @@ pthread_attr_t *opcua_p_thread_attr = NULL;
 * is calling the InternalThreadMain from OpcUa_Thread.c and your internal stuff.
 */
 
+static
 void* pthread_start(void* args)
 {
     OpcUa_P_ThreadArg*  p_P_ThreadArgs;
@@ -87,6 +88,7 @@ void* pthread_start(void* args)
 /*============================================================================
  * Initialize Raw Thread.
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_P_Thread_Initialize(OpcUa_RawThread RawThread)
 {
     memset((OpcUa_Void*)RawThread, 0, sizeof(OpcUa_P_ThreadArg));
@@ -105,15 +107,6 @@ OpcUa_StatusCode OpcUa_P_Thread_Create(OpcUa_RawThread* pRawThread)
     OpcUa_P_Thread_Initialize(*pRawThread);
 
     return uStatus;
-}
-
-/*============================================================================
- * Clear Raw Thread
- *===========================================================================*/
-OpcUa_Void OpcUa_P_Thread_Clear(OpcUa_RawThread RawThread)
-{
-    memset((OpcUa_Void*)RawThread, 0, sizeof(pthread_t));
-    return;
 }
 
 /*============================================================================

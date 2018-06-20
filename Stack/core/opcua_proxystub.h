@@ -114,6 +114,30 @@ OPCUA_EXPORT OpcUa_StatusCode OPCUA_DLLCALL OpcUa_ProxyStub_ReInitialize( OpcUa_
 OPCUA_EXPORT OpcUa_Void OPCUA_DLLCALL OpcUa_ProxyStub_Clear(void);
 
 /*============================================================================
+ * OpcUa_ProxyStub_RegisterChannel
+ *===========================================================================*/
+/** Used internally for reference counting. */
+OpcUa_Void OpcUa_ProxyStub_RegisterChannel(void);
+
+/*============================================================================
+ * OpcUa_ProxyStub_RegisterEndpoint
+ *===========================================================================*/
+/** Used internally for reference counting. */
+OpcUa_Void OpcUa_ProxyStub_RegisterEndpoint(void);
+
+/*============================================================================
+ * OpcUa_ProxyStub_DeRegisterChannel
+ *===========================================================================*/
+/** Used internally for reference counting. */
+OpcUa_Void OpcUa_ProxyStub_DeRegisterChannel(void);
+
+/*============================================================================
+ * OpcUa_ProxyStub_DeRegisterEndpoint
+ *===========================================================================*/
+/** Used internally for reference counting. */
+OpcUa_Void OpcUa_ProxyStub_DeRegisterEndpoint(void);
+
+/*============================================================================
  * OpcUa_ProxyStub_AddTypes
  *===========================================================================*/
 /** Add additional types to the known types table.
