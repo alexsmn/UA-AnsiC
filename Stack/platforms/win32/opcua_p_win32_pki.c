@@ -50,8 +50,6 @@
 /* own headers */
 #include <opcua_p_win32_pki.h>
 
-OpcUa_Void OpcUa_P_ByteString_Clear(OpcUa_ByteString* pValue);
-
 /*============================================================================
  * OpcUa_P_Win32_OpcUaPkiFlags2Win32PkiFlags
  *===========================================================================*/
@@ -541,9 +539,10 @@ OpcUa_BeginErrorHandling;
         CertFreeCertificateContext(pTargetCert);
     }
 
-    if(a_pCertificate)
+    if(a_pCertificate && a_pCertificate->Data)
     {
-        OpcUa_P_ByteString_Clear(a_pCertificate);
+        OpcUa_P_Memory_Free(a_pCertificate->Data);
+        a_pCertificate->Data = OpcUa_Null;
     }
 
     if(pSubjectName != OpcUa_Null)
@@ -779,9 +778,10 @@ OpcUa_BeginErrorHandling;
         RSA_free(pRsaPrivateKey);
     }
 
-    if(a_pPrivateKey)
+    if(a_pPrivateKey && a_pPrivateKey->Key.Data)
     {
-        OpcUa_P_ByteString_Clear(&a_pPrivateKey->Key);
+        OpcUa_P_Memory_Free(a_pPrivateKey->Key.Data);
+        a_pPrivateKey->Key.Data = OpcUa_Null;
     }
 
     if(pBio)
