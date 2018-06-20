@@ -35,56 +35,51 @@ typedef struct _OpcUa_StringInternal
     OpcUa_UInt          bFreeSecondMem  : 1;    /* strContent is a Pointer to the string */
     OpcUa_UInt          uReserved       : 7;
     OpcUa_UInt32        uLength;                /* Length without terminating '\0' */
-    OpcUa_CharA*        strContent;             /* Pointer or start of the string or 4 first unsignend chars (mind bFreeSecondMem) */
+    OpcUa_CharA*        strContent;             /* Pointer or start of the string (mind bFreeSecondMem) */
 } OpcUa_StringInternal, *OpcUa_pStringInternal;
 
 
 /*============================================================================
-* Get a pointer to the first character of the content.
-*===========================================================================*/
-#define _OpcUa_String_GetRawString(x)   ( (((OpcUa_StringA)x)[0]=='\0')?(OpcUa_StringA)(((OpcUa_pStringInternal)x)->strContent):((OpcUa_StringA)x))
+ * Get a pointer to the first character of the content.
+ * If it is the result of OpcUa_String_FromCString the first char is never zero.
+ * If it is a valid OpcUa_String object the first char is zero (uMagic).
+ *===========================================================================*/
+#define _OpcUa_String_GetRawString(x) ((((OpcUa_StringA)(x))[0]=='\0')?(OpcUa_StringA)(((OpcUa_pStringInternal)(x))->strContent):(OpcUa_StringA)(x))
 
 /*============================================================================
-* Cast a C string into a OpcUa_String.
-*===========================================================================*/
-#if !OPCUA_PREFERINLINE
-    OpcUa_String* OpcUa_String_FromCString( OpcUa_StringA   a_strCString )
+ * Cast a C string into a OpcUa_String.
+ *===========================================================================*/
+OpcUa_String* OpcUa_String_FromCString(/* in */ const OpcUa_CharA* a_strCString)
+{
+    if(a_strCString == OpcUa_Null)
     {
-        if(a_strCString == OpcUa_Null)
-        {
-            return OpcUa_Null;
-        }
-        if(a_strCString[0]==0x00)
-        {
-            return OpcUa_Null;
-        }
-        return (OpcUa_String*) a_strCString;
+        return OpcUa_Null;
     }
-#endif /* OPCUA_PREFERINLINE */
+    if(a_strCString[0] == 0x00)
+    {
+        return OpcUa_Null;
+    }
+    return (OpcUa_String*) a_strCString;
+}
 
 
 /*============================================================================
-* Check if argument is OpcUa_String instance.
-*===========================================================================*/
-#if OPCUA_PREFERINLINE
-    #define _OpcUa_IsUaString(x)    (x==OpcUa_Null?OpcUa_False:((char*)x)[0]=='\0'?OpcUa_True:OpcUa_False)
-#else /* OPCUA_PREFERINLINE */
-    OpcUa_Boolean _OpcUa_IsUaString(const OpcUa_Void* a_strCString)
+ * Check if argument is OpcUa_String instance.
+ *===========================================================================*/
+static OpcUa_Boolean _OpcUa_IsUaString(/* in */ const OpcUa_Void* a_strCString)
+{
+    if(a_strCString == OpcUa_Null)
     {
-        if(a_strCString == OpcUa_Null)
-        {
-            return OpcUa_False;
-        }
-
-        if(((OpcUa_StringA)a_strCString)[0]==0x00)
-        {
-            return OpcUa_True;
-        }
-
         return OpcUa_False;
     }
-#endif /* OPCUA_PREFERINLINE */
 
+    if(((OpcUa_StringA)a_strCString)[0] == 0x00)
+    {
+        return OpcUa_True;
+    }
+
+    return OpcUa_False;
+}
 
 /*============================================================================
 * Enlarge the buffer of the given string.
@@ -148,7 +143,7 @@ static OpcUa_StatusCode _OpcUa_ExpandString(  /* bi */ OpcUa_String*    a_pStrin
 /*============================================================================
  * Initialize a string.
  *===========================================================================*/
-OpcUa_StatusCode OpcUa_String_Initialize( /*  bi */ OpcUa_String* a_pString )
+OpcUa_Void OpcUa_String_Initialize(/* out */ OpcUa_String* a_pString)
 {
     OpcUa_pStringInternal   pStringInt  = (OpcUa_pStringInternal)   a_pString;
 
@@ -158,12 +153,12 @@ OpcUa_StatusCode OpcUa_String_Initialize( /*  bi */ OpcUa_String* a_pString )
     pStringInt->uLength         = 0;
     pStringInt->strContent      = OpcUa_Null;
 
-    return OpcUa_Good;
+    return;
 }
 
 /*============================================================================
-* Create a new OpcUa_String
-*===========================================================================*/
+ * Create a new OpcUa_String
+ *===========================================================================*/
 OpcUa_StatusCode OpcUa_String_CreateNewString(   /*  in */ OpcUa_StringA            a_strSource,
                                                  /*  in */ OpcUa_UInt32             a_uLength,
                                                  /*  in */ OpcUa_UInt32             a_uBufferSize,
@@ -177,16 +172,16 @@ OpcUa_StatusCode OpcUa_String_CreateNewString(   /*  in */ OpcUa_StringA        
 
 OpcUa_ReturnErrorIfArgumentNull(a_ppNewString);
 
-   /* ToDo: maybe remove this parameter; its unlikely to be used at all */
+    /* ToDo: maybe remove this parameter; its unlikely to be used at all */
     OpcUa_ReferenceParameter(a_uBufferSize);
 
-    /* clar if prior string exists */
+    /* clear if prior string exists */
     *a_ppNewString = OpcUa_Null;
 
     /* Use length of source, must be \0ed */
     if(a_uLength == OPCUA_STRINGLENZEROTERMINATED)
     {
-        if(a_strSource != OpcUa_Null )
+        if(a_strSource != OpcUa_Null)
         {
             a_uLength = OpcUa_P_String_StrLen(a_strSource);
         }
@@ -316,9 +311,9 @@ OpcUa_StatusCode OpcUa_String_AttachToString(  /* in */ OpcUa_StringA           
 /*============================================================================
  * Free memory for string
  *===========================================================================*/
-OpcUa_Void OpcUa_String_Delete(OpcUa_String** a_ppString)
+OpcUa_Void OpcUa_String_Delete(/* bi */ OpcUa_String** a_ppString)
 {
-    OpcUa_pStringInternal pStringInt = OpcUa_Null;
+    OpcUa_pStringInternal pStringInt;
 
     if(a_ppString == OpcUa_Null)
     {
@@ -329,7 +324,7 @@ OpcUa_Void OpcUa_String_Delete(OpcUa_String** a_ppString)
     pStringInt = (OpcUa_pStringInternal)*a_ppString;
 
     /* if it isnt a OpcUa_String object, leave... */
-    if(_OpcUa_IsUaString((OpcUa_StringA)pStringInt) == OpcUa_False)
+    if(_OpcUa_IsUaString(pStringInt) == OpcUa_False)
     {
         return;
     }
@@ -344,17 +339,19 @@ OpcUa_Void OpcUa_String_Delete(OpcUa_String** a_ppString)
 
     /* reset pointer */
     (*a_ppString) = OpcUa_Null;
+
+    return;
 }
 
 
 /*============================================================================
-*
-*===========================================================================*/
-OpcUa_Void OpcUa_String_Clear(OpcUa_String* a_pString)
+ *
+ *===========================================================================*/
+OpcUa_Void OpcUa_String_Clear(/* bi */ OpcUa_String* a_pString)
 {
     OpcUa_pStringInternal pStringInt = (OpcUa_pStringInternal) a_pString;
 
-    if(_OpcUa_IsUaString( (OpcUa_StringA) a_pString) == OpcUa_False)
+    if(_OpcUa_IsUaString(a_pString) == OpcUa_False)
     {
         return;
     }
@@ -368,21 +365,24 @@ OpcUa_Void OpcUa_String_Clear(OpcUa_String* a_pString)
     }
 
     OpcUa_String_Initialize(a_pString);
+
+    return;
 }
 
 
 /*============================================================================
-* Get pointer to internal raw string.
-*===========================================================================*/
-OpcUa_CharA* OpcUa_String_GetRawString(const OpcUa_String* a_pString)
+ * Get pointer to internal raw string.
+ *===========================================================================*/
+OpcUa_CharA* OpcUa_String_GetRawString(/* in */ const OpcUa_String* a_pString)
 {
     return _OpcUa_String_GetRawString(a_pString);
 }
 
+
 /*============================================================================
-* Check if string is empty.
-*===========================================================================*/
-OpcUa_Boolean OpcUa_String_IsEmpty(const OpcUa_String* a_pString)
+ * Check if string is empty.
+ *===========================================================================*/
+OpcUa_Boolean OpcUa_String_IsEmpty(/* in */ const OpcUa_String* a_pString)
 {
     OpcUa_pStringInternal   pStringInt  = (OpcUa_pStringInternal)a_pString;
 
@@ -408,9 +408,9 @@ OpcUa_Boolean OpcUa_String_IsEmpty(const OpcUa_String* a_pString)
 
 
 /*============================================================================
-* Check if string is null.
-*===========================================================================*/
-OpcUa_Boolean OpcUa_String_IsNull(const OpcUa_String* a_pString)
+ * Check if string is null.
+ *===========================================================================*/
+OpcUa_Boolean OpcUa_String_IsNull(/* in */ const OpcUa_String* a_pString)
 {
     OpcUa_pStringInternal pStringInt  = (OpcUa_pStringInternal)a_pString;
 
@@ -431,9 +431,9 @@ OpcUa_Boolean OpcUa_String_IsNull(const OpcUa_String* a_pString)
 
 
 /*============================================================================
-* Get number of bytes.
-*===========================================================================*/
-OpcUa_UInt32 OpcUa_String_StrSize(const OpcUa_String* a_pString)
+ * Get number of bytes.
+ *===========================================================================*/
+OpcUa_UInt32 OpcUa_String_StrSize(/* in */ const OpcUa_String* a_pString)
 {
     OpcUa_pStringInternal pStringInt = (OpcUa_pStringInternal)a_pString;
 
@@ -442,7 +442,7 @@ OpcUa_UInt32 OpcUa_String_StrSize(const OpcUa_String* a_pString)
         return 0;
     }
 
-    if( _OpcUa_IsUaString(a_pString) != OpcUa_False )
+    if(_OpcUa_IsUaString(a_pString) != OpcUa_False)
     {
         if(pStringInt->strContent == OpcUa_Null)
         {
@@ -456,67 +456,11 @@ OpcUa_UInt32 OpcUa_String_StrSize(const OpcUa_String* a_pString)
 
 
 /*============================================================================
-* Get number of characters.
-*===========================================================================*/
-OpcUa_UInt32 OpcUa_String_StrLen(const OpcUa_String*  a_pString)
-{
-    OpcUa_UInt32            uRawLen         = 0;
-    OpcUa_StringA           strRawString    = OpcUa_Null;
-    OpcUa_UInt32            uCount          = 0;
-    OpcUa_UInt32            uiOctetCount    = 0;
-    OpcUa_UInt32            uLen            = 0;
-    OpcUa_Byte              byMask          = 0;
-
-    static const OpcUa_UCharA   byUTF8Mask[6] = {   0x00,                  /* Mask for 1 Byte UTF 0x0xxxxxxx */
-                                                    0xC0,                  /* Mask for 2 Byte UTF 0x110xxxxx */
-                                                    0xE0,                  /* Mask for 3 Byte UTF 0x1110xxxx */
-                                                    0xF0,                  /* Mask for 4 Byte UTF 0x11110xxx */
-                                                    0xF8,                  /* Mask for 5 Byte UTF 0x111110xx */
-                                                    0xFC                   /* Mask for 6 Byte UTF 0x1111110x */
-                                                };
-
-    if(a_pString == OpcUa_Null)
-    {
-        return 0;
-    }
-
-    strRawString = _OpcUa_String_GetRawString(a_pString);
-
-    if(strRawString == OpcUa_Null)
-    {
-        return 0;
-    }
-
-    uRawLen = OpcUa_String_StrSize(a_pString);
-    uLen = 0;
-    for(uCount = 0; uCount < uRawLen; uCount++)
-    {
-        if ((strRawString[uCount]&0x80) !=0 )
-        {
-            uiOctetCount = 7;  /* Maximum BYTES of UTF Char ist 6, we ne 1 one, cause we make a -1 in the next step. */
-            do
-            {
-                uiOctetCount--;
-                byMask = (OpcUa_Byte) ((0xff >> (8 - uiOctetCount)) << (8 - uiOctetCount));
-            } while ((uiOctetCount>1) && ((strRawString[uCount] & byMask) != byUTF8Mask[uiOctetCount-1]));
-            if (uiOctetCount==1)
-            {
-                /* Todo OpcUa_BadSyntaxError might be better, but is not yet defined */
-                /* OpcUa_BadInvalidArgument; */
-            }
-            uCount+=uiOctetCount-1;
-        }
-        uLen++;
-    }
-    return uLen;
-}
-
-/*============================================================================
-* Copy string.
-*===========================================================================*/
-OpcUa_StatusCode OpcUa_String_StrnCpy( OpcUa_String*       a_pDestString,
-                                       const OpcUa_String* a_pSrcString,
-                                       OpcUa_UInt32        a_uLength)
+ * Copy string.
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_String_StrnCpy(/* bi */ OpcUa_String*       a_pDestString,
+                                      /* in */ const OpcUa_String* a_pSrcString,
+                                      /* in */ OpcUa_UInt32        a_uLength)
 {
     OpcUa_StringA           strRawSrc   = OpcUa_Null;
     OpcUa_UInt32            uiSrcLen    = 0;
@@ -558,11 +502,11 @@ OpcUa_StatusCode OpcUa_String_StrnCpy( OpcUa_String*       a_pDestString,
 }
 
 /*============================================================================
-* Append string.
-*===========================================================================*/
-OpcUa_StatusCode OpcUa_String_StrnCat(  OpcUa_String*       a_pDestString,
-                                        const OpcUa_String* a_pSrcString,
-                                        OpcUa_UInt32        a_uLength)
+ * Append string.
+ *===========================================================================*/
+OpcUa_StatusCode OpcUa_String_StrnCat(/* bi */ OpcUa_String*       a_pDestString,
+                                      /* in */ const OpcUa_String* a_pSrcString,
+                                      /* in */ OpcUa_UInt32        a_uLength)
 {
     OpcUa_pStringInternal   pStringInt  = (OpcUa_pStringInternal) a_pDestString;
     OpcUa_StringA           strRawSrc   = OpcUa_Null;
@@ -574,7 +518,7 @@ OpcUa_StatusCode OpcUa_String_StrnCat(  OpcUa_String*       a_pDestString,
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_String);
     OpcUa_ReturnErrorIfArgumentNull(a_pDestString);
 
-    if( a_pSrcString == OpcUa_Null || OpcUa_String_IsNull(a_pSrcString) || OpcUa_String_IsEmpty(a_pSrcString) || a_uLength == 0)
+    if(OpcUa_String_IsNull(a_pSrcString) || OpcUa_String_IsEmpty(a_pSrcString) || a_uLength == 0)
     {
         return OpcUa_Good;
     }
@@ -610,10 +554,10 @@ OpcUa_StatusCode OpcUa_String_StrnCat(  OpcUa_String*       a_pDestString,
 /*============================================================================
  * Compare two OpcUa_Strings
  *===========================================================================*/
-OpcUa_Int32 OpcUa_String_StrnCmp(   const OpcUa_String* a_pLeftString,
-                                    const OpcUa_String* a_pRightString,
-                                    OpcUa_UInt32        a_uLength,
-                                    OpcUa_Boolean       a_bIgnoreCase )
+OpcUa_Int32 OpcUa_String_StrnCmp(/* in */ const OpcUa_String* a_pLeftString,
+                                 /* in */ const OpcUa_String* a_pRightString,
+                                 /* in */ OpcUa_UInt32        a_uLength,
+                                 /* in */ OpcUa_Boolean       a_bIgnoreCase)
 {
     OpcUa_StringA   strRawLeft  = OpcUa_Null;
     OpcUa_StringA   strRawRight = OpcUa_Null;
@@ -665,7 +609,7 @@ OpcUa_Int32 OpcUa_String_StrnCmp(   const OpcUa_String* a_pLeftString,
     }
 
     /* need to provide strnicmp with valid lengths, because the raw strings may not be zero terminated! */
-    if(a_bIgnoreCase  != OpcUa_False)
+    if(a_bIgnoreCase != OpcUa_False)
     {
         nRetVal = OpcUa_P_String_StrniCmp(strRawLeft, strRawRight, uiTempLen);
     }
@@ -682,10 +626,11 @@ OpcUa_Int32 OpcUa_String_StrnCmp(   const OpcUa_String* a_pLeftString,
 /*============================================================================
  * OpcUa_String_AttachReadOnly
  *===========================================================================*/
-OpcUa_StatusCode OpcUa_String_AttachReadOnly(OpcUa_String* a_pDst, const OpcUa_StringA a_pSrc)
+OpcUa_StatusCode OpcUa_String_AttachReadOnly(/* bi */ OpcUa_String* a_pDst,
+                                             /* in */ const OpcUa_CharA* a_pSrc)
 {
     OpcUa_StatusCode uStatus = OpcUa_String_AttachToString(
-        a_pSrc,
+        (OpcUa_StringA)a_pSrc,
         OPCUA_STRINGLENZEROTERMINATED,
         0,
         OpcUa_False,  /* attach the source without copying */
@@ -698,10 +643,11 @@ OpcUa_StatusCode OpcUa_String_AttachReadOnly(OpcUa_String* a_pDst, const OpcUa_S
 /*============================================================================
  * OpcUa_String_AttachCopy
  *===========================================================================*/
-OpcUa_StatusCode OpcUa_String_AttachCopy(OpcUa_String* a_pDst, const OpcUa_StringA a_pSrc)
+OpcUa_StatusCode OpcUa_String_AttachCopy(/* bi */ OpcUa_String* a_pDst,
+                                         /* in */ const OpcUa_CharA* a_pSrc)
 {
     OpcUa_StatusCode uStatus = OpcUa_String_AttachToString(
-        a_pSrc,
+        (OpcUa_StringA)a_pSrc,
         OPCUA_STRINGLENZEROTERMINATED,
         0,
         OpcUa_True, /* copy the given string */
@@ -714,7 +660,8 @@ OpcUa_StatusCode OpcUa_String_AttachCopy(OpcUa_String* a_pDst, const OpcUa_Strin
 /*============================================================================
  * OpcUa_String_AttachWithOwnership
  *===========================================================================*/
-OpcUa_StatusCode OpcUa_String_AttachWithOwnership(OpcUa_String* a_pDst, OpcUa_StringA a_pSrc)
+OpcUa_StatusCode OpcUa_String_AttachWithOwnership(/* bi */ OpcUa_String* a_pDst,
+                                                  /* in */ OpcUa_StringA a_pSrc)
 {
     OpcUa_StatusCode uStatus = OpcUa_String_AttachToString(
         a_pSrc,
@@ -726,4 +673,3 @@ OpcUa_StatusCode OpcUa_String_AttachWithOwnership(OpcUa_String* a_pDst, OpcUa_St
 
     return uStatus;
 }
-

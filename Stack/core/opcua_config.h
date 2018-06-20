@@ -74,18 +74,12 @@
 /*============================================================================
  * general
  *===========================================================================*/
-/** @brief Prefer the use of inline functions instead of function calls (see opcua_string) */
-#define OPCUA_PREFERINLINE                          OPCUA_CONFIG_NO
-
 /** @brief Enable the use of safe functions like defined with VS2005 and higher. */
 #if defined(_MSC_VER) && (_MSC_VER >= 1400 )
 #define OPCUA_USE_SAFE_FUNCTIONS                    OPCUA_CONFIG_YES
 #else
 #define OPCUA_USE_SAFE_FUNCTIONS                    OPCUA_CONFIG_NO
 #endif
-
-/** @brief Some temporary optimizations, to test their impact on performance. */
-#define OPCUA_PERFORMANCE_OPTIMIZATION_TESTING      OPCUA_CONFIG_NO
 
 /** @brief Ensure enum size of at least 32 bits (for backward compatibility). */
 #define OPCUA_FORCE_INT32_ENUMS                     OPCUA_CONFIG_NO
