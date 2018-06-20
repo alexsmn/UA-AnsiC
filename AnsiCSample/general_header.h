@@ -31,45 +31,30 @@
 #define _GENERAL_HEADER_
 
 
-#define SESSION_NOT_ACTIVATED   OpcUa_BadSessionNotActivated
-#define SESSION_ACTIVATED       OpcUa_Good
+#define SESSION_NOT_ACTIVATED	0x80270000
+#define	SESSION_ACTIVATED		0x00000000
 
-#define RESET_SESSION_COUNTER(session)  (session)->msec_counter=0;
+#define RESET_SESSION_COUNTER	msec_counter=0;
 
 #define REVISED_SESSIONTIMEOUT  30000    
 
-//SESSION DATA  -----------------------------------------------
-typedef struct _SessionData
-{
-    struct _SessionData* Next;
-    struct _SessionData* Prev;
-
-    OpcUa_UInt32         securechannelId;
-    OpcUa_UInt32         session_flag;
-    OpcUa_Double         session_timeout;
-    OpcUa_String*        p_user_name;
-    OpcUa_Timer          Timer;
-    OpcUa_Double         msec_counter;
-    OpcUa_NodeId         SessionId;
-} SessionData;
 
 /*********************************************************************************************/
 /***********************                 Prototypes of services       ************************/
 /*********************************************************************************************/
 
-SessionData*			UaTestServer_Session_Find                                       (const OpcUa_NodeId* a_SessionId);
-OpcUa_StatusCode		check_securechannelId											(SessionData*,OpcUa_Endpoint,OpcUa_Handle);
-OpcUa_StatusCode		check_useridentitytoken											(SessionData*,const OpcUa_ExtensionObject*);
-OpcUa_StatusCode		save_username												    (SessionData*,const OpcUa_ExtensionObject*);
-OpcUa_Void				username_free													(SessionData*);
-OpcUa_StatusCode		check_username												    (SessionData*,const OpcUa_ExtensionObject*);
-OpcUa_StatusCode		check_password													(const OpcUa_ExtensionObject*);
-OpcUa_StatusCode		response_header_fill      										(SessionData*,OpcUa_ResponseHeader*,const OpcUa_RequestHeader*, OpcUa_StatusCode);
+OpcUa_StatusCode		check_authentication_token										(const OpcUa_RequestHeader* );
+OpcUa_StatusCode		check_securechannelId											(OpcUa_Endpoint ,  OpcUa_Handle );
+OpcUa_StatusCode		check_useridentitytoken											(const OpcUa_ExtensionObject* );
+OpcUa_StatusCode		save_username												    (const OpcUa_ExtensionObject* );
+OpcUa_Void				username_free													(OpcUa_Void);
+OpcUa_StatusCode		check_username												    (const OpcUa_ExtensionObject*);
+OpcUa_StatusCode		check_password													(const OpcUa_ExtensionObject* );
+OpcUa_StatusCode		response_header_fill      										(OpcUa_ResponseHeader*  ,const OpcUa_RequestHeader*, OpcUa_StatusCode);
 OpcUa_StatusCode		my_GetDateTimeDiffInSeconds32								    (OpcUa_DateTime  ,OpcUa_DateTime  , OpcUa_UInt32*  );
 OpcUa_StatusCode		getEndpoints													(OpcUa_Int32*  ,OpcUa_EndpointDescription** );
 OpcUa_StatusCode		initialize_value_attribute_of_variablenodes_variabletypenodes	(OpcUa_Void);
 OpcUa_StatusCode		fill_server_variable											(OpcUa_ApplicationDescription* );
-const OpcUa_CharA*		getNodeIdString							(const OpcUa_NodeId* a_NodeId);
 
  
 

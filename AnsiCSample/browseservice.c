@@ -66,10 +66,13 @@ OpcUa_StatusCode my_Browse(
 {
 	_BaseAttribute_*		pointer_to_node;
 	OpcUa_Int				m;
-	SessionData*			pSession = OpcUa_Null;
+	extern OpcUa_UInt32		securechannelId;
+	extern OpcUa_UInt32		session_flag;
+	extern OpcUa_Double		msec_counter;
+	extern OpcUa_String*	p_user_name;
 	extern OpcUa_UInt32		max_ref_per_node;
 
-    OpcUa_InitializeStatus(OpcUa_Module_Server, "my_Browse");
+    OpcUa_InitializeStatus(OpcUa_Module_Server, "OpcUa_ServerApi_Browse");
 
     /* validate arguments. */
     OpcUa_ReturnErrorIfArgumentNull(a_hEndpoint);
@@ -85,27 +88,32 @@ OpcUa_StatusCode my_Browse(
 	*a_pNoOfDiagnosticInfos=0;
 	*a_pDiagnosticInfos=OpcUa_Null;
 		 
+	RESET_SESSION_COUNTER
+
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\n\n\nBROWSE SERVICE=============================================\n");
+	if(p_user_name!=OpcUa_Null)
+		MY_TRACE("\nUser:%s\n",OpcUa_String_GetRawString(p_user_name));  
 #endif /*_DEBUGGING_*/
 
-	pSession=UaTestServer_Session_Find(&a_pRequestHeader->AuthenticationToken);
-	OpcUa_GotoErrorIfNull(pSession,OpcUa_BadSecurityChecksFailed);
 
-	RESET_SESSION_COUNTER(pSession);
-
-#ifndef NO_DEBUGGING_
-	if(pSession->p_user_name!=OpcUa_Null)
-		MY_TRACE("\nUser:%s\n",OpcUa_String_GetRawString(pSession->p_user_name));  
-#endif /*_DEBUGGING_*/
-
-	if(OpcUa_IsBad(pSession->session_flag))
+	if(OpcUa_IsBad(session_flag))
 	{
 		/* Tell client that session is not active. */
 #ifndef NO_DEBUGGING_
 		MY_TRACE("\nSession not active\n"); 
 #endif /*_DEBUGGING_*/
 		uStatus=OpcUa_BadSessionNotActivated;
+		OpcUa_GotoError;
+	}
+
+	
+	uStatus=check_authentication_token(a_pRequestHeader);
+	if(OpcUa_IsBad(uStatus))
+	{
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nAuthentication Token ungültig.\n"); 
+#endif /*_DEBUGGING_*/
 		OpcUa_GotoError;
 	}
 
@@ -130,7 +138,7 @@ OpcUa_StatusCode my_Browse(
 			OpcUa_BrowseResult_Initialize((*a_pResults+m));
 			pointer_to_node= search_for_node((a_pNodesToBrowse+m)->NodeId);
 			#ifndef NO_DEBUGGING_
-			MY_TRACE("\nBrowse by NodeId: %s\n",getNodeIdString(&(a_pNodesToBrowse+m)->NodeId));
+			MY_TRACE("\nBrowse by NodeId:|%d|  NamespaceIndex: |%d|\n",(a_pNodesToBrowse+m)->NodeId.Identifier.Numeric,(a_pNodesToBrowse+m)->NodeId.NamespaceIndex);
 			#endif /*_DEBUGGING_*/
 			if(pointer_to_node!=OpcUa_Null) /* Browse only existing nodes */
 			{
@@ -144,7 +152,7 @@ OpcUa_StatusCode my_Browse(
 		} /* End: (check all start nodes) */
 
 	
-	uStatus = response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -153,11 +161,13 @@ OpcUa_StatusCode my_Browse(
 	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
 #endif /*_DEBUGGING_*/
 
+	RESET_SESSION_COUNTER
+
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
 
    *a_pNoOfResults=0;
-	uStatus=response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus=response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -165,6 +175,7 @@ OpcUa_StatusCode my_Browse(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
 #endif /*_DEBUGGING_*/
+	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;
 }
 
@@ -240,7 +251,7 @@ OpcUa_StatusCode browse(OpcUa_BrowseDescription* a_pNodesToBrowse,OpcUa_BrowseRe
 									OpcUa_GotoErrorIfBad(uStatus);
 									(a_pResults ->References+NoofRef)->NodeId.ServerIndex=0;
 									#ifndef NO_DEBUGGING_
-										MY_TRACE("%s\n",getNodeIdString(&pointer_to_targetnode->NodeId));
+										MY_TRACE("|%d| |%d|\n",pointer_to_targetnode->NodeId.NamespaceIndex,pointer_to_targetnode->NodeId.Identifier.Numeric);
 									#endif /*_DEBUGGING_*/
 									/**********************/
 	

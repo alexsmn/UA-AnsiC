@@ -72,6 +72,11 @@
 #include "readservice.h"
 #include "general_header.h"
 
+#define SESSION_NOT_ACTIVATED	0x80270000
+#define	SESSION_ACTIVATED		0x00000000
+
+#define RESET_SESSION_COUNTER	msec_counter=0;
+
 #define REVISED_SESSIONTIMEOUT  30000    
 
 
@@ -83,11 +88,15 @@
 
 
 
-SessionData g_UaTestServer_SessionHead = { .Next = &g_UaTestServer_SessionHead,
-                                           .Prev = &g_UaTestServer_SessionHead };
-
 char * UATESTSERVER_ENDPOINT_URL = "opc.tcp://localhost:4840";
 
+//SESSION DATA  -----------------------------------------------
+OpcUa_UInt32		securechannelId;
+OpcUa_UInt32		session_flag;
+OpcUa_Double		session_timeout;
+OpcUa_String*		p_user_name;
+OpcUa_Timer         Timer;
+OpcUa_Double		msec_counter;
 OpcUa_StatusCode OPCUA_DLLCALL Timer_Callback(  OpcUa_Void*             pvCallbackData, 
                                                 OpcUa_Timer             hTimer,
                                                 OpcUa_UInt32            msecElapsed);
@@ -350,81 +359,16 @@ static OpcUa_Void UaTestServer_SecurityClear(OpcUa_Void)
 }
 
 /*===========================================================================================*/
-/** @brief Cleans up all resources for a given session.                                      */
-/*===========================================================================================*/
-OpcUa_Void UaTestServer_Session_Free(SessionData** a_ppSession)
-{
-    SessionData* pSession = *a_ppSession;
-
-    Continuation_Point_Data.Cont_Point_Identifier=0;
-    OpcUa_BrowseDescription_Clear(&Continuation_Point_Data.NodeToBrowse);
-
-    pSession->Next->Prev = pSession->Prev;
-    pSession->Prev->Next = pSession->Next;
-
-    if (pSession->p_user_name != OpcUa_Null)
-        username_free(pSession);
-    OpcUa_Timer_Delete(&pSession->Timer);
-    OpcUa_Memory_Free(pSession);
-    *a_ppSession = OpcUa_Null;
-}
-
-SessionData* UaTestServer_Session_Create(OpcUa_Void)
-{
-    SessionData* pSession = OpcUa_Memory_Alloc(sizeof(OpcUa_ApplicationDescription));
-    if (pSession == OpcUa_Null)
-    {
-        return OpcUa_Null;
-    }
-    memset(pSession, 0, sizeof(*pSession));
-
-    pSession->session_flag = SESSION_NOT_ACTIVATED;
-    pSession->session_timeout = REVISED_SESSIONTIMEOUT;
-
-    pSession->Next = g_UaTestServer_SessionHead.Next;
-    pSession->Prev = pSession->Next->Prev;
-    pSession->Next->Prev = pSession;
-    pSession->Prev->Next = pSession;
-
-    pSession->SessionId.Identifier.Numeric = ++g_UaTestServer_SessionHead.SessionId.Identifier.Numeric;
-    pSession->SessionId.IdentifierType = OpcUa_IdentifierType_Numeric;
-
-    return pSession;
-}
-
-SessionData* UaTestServer_Session_Find(const OpcUa_NodeId* a_SessionId)
-{
-    SessionData* pSession;
-
-OpcUa_InitializeStatus(OpcUa_Module_Server, "UaTestServer_Session_Find");
-
-    OpcUa_GotoErrorIfTrue(a_SessionId->IdentifierType != OpcUa_IdentifierType_Numeric, OpcUa_Bad);
-
-    for (pSession = g_UaTestServer_SessionHead.Next; pSession != &g_UaTestServer_SessionHead; pSession = pSession->Next)
-    {
-        if (pSession->SessionId.Identifier.Numeric == a_SessionId->Identifier.Numeric)
-        {
-            return pSession;
-        }
-    }
-
-OpcUa_BeginErrorHandling;
-    return OpcUa_Null;
-}
-
-/*===========================================================================================*/
 /** @brief Cleans up all resources from the demo application.                                */
 /*===========================================================================================*/
 OpcUa_Void UaTestServer_Clear(OpcUa_Void)
 {
-    OpcUa_BrowseDescription_Clear(&Continuation_Point_Data.NodeToBrowse);
+	OpcUa_BrowseDescription_Clear(&Continuation_Point_Data.NodeToBrowse);
 
-    SessionData* pSession;
-    while (g_UaTestServer_SessionHead.Next != g_UaTestServer_SessionHead.Next)
-    {
-        pSession = g_UaTestServer_SessionHead.Next;
-        UaTestServer_Session_Free(&pSession);
-    }
+	if(p_user_name!=OpcUa_Null)
+		username_free();
+	
+	OpcUa_Timer_Delete(&Timer);
 	
     UaTestServer_SecurityClear();
     OpcUa_ProxyStub_Clear();
@@ -566,7 +510,7 @@ OpcUa_StatusCode my_FindServers(
 
 	*a_pNoOfServers=1;
 
-	uStatus=response_header_fill(OpcUa_Null,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(  a_pResponseHeader,  a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -583,7 +527,7 @@ OpcUa_StatusCode my_FindServers(
 	}
 	
 	*a_pNoOfServers=0;
-	uStatus=response_header_fill(OpcUa_Null,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(  a_pResponseHeader,  a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -627,6 +571,11 @@ OpcUa_StatusCode myserverGetEndpointsService(
 	MY_TRACE("\n\n\nGETENDPOINTS SERVICE=================================\n"); 
 #endif /*_DEBUGGING_*/
   
+	session_flag=SESSION_NOT_ACTIVATED;
+	if(p_user_name!=OpcUa_Null)
+			username_free();
+	OpcUa_Timer_Delete(&Timer);
+
 	//need to pass CTT-test---------------------------------
 	for(i=0;i< a_nNoOfProfileUris;i++)
 	{
@@ -641,7 +590,7 @@ OpcUa_StatusCode myserverGetEndpointsService(
 	uStatus = getEndpoints(a_pNoOfEndpoints, a_ppEndpoints);
 	OpcUa_GotoErrorIfBad(uStatus);
 	
-	uStatus=response_header_fill(OpcUa_Null,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(  a_pResponseHeader,  a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -649,12 +598,13 @@ OpcUa_StatusCode myserverGetEndpointsService(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE===END========================================\n\n\n"); 
 #endif /*_DEBUGGING_*/
+	RESET_SESSION_COUNTER
 
 	OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
 
    
-	uStatus=response_header_fill(OpcUa_Null,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus =response_header_fill(  a_pResponseHeader,  a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -662,6 +612,7 @@ OpcUa_StatusCode myserverGetEndpointsService(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
 #endif /*_DEBUGGING_*/
+	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;
 }
 
@@ -693,9 +644,7 @@ OpcUa_StatusCode myserver_CreateSession(
     OpcUa_SignatureData*                a_pServerSignature,
     OpcUa_UInt32*                       a_pMaxRequestMessageSize)
  {
-    SessionData* pSession = OpcUa_Null;
-
-    OpcUa_InitializeStatus(OpcUa_Module_Server, "myserver_CreateSession");
+	 OpcUa_InitializeStatus(OpcUa_Module_Server, "myserver_CreateSession");
 
     /* Validate arguments. */
     OpcUa_ReturnErrorIfArgumentNull(a_hEndpoint);
@@ -720,16 +669,14 @@ OpcUa_StatusCode myserver_CreateSession(
     OpcUa_ReturnErrorIfArgumentNull(a_pServerSignature);
     OpcUa_ReturnErrorIfArgumentNull(a_pMaxRequestMessageSize);
 
+	
+	RESET_SESSION_COUNTER
+
 #ifndef NO_DEBUGGING_
-    MY_TRACE("\n\n\nCREATESESSION SERVICE=================================\n"); 
+	MY_TRACE("\n\n\nCREATESESSION SERVICE=================================\n"); 
 #endif /*_DEBUGGING_*/
 
-    pSession = UaTestServer_Session_Create();
-    OpcUa_GotoErrorIfAllocFailed(pSession);
-    
-    RESET_SESSION_COUNTER(pSession);
-
-	if(OpcUa_IsGood(pSession->session_flag))
+	if(OpcUa_IsGood(session_flag))
 	{
 		/* Tell client that no more sessions can be accepted. */
 		uStatus=OpcUa_BadTooManySessions;
@@ -739,19 +686,19 @@ OpcUa_StatusCode myserver_CreateSession(
 	// Set SessionTimeout --------------------------------------------------------------------
 		if(a_nRequestedSessionTimeout>0 && a_nRequestedSessionTimeout<REVISED_SESSIONTIMEOUT)  
 		{
-			pSession->session_timeout=a_nRequestedSessionTimeout/30;
+			session_timeout=a_nRequestedSessionTimeout/30;
 			*a_pRevisedSessionTimeout=a_nRequestedSessionTimeout;
 		}
 		else
 		{
-			pSession->session_timeout=REVISED_SESSIONTIMEOUT/30;
+			session_timeout=REVISED_SESSIONTIMEOUT/30;
 			*a_pRevisedSessionTimeout=REVISED_SESSIONTIMEOUT;
 		}
 	
 	//-----------------------------------------------------------------------------------------------
 		
 	// Set timer for SessionTimeout-----------------------------------
-	if(OpcUa_Timer_Create(&pSession->Timer,1,&Timer_Callback,OpcUa_Null,pSession)!=OpcUa_Good)
+	if(OpcUa_Timer_Create(  &Timer,1, &Timer_Callback, OpcUa_Null,OpcUa_Null)!= OpcUa_Good)
 	{
 		uStatus=OpcUa_BadInternalError;
 		OpcUa_GotoError;                                            
@@ -762,7 +709,7 @@ OpcUa_StatusCode myserver_CreateSession(
 	// Get securechannelId and store it. ----------------------------------------------------------
 		uStatus=OpcUa_Endpoint_GetMessageSecureChannelId(  a_hEndpoint,
 														    a_hContext,
-															&pSession->securechannelId);
+															&securechannelId);
 		if(OpcUa_IsBad(uStatus))
 		{
 			uStatus=OpcUa_BadInternalError;
@@ -772,7 +719,10 @@ OpcUa_StatusCode myserver_CreateSession(
 
 
 	// Make sessionId and authenticationToken known to the client.---------------------------------
-		*a_pSessionId = pSession->SessionId;
+		a_pSessionId->Identifier.Numeric=12345;
+		a_pSessionId->IdentifierType=OpcUa_IdentifierType_Numeric;
+		a_pSessionId->NamespaceIndex=0;
+
 		*a_pAuthenticationToken=*a_pSessionId;
 	//----------------------------------------------------------------------------------------------
 
@@ -795,7 +745,7 @@ OpcUa_StatusCode myserver_CreateSession(
 	uStatus = getEndpoints(a_pNoOfServerEndpoints, a_pServerEndpoints);
 	OpcUa_GotoErrorIfBad(uStatus);
 	
-	uStatus=response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -803,13 +753,13 @@ OpcUa_StatusCode myserver_CreateSession(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
 #endif /*_DEBUGGING_*/
-	RESET_SESSION_COUNTER(pSession);
+	RESET_SESSION_COUNTER
 
 	OpcUa_ReturnStatusCode;
 	OpcUa_BeginErrorHandling;
     
     
-	uStatus=response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus=response_header_fill(  a_pResponseHeader,  a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -817,7 +767,7 @@ OpcUa_StatusCode myserver_CreateSession(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
 #endif /*_DEBUGGING_*/
-	RESET_SESSION_COUNTER(pSession);
+	RESET_SESSION_COUNTER
 	OpcUa_FinishErrorHandling;
  }
 
@@ -843,8 +793,6 @@ OpcUa_StatusCode my_ActivateSession(
     OpcUa_Int32*                           a_pNoOfDiagnosticInfos,
     OpcUa_DiagnosticInfo**                 a_pDiagnosticInfos)
 {
-    SessionData* pSession = OpcUa_Null;
-
     OpcUa_InitializeStatus(OpcUa_Module_Server, "my_ActivateSession");
 
     /* Validate arguments. */
@@ -861,24 +809,34 @@ OpcUa_StatusCode my_ActivateSession(
     OpcUa_ReturnErrorIfArrayArgumentNull(a_pNoOfResults, a_pResults);
     OpcUa_ReturnErrorIfArrayArgumentNull(a_pNoOfDiagnosticInfos, a_pDiagnosticInfos);
 
+	RESET_SESSION_COUNTER
+
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\n\n\nACTIVATESESSION SERVICE===============================\n"); 
 #endif /*_DEBUGGING_*/
 	
-	pSession = UaTestServer_Session_Find(&a_pRequestHeader->AuthenticationToken);
-	OpcUa_GotoErrorIfNull(pSession, OpcUa_BadSecurityChecksFailed);
+	/* Check Authentication Token. ******************************************************************/
+	uStatus=check_authentication_token(a_pRequestHeader);
+	if(OpcUa_IsBad(uStatus))
+	{
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nAuthentication Token ungültig.\n"); 
+#endif /*_DEBUGGING_*/
+		uStatus = OpcUa_BadSecurityChecksFailed;
+		OpcUa_GotoError;
+	}
+    /**********************************************************************************************/
 
-	RESET_SESSION_COUNTER(pSession);
 
 	/* Check UserIdentityToken. ******************************************************************/
-	uStatus=check_useridentitytoken(pSession,a_pUserIdentityToken);
+	uStatus=check_useridentitytoken(a_pUserIdentityToken);
 	OpcUa_GotoErrorIfBad(uStatus)
     /********************************************************************************************/
 	
 	
-	if(OpcUa_IsBad(pSession->session_flag)) // Session not yet activated.
+    if(OpcUa_IsBad(session_flag)) // Session not yet activated.
 	{
-		uStatus=check_securechannelId(pSession,a_hEndpoint,a_hContext);
+		uStatus=check_securechannelId(a_hEndpoint,a_hContext);
 		if(OpcUa_IsBad(uStatus))
 		{
 			uStatus=OpcUa_BadSecurityChecksFailed;
@@ -890,7 +848,7 @@ OpcUa_StatusCode my_ActivateSession(
 	{
 		uStatus=OpcUa_Endpoint_GetMessageSecureChannelId(  a_hEndpoint,
 															a_hContext,
-															&pSession->securechannelId);
+															&securechannelId);
 		if(OpcUa_IsBad(uStatus))
 		{
 			uStatus =OpcUa_BadInternalError;
@@ -898,15 +856,15 @@ OpcUa_StatusCode my_ActivateSession(
 			OpcUa_GotoError;                                            
 		}
 		#ifndef NO_DEBUGGING_
-			MY_TRACE("\nNew Securechannel(%d) assigned to the current session\n",pSession->securechannelId);
+			MY_TRACE("\nNew Securechannel(%d) assigned to the current session\n",securechannelId);
 		#endif /*_DEBUGGING_*/
 	}
 
-	pSession->session_flag=SESSION_ACTIVATED;
+	session_flag=SESSION_ACTIVATED;
 
 #ifndef NO_DEBUGGING_
-	if(pSession->p_user_name!=OpcUa_Null)
-		MY_TRACE("\nUser(%s) logged in\n",OpcUa_String_GetRawString(pSession->p_user_name)); 
+	if(p_user_name!=OpcUa_Null)
+		MY_TRACE("\nUser(%s) logged in\n",OpcUa_String_GetRawString(p_user_name)); 
 #endif /*_DEBUGGING_*/
 
 
@@ -927,7 +885,7 @@ OpcUa_StatusCode my_ActivateSession(
 //-----------------------------------------------------------
 
 	
-	uStatus=response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -935,13 +893,13 @@ OpcUa_StatusCode my_ActivateSession(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
 #endif /*_DEBUGGING_*/
-	RESET_SESSION_COUNTER(pSession);
+	RESET_SESSION_COUNTER
 
 	OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
 
   
-	uStatus=response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -949,6 +907,7 @@ OpcUa_StatusCode my_ActivateSession(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
 #endif /*_DEBUGGING_*/
+	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;
 }
 
@@ -962,7 +921,6 @@ OpcUa_StatusCode my_CloseSession(
     OpcUa_Boolean              a_bDeleteSubscriptions,
     OpcUa_ResponseHeader*      a_pResponseHeader)
 {
-    SessionData* pSession = OpcUa_Null;
     OpcUa_InitializeStatus(OpcUa_Module_Server, "my_CloseSession");
 
     /* Validate arguments. */
@@ -972,19 +930,61 @@ OpcUa_StatusCode my_CloseSession(
     OpcUa_ReferenceParameter(a_bDeleteSubscriptions);
     OpcUa_ReturnErrorIfArgumentNull(a_pResponseHeader);
 
+	RESET_SESSION_COUNTER
+	
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\n\n\nCLOSESESSION SERVICE========================================\n"); 
 #endif /*_DEBUGGING_*/
 
-	pSession=UaTestServer_Session_Find(&a_pRequestHeader->AuthenticationToken);
-	OpcUa_GotoErrorIfNull(pSession,OpcUa_BadSecurityChecksFailed);
+	if(OpcUa_IsBad(session_flag))
+	{
+		/* Tell client that session is closed. */
+		if(p_user_name!=OpcUa_Null)
+			username_free();
 
-	uStatus=response_header_fill(pSession,a_pResponseHeader,a_pRequestHeader,uStatus);
+		OpcUa_Timer_Delete(&Timer);
+		
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nSession already closed!\n"); 
+#endif /*_DEBUGGING_*/
+		uStatus = OpcUa_BadSessionIdInvalid;
+		OpcUa_GotoError;
+	}
+
+	uStatus=check_authentication_token(a_pRequestHeader);
+	if(OpcUa_IsBad(uStatus))
+	{
+#ifndef NO_DEBUGGING_
+		MY_TRACE("\nInvalid Authentication Token.\n"); 
+#endif /*_DEBUGGING_*/
+		uStatus =OpcUa_BadSecurityChecksFailed;
+		OpcUa_GotoError;
+	}
+    
+	
+	OpcUa_Timer_Delete(&Timer);
+	
+	Continuation_Point_Data.Cont_Point_Identifier=0;
+	OpcUa_BrowseDescription_Clear(&Continuation_Point_Data.NodeToBrowse);
+
+	session_flag=SESSION_NOT_ACTIVATED;
+
+#ifndef NO_DEBUGGING_
+	if(p_user_name!=OpcUa_Null)
+		MY_TRACE("\nUser(%s) logged out\n",OpcUa_String_GetRawString(p_user_name)); 
+#endif /*_DEBUGGING_*/
+	if(p_user_name!=OpcUa_Null)
+		username_free();
+
+#ifndef NO_DEBUGGING_
+	MY_TRACE("\nSession closed!\n"); 
+#endif /*_DEBUGGING_*/
+	
+	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
 	}
-	UaTestServer_Session_Free(&pSession);
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
 #endif /*_DEBUGGING_*/
@@ -993,10 +993,12 @@ OpcUa_StatusCode my_CloseSession(
 	*(all_ValueAttribute_of_VariableTypeNodes_VariableNodes[8].Value.Array.Value.DoubleArray+0)=3.14;
 	//---------------------------------
 
+	RESET_SESSION_COUNTER
+
     OpcUa_ReturnStatusCode;
     OpcUa_BeginErrorHandling;
 
-    uStatus=response_header_fill(OpcUa_Null,a_pResponseHeader,a_pRequestHeader,uStatus);
+    uStatus =response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
 	if(OpcUa_IsBad(uStatus))
 	{
        a_pResponseHeader->ServiceResult=OpcUa_BadInternalError;
@@ -1004,6 +1006,7 @@ OpcUa_StatusCode my_CloseSession(
 #ifndef NO_DEBUGGING_
 	MY_TRACE("\nSERVICE END (WITH ERROR)===========\n\n\n"); 
 #endif /*_DEBUGGING_*/
+	RESET_SESSION_COUNTER
     OpcUa_FinishErrorHandling;
 }
 
@@ -1082,31 +1085,31 @@ OpcUa_FinishErrorHandling;
 
 
 
-OpcUa_StatusCode save_username(SessionData* a_pSession,const OpcUa_ExtensionObject* p_UserIdentityToken)
+OpcUa_StatusCode save_username(const OpcUa_ExtensionObject* p_UserIdentityToken)
 {
 	OpcUa_StatusCode        uStatus     = OpcUa_Good;
-	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken);
-	a_pSession->p_user_name=OpcUa_Alloc(sizeof(OpcUa_String));
-	OpcUa_ReturnErrorIfAllocFailed(a_pSession->p_user_name);
-	uStatus=OpcUa_String_StrnCpy(a_pSession->p_user_name,&((OpcUa_UserNameIdentityToken*)p_UserIdentityToken->Body.EncodeableObject.Object)->UserName,OPCUA_STRING_LENDONTCARE);
+	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken)
+	p_user_name=OpcUa_Alloc(sizeof(OpcUa_String));
+	OpcUa_ReturnErrorIfAllocFailed(p_user_name)
+	uStatus=OpcUa_String_StrnCpy(p_user_name,&((OpcUa_UserNameIdentityToken*)p_UserIdentityToken->Body.EncodeableObject.Object)->UserName,OPCUA_STRING_LENDONTCARE);
 	return uStatus;
 }
 
-OpcUa_Void username_free(SessionData* a_pSession)
+OpcUa_Void username_free(OpcUa_Void)
 {
-	OpcUa_String_Delete(&a_pSession->p_user_name);
+	OpcUa_String_Delete(&p_user_name);
 }
 
-OpcUa_StatusCode check_username(SessionData* a_pSession,const OpcUa_ExtensionObject* p_UserIdentityToken)
+OpcUa_StatusCode check_username(const OpcUa_ExtensionObject* p_UserIdentityToken)
 {
 	OpcUa_StatusCode        uStatus     = OpcUa_Good;
-	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken);
-	OpcUa_ReturnErrorIfArgumentNull(a_pSession);
-	if(OpcUa_String_StrLen(a_pSession->p_user_name)!=OpcUa_String_StrLen(&((OpcUa_UserNameIdentityToken*)p_UserIdentityToken->Body.EncodeableObject.Object)->UserName))
+	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken)
+	OpcUa_ReturnErrorIfArgumentNull(p_user_name)
+	if(OpcUa_String_StrLen(p_user_name)!=OpcUa_String_StrLen(&((OpcUa_UserNameIdentityToken*)p_UserIdentityToken->Body.EncodeableObject.Object)->UserName))
 	{
 		return OpcUa_Bad;
 	}
-	if( (OpcUa_String_StrnCmp(   a_pSession->p_user_name, 
+	if( (OpcUa_String_StrnCmp(   p_user_name, 
 								&((OpcUa_UserNameIdentityToken*)p_UserIdentityToken->Body.EncodeableObject.Object)->UserName, 
 								OPCUA_STRING_LENDONTCARE, 
 								OpcUa_False))==0)
@@ -1154,11 +1157,11 @@ OpcUa_StatusCode check_password(const OpcUa_ExtensionObject* p_UserIdentityToken
 	return uStatus;
 }
 
-OpcUa_StatusCode check_useridentitytoken(SessionData* a_pSession,const OpcUa_ExtensionObject* p_UserIdentityToken)
+OpcUa_StatusCode check_useridentitytoken(const OpcUa_ExtensionObject* p_UserIdentityToken)
 {
 	OpcUa_InitializeStatus(OpcUa_Module_Server, "check_useridentitytoken");
 
-	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken);
+	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken)
 	
 	//to pass CTT-test-------------------
 	if((OpcUa_UInt32)(p_UserIdentityToken->Encoding)== OpcUa_ExtensionObjectEncoding_None)
@@ -1177,9 +1180,9 @@ OpcUa_StatusCode check_useridentitytoken(SessionData* a_pSession,const OpcUa_Ext
 	
 	if((OpcUa_UInt32)(p_UserIdentityToken->TypeId.NodeId.Identifier.Numeric)== OpcUaId_UserNameIdentityToken_Encoding_DefaultBinary)
 	{
-			if(a_pSession->p_user_name!=OpcUa_Null)
+			if(p_user_name!=OpcUa_Null)
 			{
-				uStatus=check_username(a_pSession,p_UserIdentityToken);
+				uStatus=check_username(p_UserIdentityToken);
 				if(OpcUa_IsGood(uStatus))
 				{
 					uStatus=check_password(p_UserIdentityToken);
@@ -1207,7 +1210,7 @@ OpcUa_StatusCode check_useridentitytoken(SessionData* a_pSession,const OpcUa_Ext
 			}
 			else
 			{
-				uStatus=save_username(a_pSession,p_UserIdentityToken);
+				uStatus=save_username(p_UserIdentityToken);
 				OpcUa_ReturnErrorIfBad(uStatus)
 				uStatus=check_password(p_UserIdentityToken);
 				if(OpcUa_IsBad(uStatus))
@@ -1235,7 +1238,7 @@ OpcUa_StatusCode check_useridentitytoken(SessionData* a_pSession,const OpcUa_Ext
 	OpcUa_FinishErrorHandling;
 }
 
-OpcUa_StatusCode check_securechannelId(SessionData* a_pSession,OpcUa_Endpoint a_hEndpoint,OpcUa_Handle a_hContext)
+OpcUa_StatusCode check_securechannelId( OpcUa_Endpoint a_hEndpoint,  OpcUa_Handle a_hContext)
 {
 	OpcUa_UInt32* p_securechannelId;
 
@@ -1255,7 +1258,7 @@ OpcUa_StatusCode check_securechannelId(SessionData* a_pSession,OpcUa_Endpoint a_
 		uStatus=OpcUa_Good;
 		OpcUa_GotoError 
 	}
-	if(*p_securechannelId==a_pSession->securechannelId)
+	if(*p_securechannelId==securechannelId)
 	{
 		OpcUa_Free(p_securechannelId);
 		uStatus=OpcUa_Good;
@@ -1272,21 +1275,42 @@ OpcUa_StatusCode check_securechannelId(SessionData* a_pSession,OpcUa_Endpoint a_
 	OpcUa_FinishErrorHandling;
 }
 
+OpcUa_StatusCode check_authentication_token (const OpcUa_RequestHeader* a_pRequestHeader)
+{
+	OpcUa_InitializeStatus(OpcUa_Module_Server, "check_authentication_token");
+
+	if(a_pRequestHeader==OpcUa_Null)
+	{
+		uStatus=OpcUa_BadSessionIdInvalid;
+		OpcUa_GotoError
+	}
+	if((a_pRequestHeader->AuthenticationToken.IdentifierType==OpcUa_IdentifierType_Numeric && a_pRequestHeader->AuthenticationToken.NamespaceIndex==0) && (a_pRequestHeader->AuthenticationToken.Identifier.Numeric==12345))
+	{
+		uStatus=OpcUa_Good;
+	}
+	else
+	{
+		uStatus=OpcUa_BadSessionIdInvalid;
+	}
+	return uStatus;
+	OpcUa_BeginErrorHandling;
+    
+    
+	OpcUa_FinishErrorHandling;
+
+}
+
 OpcUa_StatusCode OPCUA_DLLCALL Timer_Callback(  OpcUa_Void*             pvCallbackData, 
                                                 OpcUa_Timer             hTimer,
                                                 OpcUa_UInt32            msecElapsed)
 {
-	SessionData* pSession = (SessionData*)pvCallbackData;
-	OpcUa_ReferenceParameter(hTimer);
-	OpcUa_ReferenceParameter(msecElapsed);
-
-	pSession->msec_counter++;
-	if(pSession->msec_counter>pSession->session_timeout)
+	msec_counter++;
+	if(msec_counter>session_timeout)
 	{
-		pSession->session_flag=SESSION_NOT_ACTIVATED;
-		OpcUa_Timer_Delete(&pSession->Timer);
-		if(pSession->p_user_name!=OpcUa_Null)
-			username_free(pSession);
+		session_flag=SESSION_NOT_ACTIVATED;
+		OpcUa_Timer_Delete(&Timer);
+		if(p_user_name!=OpcUa_Null)
+			username_free();
 		#ifndef NO_DEBUGGING_
 		MY_TRACE("\nSession expired!!!\n"); 
 		#endif /*_DEBUGGING_*/
@@ -1301,7 +1325,7 @@ OpcUa_StatusCode OPCUA_DLLCALL Timer_Callback(  OpcUa_Void*             pvCallba
 
 
 
-OpcUa_StatusCode response_header_fill(SessionData* a_pSession,OpcUa_ResponseHeader* a_pResponseHeader,const OpcUa_RequestHeader* a_pRequestHeader,OpcUa_StatusCode Status)
+OpcUa_StatusCode response_header_fill(OpcUa_ResponseHeader*  a_pResponseHeader,const OpcUa_RequestHeader* a_pRequestHeader,OpcUa_StatusCode  Status)
 {
 	OpcUa_StatusCode    uStatus     = OpcUa_Good;
 	OpcUa_UInt32		diff;
@@ -1313,29 +1337,28 @@ OpcUa_StatusCode response_header_fill(SessionData* a_pSession,OpcUa_ResponseHead
 	OpcUa_ResponseHeader_Initialize(a_pResponseHeader);
 	a_pResponseHeader->RequestHandle=a_pRequestHeader->RequestHandle;
 
-	a_pResponseHeader->Timestamp=OpcUa_DateTime_UtcNow();
-	uStatus=my_GetDateTimeDiffInSeconds32( (a_pRequestHeader->Timestamp),(a_pResponseHeader->Timestamp), &diff);
+	uStatus=my_GetDateTimeDiffInSeconds32( (a_pRequestHeader->Timestamp),(OpcUa_DateTime_UtcNow()), &diff);
 	if(OpcUa_IsGood(uStatus))
 	{
-		if(a_pSession!=OpcUa_Null)
+		
+		if((OpcUa_UInt32)session_timeout<diff )
 		{
-			if((OpcUa_UInt32)a_pSession->session_timeout<diff)
-			{
-				#ifndef NO_DEBUGGING_
-				MY_TRACE("\nService runtime:%u msec (TimeOut)\n", diff);
-			    	#endif /*_DEBUGGING_*/
-				Status=OpcUa_BadTimeout;
-			}
-			else
-			{
-				#ifndef NO_DEBUGGING_
-				MY_TRACE("\nService runtime:%u msec ServiceTimeOut:%.0f msec\n",diff,a_pSession->session_timeout);
-				#endif /*_DEBUGGING_*/
-			}
+			#ifndef NO_DEBUGGING_
+			MY_TRACE("\nService runtime:%u msec (TimeOut)\n", diff);
+			#endif /*_DEBUGGING_*/
+			a_pResponseHeader->ServiceResult=OpcUa_BadTimeout;
 		}
-		a_pResponseHeader->ServiceResult=Status;
+		else
+		{
+			#ifndef NO_DEBUGGING_
+			MY_TRACE("\nService runtime:%u msec ServiceTimeOut:%.0f msec\n", diff, session_timeout);
+			#endif /*_DEBUGGING_*/
+			a_pResponseHeader->ServiceResult=Status;
+		}
 	}
 	
+	a_pResponseHeader->Timestamp=OpcUa_DateTime_UtcNow();
+
 	if((a_pRequestHeader->ReturnDiagnostics) != 0x00000000) // If diagnostic information requested.
 	{
 		/* No diagnostic information available. */
@@ -1491,26 +1514,6 @@ OpcUa_StatusCode fill_server_variable(OpcUa_ApplicationDescription* p_Server)
 	OpcUa_FinishErrorHandling;
 }
 
-const OpcUa_CharA*
-getNodeIdString(const OpcUa_NodeId* a_NodeId)
-{
-    static char buffer[256];
-
-    switch (a_NodeId->IdentifierType)
-    {
-    case OpcUa_IdentifierType_Numeric:
-        snprintf(buffer, sizeof(buffer), "NS%d|Numeric|%d", a_NodeId->NamespaceIndex, a_NodeId->Identifier.Numeric);
-        break;
-    case OpcUa_IdentifierType_String:
-        snprintf(buffer, sizeof(buffer), "NS%d|String|%s", a_NodeId->NamespaceIndex, OpcUa_String_GetRawString(&a_NodeId->Identifier.String));
-        break;
-    default:
-        snprintf(buffer, sizeof(buffer), "NS%d|Other", a_NodeId->NamespaceIndex);
-        break;
-    }
-
-    return buffer;
-}
 
 /*********************************************************************************************/
 /***********************        Application Main Entry Point          ************************/

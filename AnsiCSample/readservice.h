@@ -31,6 +31,9 @@
 #define _readservice_
 
 
+#define RESET_SESSION_COUNTER	msec_counter=0; 
+
+
 OpcUa_StatusCode my_Read(
 							OpcUa_Endpoint             a_hEndpoint,
 							OpcUa_Handle               a_hContext,
