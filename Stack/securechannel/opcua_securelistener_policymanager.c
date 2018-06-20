@@ -32,10 +32,6 @@
 #include <opcua_securelistener.h>
 #include <opcua_securelistener_policymanager.h>
 
-/* TODO: Consider this: */
-#define OPCUA_SECURELISTENER_POLICYMANAGER_ISVALIDMESSAGESECURITYMODE(xPolicyManager, xMsgSecMode) \
-    (!(xPolicyManager->uMessageSecurityModes & xMsgSecMode))
-
 /*==============================================================================*/
 /* OpcUa_SecureListener_PolicyManager_Create                                    */
 /*==============================================================================*/
