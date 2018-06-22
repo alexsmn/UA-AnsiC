@@ -72,7 +72,7 @@ OpcUa_StatusCode myserverGetEndpointsService(
 												OpcUa_Int32*                 a_pNoOfEndpoints,
 												OpcUa_EndpointDescription**  a_ppEndpoints);
 
-//@brief CreateSession Prototype
+/** @brief CreateSession Prototype */
  OpcUa_StatusCode myserver_CreateSession(
 											OpcUa_Endpoint                      a_hEndpoint,
 											OpcUa_Handle                        a_hContext,
@@ -125,7 +125,7 @@ OpcUa_StatusCode my_CloseSession(
 											OpcUa_Boolean              a_bDeleteSubscriptions,
 											OpcUa_ResponseHeader*      a_pResponseHeader);
 
-//@brief FindServers Prototype 
+/** @brief FindServers Prototype */
 OpcUa_StatusCode my_FindServers(
 											OpcUa_Endpoint                 a_hEndpoint,
 											OpcUa_Handle                   a_hContext,

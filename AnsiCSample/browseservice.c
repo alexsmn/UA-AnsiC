@@ -366,7 +366,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 	OpcUa_Int i;
 	OpcUa_Int32 result;
 
-		//Check all ObjectTypeNodes--------------------------------------------------------
+		/* Check all ObjectTypeNodes--------------------------------------------------------*/
 		
 			for(i=0;i<ARRAY_SIZE_(all_ObjectTypeNodes);i++)
 			{
@@ -380,7 +380,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 	
 		
 	   
-		//Check all ObjectNodes--------------------------------------------------------
+		/* Check all ObjectNodes--------------------------------------------------------*/
 		for(i=0;i<ARRAY_SIZE_(all_ObjectNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_ObjectNodes[i]))
@@ -391,7 +391,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 				
 			}
 
-		//Check all ReferenceTypeNodes--------------------------------------------------------
+		/* Check all ReferenceTypeNodes--------------------------------------------------------*/
 		for(i=0;i<ARRAY_SIZE_(all_ReferencesTypeNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_ReferencesTypeNodes[i]))
@@ -402,7 +402,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 				
 			}
 
-		//Check all VariableNodes--------------------------------------------------------
+		/* Check all VariableNodes--------------------------------------------------------*/
 			for(i=0;i<ARRAY_SIZE_(all_VariableNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_VariableNodes[i]))
@@ -413,7 +413,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 				
 			}
 
-		//Check all VariableTypeNodes--------------------------------------------------------
+		/* Check all VariableTypeNodes--------------------------------------------------------*/
 		for(i=0;i<ARRAY_SIZE_(all_VariableTypeNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_VariableTypeNodes[i]))
@@ -424,7 +424,7 @@ OpcUa_Void* search_for_node(OpcUa_NodeId NodeId)
 				
 			}
 
-		//Check all DataTypeNodes--------------------------------------------------------
+		/* Check all DataTypeNodes--------------------------------------------------------*/
 		for(i=0;i<ARRAY_SIZE_(all_DataTypeNodes);i++)
 			{
 				if(Is_my_node(NodeId,all_DataTypeNodes[i]))

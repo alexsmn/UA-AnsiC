@@ -47,7 +47,7 @@ typedef struct
 }_my_continuationpoint_;
 
 
-//@brief Browse Prototype
+/** @brief Browse Prototype */
 OpcUa_StatusCode my_Browse(
 							OpcUa_Endpoint                 a_hEndpoint,
 							OpcUa_Handle                   a_hContext,
@@ -63,7 +63,7 @@ OpcUa_StatusCode my_Browse(
 							OpcUa_DiagnosticInfo**         a_pDiagnosticInfos);
 
 
- // @brief BrowseNext Prototype.
+/** @brief BrowseNext Prototype. */
 
 OpcUa_StatusCode my_BrowseNext(
 							OpcUa_Endpoint             a_hEndpoint,
@@ -79,7 +79,7 @@ OpcUa_StatusCode my_BrowseNext(
 							OpcUa_DiagnosticInfo**     a_pDiagnosticInfos);
 
 
-OpcUa_StatusCode		browse						(OpcUa_BrowseDescription* ,OpcUa_BrowseResult*,OpcUa_Int );  //  Think of better names!
+OpcUa_StatusCode		browse						(OpcUa_BrowseDescription* ,OpcUa_BrowseResult*,OpcUa_Int );  /* Think of better names! */
 
 OpcUa_Void*				search_for_node				(OpcUa_NodeId );
 

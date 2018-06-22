@@ -90,7 +90,7 @@
 
 char * UATESTSERVER_ENDPOINT_URL = "opc.tcp://localhost:4840";
 
-//SESSION DATA  -----------------------------------------------
+/* SESSION DATA  ----------------------------------------------- */
 OpcUa_UInt32		securechannelId;
 OpcUa_UInt32		session_flag;
 OpcUa_Double		session_timeout;
@@ -100,18 +100,18 @@ OpcUa_Double		msec_counter;
 OpcUa_StatusCode OPCUA_DLLCALL Timer_Callback(  OpcUa_Void*             pvCallbackData, 
                                                 OpcUa_Timer             hTimer,
                                                 OpcUa_UInt32            msecElapsed);
-//---------------------------------------------------------------
+/*---------------------------------------------------------------*/
 
-//CONTINUATION POINT--------------------------------
+/* CONTINUATION POINT-------------------------------- */
  _my_continuationpoint_	Continuation_Point_Data; /* Currently just one per session. */
  OpcUa_Int		Cont_Point_Counter; /* Last continuation point ID used. Unique across sessions to make tracing more readable. */
 
  OpcUa_UInt32		max_ref_per_node;
-//--------------------------------------------------
+/*--------------------------------------------------*/
 
-//all_ValueAttribute_of_VariableTypeNodes_VariableNodes--------------------------------
+/*all_ValueAttribute_of_VariableTypeNodes_VariableNodes--------------------------------*/
 my_Variant			all_ValueAttribute_of_VariableTypeNodes_VariableNodes[ARRAYSIZE_OF_VALUEATTRIBUTE];
-//--------------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------------*/
 
  
 
@@ -309,7 +309,7 @@ OpcUa_StatusCode UaTestServer_Initialize(OpcUa_Void)
 {
 OpcUa_InitializeStatus(OpcUa_Module_Server, "UaTestServer_Initialize");
 
-    UaTestServer_g_pProxyStubConfiguration.bProxyStub_Trace_Enabled              = OpcUa_True;   //to deactivate Tracer set this variable to OpcUa_False.
+    UaTestServer_g_pProxyStubConfiguration.bProxyStub_Trace_Enabled              = OpcUa_True;   /* to deactivate Tracer set this variable to OpcUa_False. */
     UaTestServer_g_pProxyStubConfiguration.uProxyStub_Trace_Level                = 0;
     UaTestServer_g_pProxyStubConfiguration.iSerializer_MaxAlloc                  = -1;
     UaTestServer_g_pProxyStubConfiguration.iSerializer_MaxStringLength           = -1;
@@ -331,7 +331,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Server, "UaTestServer_Initialize");
     UaTestServer_g_pProxyStubConfiguration.bTcpStream_ExpectWriteToBlock         = OpcUa_True;
 
     /* Initialize platform layer. */
-    uStatus = OpcUa_P_Initialize(&UaTestServer_g_PlatformLayerHandle); // UaTestServer_g_PlatformLayerHandle is pointer to Servicetable.
+    uStatus = OpcUa_P_Initialize(&UaTestServer_g_PlatformLayerHandle); /* UaTestServer_g_PlatformLayerHandle is pointer to Servicetable. */
     OpcUa_GotoErrorIfBad(uStatus);
 
     /* Initialize stack. */
@@ -576,7 +576,7 @@ OpcUa_StatusCode myserverGetEndpointsService(
 			username_free();
 	OpcUa_Timer_Delete(&Timer);
 
-	//need to pass CTT-test---------------------------------
+	/* need to pass CTT-test---------------------------------*/
 	for(i=0;i< a_nNoOfProfileUris;i++)
 	{
 		if(((OpcUa_Port_CallTable*)UaTestServer_g_PlatformLayerHandle)->StrnCmp(OpcUa_String_GetRawString(a_pProfileUris+i),OpcUa_TransportProfile_UaTcp,((OpcUa_Port_CallTable*)UaTestServer_g_PlatformLayerHandle)->StrLen(OpcUa_TransportProfile_UaTcp))==0)
@@ -585,7 +585,7 @@ OpcUa_StatusCode myserverGetEndpointsService(
 		*a_ppEndpoints=OpcUa_Null;
 		OpcUa_GotoError
 	}
-	//------------------------------------------------------
+	/*------------------------------------------------------*/
 
 	uStatus = getEndpoints(a_pNoOfEndpoints, a_ppEndpoints);
 	OpcUa_GotoErrorIfBad(uStatus);
@@ -683,7 +683,7 @@ OpcUa_StatusCode myserver_CreateSession(
 		OpcUa_GotoError;
 	}
 	
-	// Set SessionTimeout --------------------------------------------------------------------
+	/* Set SessionTimeout --------------------------------------------------------------------*/
 		if(a_nRequestedSessionTimeout>0 && a_nRequestedSessionTimeout<REVISED_SESSIONTIMEOUT)  
 		{
 			session_timeout=a_nRequestedSessionTimeout/30;
@@ -695,18 +695,18 @@ OpcUa_StatusCode myserver_CreateSession(
 			*a_pRevisedSessionTimeout=REVISED_SESSIONTIMEOUT;
 		}
 	
-	//-----------------------------------------------------------------------------------------------
+	/*-----------------------------------------------------------------------------------------------*/
 		
-	// Set timer for SessionTimeout-----------------------------------
+	/* Set timer for SessionTimeout-----------------------------------*/
 	if(OpcUa_Timer_Create(  &Timer,1, &Timer_Callback, OpcUa_Null,OpcUa_Null)!= OpcUa_Good)
 	{
 		uStatus=OpcUa_BadInternalError;
 		OpcUa_GotoError;                                            
 	}
-	//------------------------------------------------------------------
+	/*------------------------------------------------------------------*/
 
 
-	// Get securechannelId and store it. ----------------------------------------------------------
+	/* Get securechannelId and store it. ----------------------------------------------------------*/
 		uStatus=OpcUa_Endpoint_GetMessageSecureChannelId(  a_hEndpoint,
 														    a_hContext,
 															&securechannelId);
@@ -715,19 +715,19 @@ OpcUa_StatusCode myserver_CreateSession(
 			uStatus=OpcUa_BadInternalError;
 			OpcUa_GotoError;                                            
 		}
-	//---------------------------------------------------------------------------------------------
+	/*---------------------------------------------------------------------------------------------*/
 
 
-	// Make sessionId and authenticationToken known to the client.---------------------------------
+	/* Make sessionId and authenticationToken known to the client.---------------------------------*/
 		a_pSessionId->Identifier.Numeric=12345;
 		a_pSessionId->IdentifierType=OpcUa_IdentifierType_Numeric;
 		a_pSessionId->NamespaceIndex=0;
 
 		*a_pAuthenticationToken=*a_pSessionId;
-	//----------------------------------------------------------------------------------------------
+	/*----------------------------------------------------------------------------------------------*/
 
 
-	// ---------------------------------------------------------------------
+	/* ---------------------------------------------------------------------*/
 		*a_pNoOfServerSoftwareCertificates=0;
 		*a_pServerSoftwareCertificates=OpcUa_Null;
 		
@@ -739,7 +739,7 @@ OpcUa_StatusCode myserver_CreateSession(
 		OpcUa_SignatureData_Initialize(a_pServerSignature);
 
 		*a_pMaxRequestMessageSize=a_nMaxResponseMessageSize;
-	//----------------------------------------------------------------------
+	/*----------------------------------------------------------------------*/
 		
 
 	uStatus = getEndpoints(a_pNoOfServerEndpoints, a_pServerEndpoints);
@@ -834,7 +834,7 @@ OpcUa_StatusCode my_ActivateSession(
     /********************************************************************************************/
 	
 	
-    if(OpcUa_IsBad(session_flag)) // Session not yet activated.
+    if(OpcUa_IsBad(session_flag)) /* Session not yet activated. */
 	{
 		uStatus=check_securechannelId(a_hEndpoint,a_hContext);
 		if(OpcUa_IsBad(uStatus))
@@ -844,7 +844,7 @@ OpcUa_StatusCode my_ActivateSession(
 		}
 
 	}
-	else // Session is already activated. Client wants to assign current session to new securechannel.
+	else /* Session is already activated. Client wants to assign current session to new securechannel. */
 	{
 		uStatus=OpcUa_Endpoint_GetMessageSecureChannelId(  a_hEndpoint,
 															a_hContext,
@@ -873,7 +873,7 @@ OpcUa_StatusCode my_ActivateSession(
 #endif /*_DEBUGGING_*/
 	
 
-// ----------------------------------------------------------
+/*-----------------------------------------------------------*/
 	*a_pResults=OpcUa_Null;
 	*a_pNoOfResults=0;
 
@@ -882,7 +882,7 @@ OpcUa_StatusCode my_ActivateSession(
 
 	*a_pDiagnosticInfos=OpcUa_Null;
 	*a_pNoOfDiagnosticInfos=0;
-//-----------------------------------------------------------
+/*-----------------------------------------------------------*/
 
 	
 	uStatus = response_header_fill(a_pResponseHeader,a_pRequestHeader,uStatus);
@@ -989,9 +989,9 @@ OpcUa_StatusCode my_CloseSession(
 	MY_TRACE("\nSERVICE===END============================================\n\n\n"); 
 #endif /*_DEBUGGING_*/
 	
-	//Test value of variable DATA_VALUE
+	/* Test value of variable DATA_VALUE */
 	*(all_ValueAttribute_of_VariableTypeNodes_VariableNodes[8].Value.Array.Value.DoubleArray+0)=3.14;
-	//---------------------------------
+	/*---------------------------------*/
 
 	RESET_SESSION_COUNTER
 
@@ -1163,7 +1163,7 @@ OpcUa_StatusCode check_useridentitytoken(const OpcUa_ExtensionObject* p_UserIden
 
 	OpcUa_ReturnErrorIfArgumentNull(p_UserIdentityToken)
 	
-	//to pass CTT-test-------------------
+	/* to pass CTT-test-------------------*/
 	if((OpcUa_UInt32)(p_UserIdentityToken->Encoding)== OpcUa_ExtensionObjectEncoding_None)
 	{
 		#ifndef NO_DEBUGGING_
@@ -1171,7 +1171,7 @@ OpcUa_StatusCode check_useridentitytoken(const OpcUa_ExtensionObject* p_UserIden
 		#endif /*_DEBUGGING_*/
 		return OpcUa_Good;
 	}
-	//-----------------------------------
+	/*-----------------------------------*/
 
 	if((OpcUa_UInt32)(p_UserIdentityToken->TypeId.NodeId.Identifier.Numeric)== OpcUaId_AnonymousIdentityToken_Encoding_DefaultBinary)
 	{
@@ -1359,7 +1359,7 @@ OpcUa_StatusCode response_header_fill(OpcUa_ResponseHeader*  a_pResponseHeader,c
 	
 	a_pResponseHeader->Timestamp=OpcUa_DateTime_UtcNow();
 
-	if((a_pRequestHeader->ReturnDiagnostics) != 0x00000000) // If diagnostic information requested.
+	if((a_pRequestHeader->ReturnDiagnostics) != 0x00000000) /* If diagnostic information requested. */
 	{
 		/* No diagnostic information available. */
 		a_pResponseHeader->ServiceDiagnostics.SymbolicId=-1;
@@ -1370,9 +1370,9 @@ OpcUa_StatusCode response_header_fill(OpcUa_ResponseHeader*  a_pResponseHeader,c
 	a_pResponseHeader->NoOfStringTable=0;
 	a_pResponseHeader->StringTable=OpcUa_Null;
 	
-	//Test value of variable DATA_VALUE
+	/* Test value of variable DATA_VALUE. */
 	(*(all_ValueAttribute_of_VariableTypeNodes_VariableNodes[8].Value.Array.Value.DoubleArray+0))++;
-	//---------------------------------
+	/*---------------------------------*/
 	return OpcUa_Good;
 }
 
@@ -1431,45 +1431,45 @@ OpcUa_StatusCode getEndpoints(	OpcUa_Int32*                 a_pNoOfEndpoints,
 	OpcUa_UserTokenPolicy_Initialize((*a_ppEndpoints)->UserIdentityTokens);
 	OpcUa_UserTokenPolicy_Initialize(((*a_ppEndpoints)->UserIdentityTokens+1));
 
-	//endpointUrl
+	/* endpointUrl */
 	OpcUa_String_AttachCopy(&(*a_ppEndpoints)->EndpointUrl, UATESTSERVER_ENDPOINT_URL);
-	//----------
+	/*----------*/
 
-	//ApplicationDescription
+	/* ApplicationDescription */
 	uStatus=fill_server_variable(&(*a_ppEndpoints)->Server);
 	OpcUa_GotoErrorIfBad(uStatus)
-	//----------------------
+	/*----------------------*/
 
-	//ServerCertificate
-	//OpcUa_Field_Initialize(ByteString, *((*a_ppEndpoints)->ServerCertificate));
-	//---------------------
+	/* ServerCertificate */
+	/* OpcUa_Field_Initialize(ByteString, *((*a_ppEndpoints)->ServerCertificate)); */
+	/*---------------------*/
 
-	//SecurityMode
+	/* SecurityMode */
     (*a_ppEndpoints)->SecurityMode=OpcUa_MessageSecurityMode_None;
-	//------------
+	/*------------*/
 
-	//SecurityPolicyUri
+	/* SecurityPolicyUri */
 	OpcUa_String_AttachCopy(&(*a_ppEndpoints)->SecurityPolicyUri, OpcUa_SecurityPolicy_None);
-	//-----------------
+	/*-----------------*/
 	
-	//UserIdentityToken
+	/* UserIdentityToken */
 	(*a_ppEndpoints)->NoOfUserIdentityTokens=2;
-	//UserIdentityToken Number 1
+	/* UserIdentityToken Number 1 */
     (*a_ppEndpoints)->UserIdentityTokens->TokenType=OpcUa_UserTokenType_UserName;
 	OpcUa_String_AttachCopy(&(*a_ppEndpoints)->UserIdentityTokens->SecurityPolicyUri,OpcUa_SecurityPolicy_None);
 	OpcUa_String_AttachCopy(&(*a_ppEndpoints)->UserIdentityTokens->PolicyId,"3");
-	//UserIdentityToken Number 2
+	/* UserIdentityToken Number 2 */
 	 ((*a_ppEndpoints)->UserIdentityTokens+1)->TokenType=OpcUa_UserTokenType_Anonymous;
 	OpcUa_String_AttachCopy(& ((*a_ppEndpoints)->UserIdentityTokens+1)->PolicyId,"0");
-	//--------------------------
+	/*--------------------------*/
 	
-	//TransportProfileUri
+	/* TransportProfileUri */
 	OpcUa_String_AttachCopy(&(*a_ppEndpoints)->TransportProfileUri, OpcUa_TransportProfile_UaTcp);
-	//------------------
+	/*------------------*/
 
-	//SecurityLevel
+	/* SecurityLevel */
 	(*a_ppEndpoints)->SecurityLevel=(OpcUa_Byte)0;
-	//------------
+	/*------------*/
 
     *a_pNoOfEndpoints=1;
 
@@ -1504,7 +1504,7 @@ OpcUa_StatusCode fill_server_variable(OpcUa_ApplicationDescription* p_Server)
 
 	p_Server->DiscoveryUrls=OpcUa_Memory_Alloc(sizeof(OpcUa_String));
 	OpcUa_GotoErrorIfAllocFailed(p_Server->DiscoveryUrls)
-	//p_Server->DiscoveryProfileUri
+	/* p_Server->DiscoveryProfileUri */
 	OpcUa_String_AttachCopy(p_Server->DiscoveryUrls, UATESTSERVER_ENDPOINT_URL);
 	p_Server->NoOfDiscoveryUrls=1;
     
@@ -1553,7 +1553,7 @@ int main(void)
 	OpcUa_GotoErrorIfBad(uStatus)
 
 	OpcUa_Trace_Initialize();
-	OpcUa_Trace_ChangeTraceLevel(OPCUA_TRACE_OUTPUT_LEVEL_SYSTEM);      // Setting tracelevel.  
+	OpcUa_Trace_ChangeTraceLevel(OPCUA_TRACE_OUTPUT_LEVEL_SYSTEM);      /* Setting tracelevel. */
 
 
 	uStatus = UaTestServer_Serve();

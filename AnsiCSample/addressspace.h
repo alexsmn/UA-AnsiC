@@ -142,7 +142,7 @@ typedef struct{
     OpcUa_UInt32         ArrayDimensions;
     OpcUa_Byte           AccessLevel;
     OpcUa_Byte           UserAccessLevel;
-   // OpcUa_Double         MinimumSamplingInterval;
+    /* OpcUa_Double         MinimumSamplingInterval; */
     OpcUa_Boolean        Historizing;
 }_VariableNode_;
 
