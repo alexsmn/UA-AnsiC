@@ -1527,6 +1527,7 @@ OpcUa_Byte OpcUa_DiagnosticInfo_GetEncodingByte(OpcUa_DiagnosticInfo* a_pValue)
 /*============================================================================
  * OpcUa_BinaryEncoder_WriteDiagnosticInfo
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_BinaryEncoder_WriteDiagnosticInfo(
     struct _OpcUa_Encoder* a_pEncoder,
     OpcUa_StringA          a_sFieldName,
@@ -1614,6 +1615,7 @@ OpcUa_StatusCode OpcUa_BinaryEncoder_DiagnosticInfoGetSize(
 /*============================================================================
  * OpcUa_BinaryEncoder_WriteDiagnosticInfo
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_BinaryEncoder_WriteDiagnosticInfo(
     struct _OpcUa_Encoder* a_pEncoder,
     OpcUa_StringA          a_sFieldName,
@@ -1872,6 +1874,7 @@ OpcUa_StatusCode OpcUa_BinaryEncoder_WriteQualifiedName(
 /*============================================================================
  * OpcUa_BinaryEncoder_WriteEncodeable
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_BinaryEncoder_WriteEncodeable(
     struct _OpcUa_Encoder* a_pEncoder,
     OpcUa_StringA          a_sFieldName,
@@ -2172,6 +2175,7 @@ OpcUa_Byte OpcUa_DataValue_GetEncodingByte(OpcUa_DataValue* a_pValue)
 /*============================================================================
  * OpcUa_BinaryEncoder_WriteVariant
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_BinaryEncoder_WriteVariant(
     struct _OpcUa_Encoder* a_pEncoder,
     OpcUa_StringA          a_sFieldName,
@@ -2344,6 +2348,7 @@ OpcUa_StatusCode OpcUa_BinaryEncoder_WriteDataValue(
 /*============================================================================
  * OpcUa_BinaryEncoder_WriteEncodeable
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_BinaryEncoder_WriteEncodeable(
     struct _OpcUa_Encoder* a_pEncoder,
     OpcUa_StringA          a_sFieldName,
@@ -3364,6 +3369,7 @@ if (pSize != OpcUa_Null) *a_pSize += *pSize;
 /*============================================================================
  * OpcUa_BinaryEncoder_WriteVariant
  *===========================================================================*/
+static
 OpcUa_StatusCode OpcUa_BinaryEncoder_WriteVariant(
     struct _OpcUa_Encoder* a_pEncoder,
     OpcUa_StringA          a_sFieldName,
