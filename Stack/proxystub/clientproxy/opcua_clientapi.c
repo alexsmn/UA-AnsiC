@@ -78,7 +78,13 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ClientApi_FindServers(
 
     /* copy parameters into request object. */
     cRequest.RequestHeader  = *a_pRequestHeader;
-    cRequest.EndpointUrl    = *a_pEndpointUrl;
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pEndpointUrl),
+        OpcUa_String_StrSize(a_pEndpointUrl),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.EndpointUrl);
     cRequest.NoOfLocaleIds  = a_nNoOfLocaleIds;
     cRequest.LocaleIds      = (OpcUa_String*)a_pLocaleIds;
     cRequest.NoOfServerUris = a_nNoOfServerUris;
@@ -157,7 +163,13 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ClientApi_BeginFindServers(
 
     /* copy parameters into request object. */
     cRequest.RequestHeader  = *a_pRequestHeader;
-    cRequest.EndpointUrl    = *a_pEndpointUrl;
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pEndpointUrl),
+        OpcUa_String_StrSize(a_pEndpointUrl),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.EndpointUrl);
     cRequest.NoOfLocaleIds  = a_nNoOfLocaleIds;
     cRequest.LocaleIds      = (OpcUa_String*)a_pLocaleIds;
     cRequest.NoOfServerUris = a_nNoOfServerUris;
@@ -357,7 +369,13 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ClientApi_GetEndpoints(
 
     /* copy parameters into request object. */
     cRequest.RequestHeader   = *a_pRequestHeader;
-    cRequest.EndpointUrl     = *a_pEndpointUrl;
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pEndpointUrl),
+        OpcUa_String_StrSize(a_pEndpointUrl),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.EndpointUrl);
     cRequest.NoOfLocaleIds   = a_nNoOfLocaleIds;
     cRequest.LocaleIds       = (OpcUa_String*)a_pLocaleIds;
     cRequest.NoOfProfileUris = a_nNoOfProfileUris;
@@ -436,7 +454,13 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ClientApi_BeginGetEndpoints(
 
     /* copy parameters into request object. */
     cRequest.RequestHeader   = *a_pRequestHeader;
-    cRequest.EndpointUrl     = *a_pEndpointUrl;
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pEndpointUrl),
+        OpcUa_String_StrSize(a_pEndpointUrl),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.EndpointUrl);
     cRequest.NoOfLocaleIds   = a_nNoOfLocaleIds;
     cRequest.LocaleIds       = (OpcUa_String*)a_pLocaleIds;
     cRequest.NoOfProfileUris = a_nNoOfProfileUris;
@@ -774,9 +798,27 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ClientApi_CreateSession(
     /* copy parameters into request object. */
     cRequest.RequestHeader           = *a_pRequestHeader;
     cRequest.ClientDescription       = *a_pClientDescription;
-    cRequest.ServerUri               = *a_pServerUri;
-    cRequest.EndpointUrl             = *a_pEndpointUrl;
-    cRequest.SessionName             = *a_pSessionName;
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pServerUri),
+        OpcUa_String_StrSize(a_pServerUri),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.ServerUri);
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pEndpointUrl),
+        OpcUa_String_StrSize(a_pEndpointUrl),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.EndpointUrl);
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pSessionName),
+        OpcUa_String_StrSize(a_pSessionName),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.SessionName);
     cRequest.ClientNonce             = *a_pClientNonce;
     cRequest.ClientCertificate       = *a_pClientCertificate;
     cRequest.RequestedSessionTimeout = a_nRequestedSessionTimeout;
@@ -873,9 +915,27 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_ClientApi_BeginCreateSession(
     /* copy parameters into request object. */
     cRequest.RequestHeader           = *a_pRequestHeader;
     cRequest.ClientDescription       = *a_pClientDescription;
-    cRequest.ServerUri               = *a_pServerUri;
-    cRequest.EndpointUrl             = *a_pEndpointUrl;
-    cRequest.SessionName             = *a_pSessionName;
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pServerUri),
+        OpcUa_String_StrSize(a_pServerUri),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.ServerUri);
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pEndpointUrl),
+        OpcUa_String_StrSize(a_pEndpointUrl),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.EndpointUrl);
+    OpcUa_String_AttachToString(
+        OpcUa_String_GetRawString(a_pSessionName),
+        OpcUa_String_StrSize(a_pSessionName),
+        0,
+        OpcUa_False,
+        OpcUa_False,
+        &cRequest.SessionName);
     cRequest.ClientNonce             = *a_pClientNonce;
     cRequest.ClientCertificate       = *a_pClientCertificate;
     cRequest.RequestedSessionTimeout = a_nRequestedSessionTimeout;
