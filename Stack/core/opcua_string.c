@@ -227,7 +227,7 @@ OpcUa_ReturnErrorIfArgumentNull(a_ppNewString);
             if(a_uLength != 0)
             {
                 retVal = OpcUa_P_String_StrnCpy(    pStringInt->strContent,
-                                                    a_uLength,
+                                                    a_uLength + 1,
                                                     a_strSource,
                                                     a_uLength);
             }

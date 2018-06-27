@@ -58,18 +58,22 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_String_strncpy(    OpcUa_StringA   a_strD
                                                     OpcUa_UInt32    a_uiLength)
 {
 #if OPCUA_USE_SAFE_FUNCTIONS
-    if(strncpy_s(a_strDestination, a_uiDestSize + 1, a_strSource, a_uiLength) != 0 )
+    if(strncpy_s(a_strDestination, a_uiDestSize, a_strSource, a_uiLength) != 0 )
     {
         return OpcUa_Bad;
     }
 #else /* OPCUA_USE_SAFE_FUNCTIONS */
-    OpcUa_ReferenceParameter(a_uiDestSize);
-
     if(strncpy(a_strDestination, a_strSource, a_uiLength) != a_strDestination)
     {
         return OpcUa_Bad;
     }
+
+    if(uiDestSize > uiLength)
+    {
+        strDestination[uiLength] = '\0';
+    }
 #endif /* OPCUA_USE_SAFE_FUNCTIONS */
+
     return OpcUa_Good;
 }
 
@@ -81,19 +85,19 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_String_strncat( OpcUa_StringA   a_strDest
                                                        OpcUa_StringA   a_strSource,
                                                        OpcUa_UInt32    a_uiLength)
 {
-    #if OPCUA_USE_SAFE_FUNCTIONS
-        if(strncat_s(a_strDestination, a_uiDestSize, a_strSource, a_uiLength) != 0 )
-        {
-            return OpcUa_Bad;
-        }
-    #else /* OPCUA_USE_SAFE_FUNCTIONS */
-        OpcUa_ReferenceParameter(a_uiDestSize);
+#if OPCUA_USE_SAFE_FUNCTIONS
+    if(strncat_s(a_strDestination, a_uiDestSize, a_strSource, a_uiLength) != 0 )
+    {
+        return OpcUa_Bad;
+    }
+#else /* OPCUA_USE_SAFE_FUNCTIONS */
+    OpcUa_ReferenceParameter(a_uiDestSize);
 
-        if(strncat(a_strDestination, a_strSource, a_uiLength) != a_strDestination)
-        {
-            return OpcUa_Bad;
-        }
-    #endif /* OPCUA_USE_SAFE_FUNCTIONS */
+    if(strncat(a_strDestination, a_strSource, a_uiLength) != a_strDestination)
+    {
+        return OpcUa_Bad;
+    }
+#endif /* OPCUA_USE_SAFE_FUNCTIONS */
 
     return OpcUa_Good;
 }
