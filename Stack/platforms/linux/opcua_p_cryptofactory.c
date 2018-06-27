@@ -59,11 +59,9 @@ OpcUa_InitializeStatus(OpcUa_Module_P_CryptoFactory, "CreateCryptoProvider");
     OpcUa_GotoErrorIfAllocFailed(a_pProvider->Name);
 
     OpcUa_P_String_strncpy( a_pProvider->Name,
-                            OpcUa_P_String_strlen(a_Uri),
+                            OpcUa_P_String_strlen(a_Uri) + 1,
                             a_Uri,
                             OpcUa_P_String_strlen(a_Uri));
-
-    a_pProvider->Name[OpcUa_P_String_strlen(a_Uri)] = '\0';
 
     /* Check whether a noSecurityPolicy is passed in */
     if(a_Uri == OpcUa_Null)
