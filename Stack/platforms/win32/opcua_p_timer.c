@@ -61,7 +61,7 @@ OpcUa_RawThread         g_pTimerThread                  = OpcUa_Null;
 OpcUa_Semaphore         g_hTimerAddedSemaphore          = OpcUa_Null;
 OpcUa_Boolean           g_bStopTimerThread              = OpcUa_False;
 
-OpcUa_Void OpcUa_P_Timer_Thread(OpcUa_Void* pArguments);
+static OpcUa_Void OpcUa_P_Timer_Thread(OpcUa_Void* pArguments);
 #endif /* OPCUA_MULTITHREADED */
 
 /*============================================================================
@@ -240,6 +240,7 @@ static OpcUa_StatusCode OpcUa_P_Timer_Initialize(   OpcUa_P_InternalTimer*  a_pI
 /*============================================================================
  * The thread watching and triggering the timer events.
  *===========================================================================*/
+static
 OpcUa_Void OpcUa_P_Timer_Thread(OpcUa_Void* a_pvArguments)
 {
     OpcUa_UInt32            uTimeout        = 0;
@@ -269,7 +270,7 @@ OpcUa_Void OpcUa_P_Timer_Thread(OpcUa_Void* a_pvArguments)
 /*============================================================================
  * Timeout expired callback function
  *===========================================================================*/
-
+static
 OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketTimerCallback( OpcUa_Void*     pData,
                                                             OpcUa_Timer     pTimer,
                                                             OpcUa_UInt32    msecElapsed)
@@ -284,7 +285,7 @@ OpcUa_StatusCode OPCUA_DLLCALL OpcUa_P_SocketTimerCallback( OpcUa_Void*     pDat
 /*============================================================================
  * Timeout deleted callback function
  *===========================================================================*/
-
+static
 OpcUa_StatusCode OPCUA_DLLCALL  OpcUa_P_SocketKillTimerCallback(OpcUa_Void*     pData,
                                                                 OpcUa_Timer     pTimer,
                                                                 OpcUa_UInt32    msecElapsed)
