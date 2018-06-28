@@ -46,56 +46,56 @@ typedef struct _OpcUa_StatusCodeString
 #endif /* OPCUA_TRACE_ERROR_MACROS */
 
 /* general modules */
-#define OpcUa_Module_NoModule           0x00000000L
-#define OpcUa_Module_TestModule         0x00000001L
-#define OpcUa_Module_Stream             0x00000002L
-#define OpcUa_Module_Buffer             0x00000003L
-#define OpcUa_Module_Connection         0x00000004L
-#define OpcUa_Module_Crypto             0x00000005L
-#define OpcUa_Module_Listener           0x00000006L
-#define OpcUa_Module_MemoryStream       0x00000007L
-#define OpcUa_Module_PkiProvider        0x00000008L
+#define OpcUa_Module_NoModule           0x00000000
+#define OpcUa_Module_TestModule         0x00000001
+#define OpcUa_Module_Stream             0x00000002
+#define OpcUa_Module_Buffer             0x00000003
+#define OpcUa_Module_Connection         0x00000004
+#define OpcUa_Module_Crypto             0x00000005
+#define OpcUa_Module_Listener           0x00000006
+#define OpcUa_Module_MemoryStream       0x00000007
+#define OpcUa_Module_PkiProvider        0x00000008
 
 /* transport modules */
-#define OpcUa_Module_TcpListener        0x00000101L
-#define OpcUa_Module_HttpListener       0x00000102L
-#define OpcUa_Module_TcpConnection      0x00000103L
-#define OpcUa_Module_TcpStream          0x00000104L
-#define OpcUa_Module_SecureConnection   0x00000105L
-#define OpcUa_Module_SecureListener     0x00000106L
-#define OpcUa_Module_SecureStream       0x00000107L
-#define OpcUa_Module_SecureChannel      0x00000108L
-#define OpcUa_Module_HttpStream         0x00000109L
-#define OpcUa_Module_HttpConnection     0x00000110L
+#define OpcUa_Module_TcpListener        0x00000101
+#define OpcUa_Module_HttpListener       0x00000102
+#define OpcUa_Module_TcpConnection      0x00000103
+#define OpcUa_Module_TcpStream          0x00000104
+#define OpcUa_Module_SecureConnection   0x00000105
+#define OpcUa_Module_SecureListener     0x00000106
+#define OpcUa_Module_SecureStream       0x00000107
+#define OpcUa_Module_SecureChannel      0x00000108
+#define OpcUa_Module_HttpStream         0x00000109
+#define OpcUa_Module_HttpConnection     0x00000110
 
 /* core modules */
-#define OpcUa_Module_Mutex              0x00000201L
-#define OpcUa_Module_Thread             0x00000202L
-#define OpcUa_Module_Socket             0x00000203L
-#define OpcUa_Module_Memory             0x00000204L
-#define OpcUa_Module_Condition          0x00000205L
-#define OpcUa_Module_List               0x00000206L
-#define OpcUa_Module_Utilities          0x00000207L
-#define OpcUa_Module_DateTime           0x00000208L
-#define OpcUa_Module_Guid               0x00000209L
-#define OpcUa_Module_Semaphore          0x0000020AL
-#define OpcUa_Module_String             0x0000020BL
-#define OpcUa_Module_Trace              0x0000020CL
+#define OpcUa_Module_Mutex              0x00000201
+#define OpcUa_Module_Thread             0x00000202
+#define OpcUa_Module_Socket             0x00000203
+#define OpcUa_Module_Memory             0x00000204
+#define OpcUa_Module_Condition          0x00000205
+#define OpcUa_Module_List               0x00000206
+#define OpcUa_Module_Utilities          0x00000207
+#define OpcUa_Module_DateTime           0x00000208
+#define OpcUa_Module_Guid               0x00000209
+#define OpcUa_Module_Semaphore          0x0000020A
+#define OpcUa_Module_String             0x0000020B
+#define OpcUa_Module_Trace              0x0000020C
 
 /* proxy stub modules */
-#define OpcUa_Module_Session            0x00000301L
-#define OpcUa_Module_Endpoint           0x00000302L
-#define OpcUa_Module_AsyncCallState     0x00000303L
-#define OpcUa_Module_Serializer         0x00000304L
-#define OpcUa_Module_BinarySerializer   0x00000305L
-#define OpcUa_Module_XmlSerializer      0x00000306L
-#define OpcUa_Module_Channel            0x00000307L
-#define OpcUa_Module_ProxyStub          0x00000308L
-#define OpcUa_Module_ServiceTable       0x00000309L
+#define OpcUa_Module_Session            0x00000301
+#define OpcUa_Module_Endpoint           0x00000302
+#define OpcUa_Module_AsyncCallState     0x00000303
+#define OpcUa_Module_Serializer         0x00000304
+#define OpcUa_Module_BinarySerializer   0x00000305
+#define OpcUa_Module_XmlSerializer      0x00000306
+#define OpcUa_Module_Channel            0x00000307
+#define OpcUa_Module_ProxyStub          0x00000308
+#define OpcUa_Module_ServiceTable       0x00000309
 
 /* application modules */
-#define OpcUa_Module_Server             0x00000401L
-#define OpcUa_Module_Client             0x00000402L
+#define OpcUa_Module_Server             0x00000401
+#define OpcUa_Module_Client             0x00000402
 
 /*============================================================================
  * Everything is as expected.
@@ -432,7 +432,7 @@ typedef struct _OpcUa_StatusCodeString
         OpcUa_UInt32        uModule              = xModule; \
         OpcUa_CharA         const uStatusMethod[]= xMethod;   \
         OpcUa_ReferenceParameter(uStatusMethod); \
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "--> " #xModule "::" #xMethod " (0x%08X)\n", (xModule&0x0000FFFFL));\
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, "--> " #xModule "::" #xMethod " (0x%08X)\n", (xModule&0x0000FFFF));\
         if (uStatus != OpcUa_Good) goto Error; OpcUa_ReferenceParameter(uModule);
     #else /* OPCUA_TRACE_ERROR_MACROS */
         #define OpcUa_InitializeStatus(xModule, xMethod)     \

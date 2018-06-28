@@ -975,7 +975,7 @@ OpcUa_InitializeStatus(OpcUa_Module_TcpConnection, "SocketCallback");
             }
         }
 
-        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, " * OpcUa_TcpConnection_SocketCallback: Socket(%x), Port(%d), Data(%d), Event(%s)\n", a_pSocket, a_nPortNumber, a_pUserData, strEvent);
+        OpcUa_Trace(OPCUA_TRACE_LEVEL_DEBUG, " * OpcUa_TcpConnection_SocketCallback: Socket(%p), Port(%d), Data(%p), Event(%s)\n", a_pSocket, a_nPortNumber, a_pUserData, strEvent);
     }
 #endif /* debug code end */
 

@@ -1806,7 +1806,7 @@ OpcUa_InitializeStatus(OpcUa_Module_SecureStream, "AppendInput");
     {
         /* error - sender mixed chunk order or maybe this is a replay attack */
         OpcUa_Trace(OPCUA_TRACE_LEVEL_ERROR,
-                    "OpcUa_SecureStream_AppendInput: Streams SID %u does not match expected one: %u\n",
+                    "OpcUa_SecureStream_AppendInput: Streams SID %u does not match expected one.\n",
                     uSequenceNumber);
         OpcUa_GotoError;
     }

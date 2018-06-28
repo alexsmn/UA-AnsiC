@@ -147,7 +147,9 @@
 #define OPCUA_TRACE_MAXLENGTH                       200
 
 /** @brief output the messages in errorhandling macros; requires OPCUA_ERRORHANDLING_OMIT_METHODNAME set to OPCUA_CONFIG_NO */
+#ifndef OPCUA_TRACE_ERROR_MACROS
 #define OPCUA_TRACE_ERROR_MACROS                    OPCUA_CONFIG_NO
+#endif
 
 /** @brief Omit the methodname in initialize status macro. */
 #define OPCUA_ERRORHANDLING_OMIT_METHODNAME         OPCUA_CONFIG_NO

@@ -30,7 +30,7 @@ OPCUA_BEGIN_EXTERN_C
 /*============================================================================
  * OpcUa_TcpStream_MessageType
  *===========================================================================*/
-#define OPCUA_TCPSTREAM_MESSAGELENGTH_LENGTH    sizeof(OpcUa_UInt32)
+#define OPCUA_TCPSTREAM_MESSAGELENGTH_LENGTH    4    /* sizeof(OpcUa_UInt32) */
 
 /*============================================================================
  * OpcUa_TcpStream_MessageType
