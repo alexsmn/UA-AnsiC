@@ -2121,7 +2121,7 @@ OpcUa_InitializeStatus(OpcUa_Module_Serializer, "OpcUa_BinaryEncoder_WriteExtens
 OpcUa_ReturnStatusCode;
 OpcUa_BeginErrorHandling;
 
-    OpcUa_ExpandedNodeId_Clear(&cTypeId);
+    /* nothing to do */
 
 OpcUa_FinishErrorHandling;
 }
