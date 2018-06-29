@@ -206,7 +206,7 @@ struct S_OpcUa_Port_CallTable
      */
     OpcUa_Void          (OPCUA_DLLCALL* GetTimeOfDay)             ( OpcUa_TimeVal*              pValue);
 
-    /** @brief Converts the given datetime into a string format format. The given buffer must have a length of
+    /** @brief Converts the given datetime into a string format. The given buffer must have a length of
      *         at least 25 bytes. The length parameter is used for verification. The format is %04d-%02d-%02dT%02d:%02d:%02d.%03dZ.
      *  @ingroup opcua_platformlayer_interface
      */
