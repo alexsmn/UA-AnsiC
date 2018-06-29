@@ -139,8 +139,6 @@ typedef OpcUa_UInt64        OpcUa_UInt64_Wire;
 typedef OpcUa_Float         OpcUa_Float_Wire;
 typedef OpcUa_Double        OpcUa_Double_Wire;
 typedef OpcUa_CharA         OpcUa_Char_Wire;
-typedef OpcUa_Char_Wire*    OpcUa_String_Wire;
-typedef OpcUa_DateTime      OpcUa_DateTime_Wire;
 
 /*============================================================================
 * Type definitions for structured data types.
@@ -152,7 +150,7 @@ typedef struct _OpcUa_Guid
     OpcUa_UInt16    Data2;
     OpcUa_UInt16    Data3;
     OpcUa_UCharA    Data4[8];
-} OpcUa_Guid, *OpcUa_pGuid, OpcUa_Guid_Wire, *pOpcUa_Guid_Wire;
+} OpcUa_Guid, *OpcUa_pGuid;
 
 #define OPCUA_STRING_STATICINITIALIZER {0, 0, OpcUa_Null}
 #ifdef _DEBUG

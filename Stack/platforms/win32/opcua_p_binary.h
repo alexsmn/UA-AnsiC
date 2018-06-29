@@ -144,36 +144,6 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_Double_P_NativeToWire(OpcUa_Double_Wire* wir
  *===========================================================================*/
 OPCUA_EXPORT OpcUa_StatusCode OpcUa_Double_P_WireToNative(OpcUa_Double* native, OpcUa_Double_Wire* wire);
 
-/*============================================================================
- * OpcUa_String_P_NativeToWire
- *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_String_P_NativeToWire(OpcUa_String_Wire* wire, OpcUa_String* native);
-
-/*============================================================================
- * OpcUa_String_P_WireToNative
- *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_String_P_WireToNative(OpcUa_String* native, OpcUa_String_Wire* wire);
-
-/*============================================================================
- * OpcUa_DateTime_P_NativeToWire
- *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_DateTime_P_NativeToWire(OpcUa_DateTime_Wire* wire, OpcUa_DateTime* native);
-
-/*============================================================================
- * OpcUa_DateTime_P_WireToNative
- *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_DateTime_P_WireToNative(OpcUa_DateTime* native, OpcUa_DateTime_Wire* wire);
-
-/*============================================================================
- * OpcUa_Guid_P_NativeToWire
- *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_Guid_P_NativeToWire(OpcUa_Guid_Wire* wire, OpcUa_Guid* native);
-
-/*============================================================================
- * OpcUa_Guid_P_WireToNative
- *===========================================================================*/
-OPCUA_EXPORT OpcUa_StatusCode OpcUa_Guid_P_WireToNative(OpcUa_Guid* native, OpcUa_Guid_Wire* wire);
-
 OPCUA_END_EXTERN_C
 
 #endif /* _OpcUa_P_Binary_H_ */

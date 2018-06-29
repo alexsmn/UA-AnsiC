@@ -317,7 +317,6 @@ OpcUa_StatusCode OpcUa_Float_P_WireToNative(OpcUa_Float* native, OpcUa_Float_Wir
 /*============================================================================
  * OpcUa_Double_P_NativeToWire
  *===========================================================================*/
-
 OpcUa_StatusCode OpcUa_Double_P_NativeToWire(OpcUa_Double_Wire* wire, OpcUa_Double* native)
 {
     OpcUa_DeclareErrorTraceModule(OpcUa_Module_BinarySerializer);
@@ -330,7 +329,7 @@ OpcUa_StatusCode OpcUa_Double_P_NativeToWire(OpcUa_Double_Wire* wire, OpcUa_Doub
 }
 
 /*============================================================================
- * OpcUa_String_P_WireToNative
+ * OpcUa_Double_P_WireToNative
  *===========================================================================*/
 OpcUa_StatusCode OpcUa_Double_P_WireToNative(OpcUa_Double* native, OpcUa_Double_Wire* wire)
 {
