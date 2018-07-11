@@ -23,6 +23,7 @@
 /* System Headers */
 #include <windows.h>
 #include <time.h>
+#include <stdlib.h>
 
 /* UA platform definitions */
 #include <opcua_p_internal.h>
