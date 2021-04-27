@@ -17,8 +17,9 @@
 #
 # Hint at old root folder (see build_win32/build_win64.bat)
 #
-    set (OPENSSL_ROOT_DIR ${_PROJECT_ROOT}/openssl)
-    include(FindOpenSSL)
+
+find_package(OpenSSL REQUIRED)
+
 if(NOT OPENSSL_FOUND)
     message(FATAL_ERROR, "No openssl found - please install")
 endif()
@@ -194,7 +195,7 @@ endif()
     target_link_libraries(uastack PUBLIC ${OPENSSL_LIBRARIES})
 
 if(WIN32)
-  # Place here the install rule for win32
+    install (TARGETS uastack RUNTIME DESTINATION bin)
 elseif(LINUX)
     install (TARGETS uastack LIBRARY DESTINATION lib)
 endif()
