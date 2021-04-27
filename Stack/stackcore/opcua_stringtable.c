@@ -197,7 +197,8 @@ OPCUA_EXPORT OpcUa_StatusCode OpcUa_StringTable_FindIndex(
 
     for (ii = 0; ii < a_pTable->Count; ii++)
     {
-        if (OpcUa_String_StrnCmp(&(a_pTable->Values[ii]), a_pString, uLength, OpcUa_False) == 0)
+        if (OpcUa_String_StrSize(&(a_pTable->Values[ii])) == uLength &&
+            OpcUa_String_StrnCmp(&(a_pTable->Values[ii]), a_pString, uLength, OpcUa_False) == 0)
         {
             *a_pIndex = ii;
             break;
