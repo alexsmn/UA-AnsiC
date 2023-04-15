@@ -100,7 +100,7 @@
 #endif
 
 /** @brief Using a special mutex struct with debug information. */
-#define OPCUA_MUTEX_ERROR_CHECKING                  OPCUA_CONFIG_NO
+//#define OPCUA_MUTEX_ERROR_CHECKING                  OPCUA_CONFIG_NO
 
 /*============================================================================
  * timer

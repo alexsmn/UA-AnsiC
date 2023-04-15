@@ -35,6 +35,8 @@
 /* System Headers */
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <stdlib.h>
+#include <search.h>
 
 /* UA platform definitions */
 #include <opcua_p_internal.h>

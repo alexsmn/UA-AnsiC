@@ -34,12 +34,13 @@
 #include <windows.h>
 #include <opcua.h>
 #include <memory.h>     /*  */
+#include <stdlib.h>
+#include <malloc.h>
 #ifndef _WIN32_WCE
 #include <errno.h>      /* for errornumbers when using save functions */
 #endif /* _WIN32_WCE */
 
 #include <opcua_p_memory.h>
-
 
 /*============================================================================
  * static variables
